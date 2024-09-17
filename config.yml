@@ -1,0 +1,4 @@
+url: https://<local-ipaddress>:8080
+json: false
+verify: false
+user: <initials>
