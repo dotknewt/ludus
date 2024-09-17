@@ -1,0 +1,30 @@
+---
+#- name: Check for Linux
+#  ansible.builtin.fail:
+#    msg: This role only supports Windows
+#  when: ansible_os_family != "Linux"
+
+- set_fact:
+    linux_keyboard_language: "{{ ludus_default_linux_keyboard_language }}"
+  when: linux_keyboard_language is undefined
+
+- set_fact:
+    linux_username: "{{ ludus_default_linux_username }}"
+  when: linux_username is undefined
+
+- name: Set default keyboard language
+  ansible.linux.shell:
+    script: |
+      sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_keyboard_language }}"/' /etc/default/keyboard
+
+- name: Set XKBMap Layout
+  ansible.linux.shell:
+    script: |
+      setxkbmap -layout {{ linux_keyboard_language }}
+
+- name: Reboot after changing keyboard layout
+  ansible.builtin.reboot:
+    msg: "Rebooting machine in 5 seconds"
+- name: Linux - Success
+  ansible.builtin.debug:
+    msg: "Default keyboard layout has changed"

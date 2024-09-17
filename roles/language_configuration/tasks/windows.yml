@@ -1,0 +1,44 @@
+---
+#- name: Check for Windows
+#  ansible.builtin.fail:
+#    msg: This role only supports Windows
+#  when: ansible_os_family != "Windows"
+
+- set_fact:
+    windows_display_language: "{{ ludus_default_windows_display_language }}"
+  when: windows_display_language is undefined
+
+- set_fact:
+    windows_keyboard_language: "{{ ludus_default_windows_keyboard_language }}"
+  when: windows_keyboard_language is undefined
+
+- set_fact:
+    windows_username: "{{ ludus_default_windows_username }}"
+  when: windows_username is undefined
+
+- name: Set default keyboard in registry
+  ansible.windows.win_powershell:
+    script: |
+      reg add "HKEY_USERS\.DEFAULT\Keyboard Layout\Preload" /v 1 /d {{ windows_keyboard_language }} /f
+
+- name: Set users' default keyboard in registry
+  ansible.windows.win_powershell:
+    script: |
+      reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ windows_username }} | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ windows_keyboard_language }} /f
+
+- name: Set language+keyboard combination
+  ansible.windows.win_powershell:
+    script: |
+      Set-WinDefaultInputMethodOverride -InputTip "{{ windows_display_language }}:{{ windows_keyboard_language }}"
+
+- name: Set language+keyboard combination for everything
+  ansible.windows.win_powershell:
+    script: |
+      Copy-UserInternationalSettingsToSystem -NewUser $True -WelcomeScreen $True
+
+- name: Reboot after changing keyboard layout
+  ansible.windows.win_reboot:
+    #reboot_timeout: 3600
+- name: Windows - Success
+  ansible.builtin.debug:
+    msg: "Default keyboard layout has changed"
