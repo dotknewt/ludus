@@ -1,6 +1,0 @@
----
-ludus_default_windows_username: localuser
-ludus_default_windows_display_language: '0409'
-ludus_default_windows_keyboard_language: '00000414'
-ludus_default_linux_keyboard_language: 'no'
-ludus_default_linux_username: localuser
