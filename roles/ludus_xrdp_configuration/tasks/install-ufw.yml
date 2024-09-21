@@ -9,15 +9,15 @@
   retries: 2
   until: result.failed == false
 
-- name: Allow everything and enable UFW
+- name: Enable UFW # and deny any
   community.general.ufw:
     state: enabled
-    rule: allow
+    #rule: deny
 
 - name: Allow all access to port 22 (SSH)
   community.general.ufw:
     rule: allow
-    port: '22'
+    name: OpenSSH
   
 - name: Allow all access to port 3389 (xrdp)
   community.general.ufw:
