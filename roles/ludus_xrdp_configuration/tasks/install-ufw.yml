@@ -1,5 +1,5 @@
 ---
-- name: Install packages
+- name: Install ufw
   become: true
   ansible.builtin.apt:
     name:
@@ -17,7 +17,7 @@
 - name: Allow all access to port 22 (SSH)
   community.general.ufw:
     rule: allow
-    port: '22'
+    name: '22'
   
 - name: Allow all access to port 3389 (xrdp)
   community.general.ufw:

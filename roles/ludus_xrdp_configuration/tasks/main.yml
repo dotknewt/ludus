@@ -8,6 +8,16 @@
     msg: This role only supports Linux
   when: ansible_os_family == "Windows"
 
+- name: Update package cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Upgrade all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
 - name: Install and configure xrdp
   ansible.builtin.include_tasks:
     file: install-xrdp.yml
@@ -21,3 +31,7 @@
   ansible.builtin.include_tasks:
     file: install-ufw.yml
   when: xrdp_firewall
+
+- name: Rebooting Linux guest
+  ansible.builtin.reboot:
+    msg: "Rebooting machine in 5 seconds"

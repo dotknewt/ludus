@@ -3,12 +3,11 @@
     linux_username: "{{ ludus_default_linux_username }}"
   when: linux_username is undefined
 
-- name: Install packages
+- name: Install xrdp
   become: true
   ansible.builtin.apt:
     name:
       - xrdp
-    update_cache: true
     state: present
   register: result
   retries: 2
@@ -17,7 +16,7 @@
 - name: Add {{ linux_username }} to the ssl-cert group
   become: true
   ansible.builtin.user:
-    name: '{{ linux_username }}'
+    name: {{ linux_username }}
       groups: ssl-cert
     append: true
 
