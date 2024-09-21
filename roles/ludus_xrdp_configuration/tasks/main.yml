@@ -17,14 +17,14 @@
   ansible.builtin.include_tasks:
     file: install-xrdp.yml
 
-- set_fact:
-    xrdp_firewall: "{{ ludus_default_xrdp_firewall }}"
-  when: xrdp_firewall is undefined
+#- set_fact:
+#    xrdp_firewall: "{{ ludus_default_xrdp_firewall }}"
+#  when: xrdp_firewall is undefined
 
-- name: Install and configure UFW firewall
-  ansible.builtin.include_tasks:
-    file: install-ufw.yml
-  when: xrdp_firewall == 'true'
+#- name: Install and configure UFW firewall
+#  ansible.builtin.include_tasks:
+#    file: install-ufw.yml
+#  when: xrdp_firewall == 'true'
 
 - name: Rebooting Linux guest
   ansible.builtin.reboot:
