@@ -1,51 +1,47 @@
 ---
-- name: Setup xrdp on Linux
-  hosts: all
-  become_method: sudo
-  tasks:
-    - set_fact:
-        linux_username: "{{ ludus_default_linux_username }}"
-      when: linux_username is undefined
+- set_fact:
+    linux_username: "{{ ludus_default_linux_username }}"
+  when: linux_username is undefined
 
-    - name: Install packages
-      become: true
-      ansible.builtin.apt:
-        name:
-          - xrdp
-          - ufw
-        state: present
-      register: result
-      retries: 2
-      until: result.failed == false
+- name: Install packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - xrdp
+      - ufw
+    state: present
+  register: result
+  retries: 2
+  until: result.failed == false
 
-    - name: Add {{ linux_username }} to the ssl-cert group
-      become: true
-      ansible.builtin.user:
-        name: '{{ linux_username }}'
-          groups: ssl-cert
-        append: true
+- name: Add {{ linux_username }} to the ssl-cert group
+  become: true
+  ansible.builtin.user:
+    name: '{{ linux_username }}'
+      groups: ssl-cert
+    append: true
 
-    - name: Restart the xrdp service
-      ansible.builtin.systemd_service:
-        state: restarted
-        daemon_reload: true
-        name: xrdp
+- name: Restart the xrdp service
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: xrdp
 
-    - name: Allow everything and enable UFW
-      community.general.ufw:
-        state: enabled
-        rule: allow
-    
-    - name: Allow all access to port 22 (SSH)
-      community.general.ufw:
-        rule: allow
-        name: '22'
-      
-    - name: Allow all access to port 3389 (xrdp)
-      community.general.ufw:
-        rule: allow
-        port: '3389'
+- name: Allow everything and enable UFW
+  community.general.ufw:
+    state: enabled
+    rule: allow
 
-    - name: Linux - Successfully installed xrdp
-      ansible.builtin.debug:
-        msg: "Successfully installed xrdp"
+- name: Allow all access to port 22 (SSH)
+  community.general.ufw:
+    rule: allow
+    name: '22'
+  
+- name: Allow all access to port 3389 (xrdp)
+  community.general.ufw:
+    rule: allow
+    port: '3389'
+
+- name: Linux - Successfully installed xrdp
+  ansible.builtin.debug:
+    msg: "Successfully installed xrdp"
