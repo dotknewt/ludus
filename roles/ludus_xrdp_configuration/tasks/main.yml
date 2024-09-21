@@ -3,11 +3,6 @@
   ansible.builtin.setup:
   when: ansible_os_family is not defined
 
-- name: Check for Linux
-  ansible.builtin.fail:
-    msg: This role only supports Linux
-  when: ansible_os_family == "Windows"
-
 - name: Update package cache
   ansible.builtin.apt:
     update_cache: yes
@@ -21,7 +16,6 @@
 - name: Install and configure xrdp
   ansible.builtin.include_tasks:
     file: install-xrdp.yml
-  when: ansible_os_family == "Linux"
 
 - set_fact:
     xrdp_firewall: "{{ ludus_default_xrdp_firewall }}"
