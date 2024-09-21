@@ -1,0 +1,23 @@
+---
+- name: Gather facts if needed
+  ansible.builtin.setup:
+  when: ansible_os_family is not defined
+
+- name: Check for Linux
+  ansible.builtin.fail:
+    msg: This role only supports Linux
+  when: ansible_os_family != "Linux"
+
+- name: Install and configure xrdp
+  ansible.builtin.include_tasks:
+    file: install-xrdp.yml
+  when: ansible_os_family == "Linux"
+
+- set_fact:
+    xrdp_firewall: "{{ ludus_default_xrdp_firewall }}"
+  when: xrdp_firewall is undefined
+
+- name: Install and configure UFW firewall
+  ansible.builtin.include_tasks:
+    file: install-ufw.yml
+  when: xrdp_firewall
