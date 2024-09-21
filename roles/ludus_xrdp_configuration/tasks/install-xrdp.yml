@@ -7,6 +7,9 @@
   become: true
   ansible.builtin.apt:
     name:
+      - xorg
+      - xfce4
+      - xfce4-goodies
       - xrdp
     state: present
   register: result

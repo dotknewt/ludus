@@ -24,7 +24,7 @@
 - name: Install and configure UFW firewall
   ansible.builtin.include_tasks:
     file: install-ufw.yml
-  when: xrdp_firewall
+  when: xrdp_firewall == 'true'
 
 - name: Rebooting Linux guest
   ansible.builtin.reboot:

@@ -14,7 +14,7 @@
     state: enabled
     #rule: deny
 
-- name: Allow all access to port 22 (SSH)
+- name: Allow all access to port OpenSSH (22)
   community.general.ufw:
     rule: allow
     name: OpenSSH
