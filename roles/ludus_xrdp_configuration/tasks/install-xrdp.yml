@@ -16,7 +16,7 @@
 - name: Add {{ linux_username }} to the ssl-cert group
   become: true
   ansible.builtin.user:
-    name: {{ linux_username }}
+    name: '{{ linux_username }}'
       groups: ssl-cert
     append: true
 
