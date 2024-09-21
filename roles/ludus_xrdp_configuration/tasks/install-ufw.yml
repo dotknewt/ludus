@@ -12,17 +12,17 @@
 - name: Enable UFW # and deny any
   community.general.ufw:
     state: enabled
-    #rule: deny
+    rule: allow
 
-- name: Allow all access to port OpenSSH (22)
-  community.general.ufw:
-    rule: allow
-    name: OpenSSH
+#- name: Allow all access to port OpenSSH (22)
+#  community.general.ufw:
+#    rule: allow
+#    name: OpenSSH
   
-- name: Allow all access to port 3389 (xrdp)
-  community.general.ufw:
-    rule: allow
-    port: '3389'
+#- name: Allow all access to port 3389 (xrdp)
+#  community.general.ufw:
+#    rule: allow
+#    port: '3389'
 
 - name: Successfully installed and configured UFW
   ansible.builtin.debug:
