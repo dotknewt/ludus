@@ -6,7 +6,7 @@
 - name: Check for Linux
   ansible.builtin.fail:
     msg: This role only supports Linux
-  when: ansible_os_family != "Linux"
+  when: ansible_os_family == "Windows"
 
 - name: Install and configure xrdp
   ansible.builtin.include_tasks:
