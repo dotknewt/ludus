@@ -3,6 +3,10 @@
   debug:
     msg: "{{ keyboard }}.layout OR {{ keyboard }}.value OR {{ keyboard.layout }}.value"
 
+- name: Debugging {{ keyboard.layout }} 
+  debug:
+    msg: "the variable value is: lookup('ansible.builtin.vars', keyboard.layout )"
+
 - name: Set XKBLAYOUT to {{ keyboard.layout }} in /etc/default/keyboard
   become: true
   ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard.layout }}"/' /etc/default/keyboard
