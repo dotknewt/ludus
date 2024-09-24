@@ -5,7 +5,7 @@
 
 - name: Debugging {{ keyboard.layout }} 
   debug:
-    msg: "the variable value is: lookup('ansible.builtin.vars', keyboard.layout )"
+    msg: lookup('ansible.builtin.vars', keyboard.layout )
 
 - name: Set XKBLAYOUT to {{ keyboard.layout }} in /etc/default/keyboard
   become: true
