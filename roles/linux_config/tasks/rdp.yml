@@ -1,0 +1,24 @@
+---
+- ansible.builtin.set_fact:
+  rdp_dependencies: 
+    - xorg
+    - xrdp
+  when: ansible_os_family == "Debian"
+
+- ansible.builtin.set_fact:
+  rdp_dependencies: 
+    - kali-desktop-xfce
+  when: rdp == "kali" 
+
+- name: Apt install dependencies
+  ansible.builtin.include_tasks:
+    file: apt-install.yml
+  when: ansible_os_family == "Debian"
+
+- name: Enable the xrdp.service
+  become: true
+  ansible.builtin.service:
+    name: xrdp.service
+    enabled: true
+    daemon_reload: true
+    state: started

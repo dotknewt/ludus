@@ -1,0 +1,11 @@
+---
+- name: Apt install {{ rdp_dependencies }}
+  become: true
+  ansible.builtin.apt:
+    name: "{{ rdp_dependencies }}" 
+    state: present
+    update_cache: true
+  with_items: "{{ rdp_dependencies }}"
+  register: result
+  retries: 2
+  until: result.failed == false

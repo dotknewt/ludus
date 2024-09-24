@@ -1,0 +1,15 @@
+---
+- name: Set keyboard layout to {{ keyboard_layout }}
+  ansible.builtin.include_tasks:
+    file: keyboard.yml
+  when: keyboard_layout is defined
+
+- name: Configure rdp
+  ansible.builtin.include_tasks:
+    file: rdp.yml
+  when: rdp is defined
+
+#- name: Set firewall blocking for {{ firewall_block }}
+#  ansible.builtin.include_tasks:
+#    file: firewall.yml
+#  when: firewall_block is defined
