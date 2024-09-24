@@ -7,16 +7,12 @@
 #    linux_username: "{{ ludus_default_linux_username }}"
 #  when: linux_username is undefined
 
-- name: Set default keyboard language to "{{ keyboard_layout }}"
+- name: Set XKBLAYOUT to {{ keyboard_layout }} in /etc/default/keyboard
   become: true
-  ansible.linux.shell:
-    script: |
-      sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard_layout }}"/' /etc/default/keyboard
+  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard_layout }}"/' /etc/default/keyboard
 
-- name: Set XKBMap Layout to "{{ keyboard_layout }}"
-  ansible.linux.shell:
-    script: |
-      setxkbmap "{{ keyboard_layout }}"
+- name: Set xkbmap layout to {{ keyboard_layout }}
+  ansible.builtin.shell: setxkbmap {{ keyboard_layout }}
 
 #- name: Linux - Success
 #  ansible.builtin.debug:

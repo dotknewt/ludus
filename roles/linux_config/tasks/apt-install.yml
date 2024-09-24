@@ -1,11 +1,11 @@
 ---
-- name: Apt install {{ rdp_dependencies }}
+- name: Apt install {{ dependencies }}
   become: true
   ansible.builtin.apt:
-    name: "{{ rdp_dependencies }}" 
+    name: "{{ dependencies }}" 
     state: present
     update_cache: true
-  with_items: "{{ rdp_dependencies }}"
+  with_items: "{{ dependencies }}"
   register: result
   retries: 2
   until: result.failed == false

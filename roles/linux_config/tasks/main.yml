@@ -1,5 +1,5 @@
 ---
-- name: Set keyboard layout to "{{ keyboard_layout }}"
+- name: Set keyboard layout
   ansible.builtin.include_tasks:
     file: keyboard.yml
   when: keyboard_layout is defined
