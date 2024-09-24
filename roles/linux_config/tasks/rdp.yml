@@ -6,7 +6,7 @@
     - task-xfce-desktop
   when: # ansible_os_family == Debian AND rdp != kali
     - ansible_os_family == "Debian"
-    - rdp != "kali" 
+    - rdp.distro != "kali" 
 
 - ansible.builtin.set_fact:
   dependencies: 
@@ -15,7 +15,7 @@
     - xrdp
   when: # ansible_os_family == Debian AND rdp == kali
     - ansible_os_family == "Debian"
-    - rdp == "kali"
+    - rdp.distro == "kali"
 
 - name: Apt install dependencies
   ansible.builtin.include_tasks:
