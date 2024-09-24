@@ -1,12 +1,14 @@
 ---
-- name: Check defaults - Debian # Check distribution facts
+- name: Check KBD Variables - Debian # Check distribution facts
   ansible.builtin.set_fact: kbd_layout="{{ default_kbd_layout }}"
   when: kbd_layout is undefined
 
-- name: Check facts # Check distribution facts
-  ansible.builtin.set_fact: kbd_layout="{{ default_kbd_layout }}"
-  when: kbd_layout is undefined
+- name: Check XRDP Variables - Debian
+  ansible.builtin.set_fact: xrdp_config="{{ default_xrdp_config }}"
+  when: xrdp_config is undefined
 
+# if distribution or variable is kali
+  # include task kali-install.yml
 - name: Install kali packages
   become: true
   ansible.builtin.apt:

@@ -1,3 +1,4 @@
 ---
 default_kbd_layout: us
+default_xrdp_config: false
 default_kali_config: false
