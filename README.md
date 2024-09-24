@@ -14,7 +14,7 @@ windows_config:
 
 
 ## install packages from a list of variables
-linux_packages:
+extra_packages:
   - git
   - curl
   - neovim
