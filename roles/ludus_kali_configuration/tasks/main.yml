@@ -46,3 +46,4 @@
     name: xrdp.service
     enabled: true
     daemon_reload: true
+    state: started
