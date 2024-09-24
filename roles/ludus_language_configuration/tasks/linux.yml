@@ -13,6 +13,7 @@
   when: linux_username is undefined
 
 - name: Set default keyboard language
+  become: true
   ansible.linux.shell:
     script: |
       sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_keyboard_language }}"/' /etc/default/keyboard
@@ -20,11 +21,12 @@
 - name: Set XKBMap Layout
   ansible.linux.shell:
     script: |
-      setxkbmap -layout {{ linux_keyboard_language }}
+      setxkbmap {{ linux_keyboard_language }}
 
-- name: Reboot after changing keyboard layout
-  ansible.builtin.reboot:
-    msg: "Rebooting machine in 5 seconds"
+#- name: Reboot after changing keyboard layout
+#  ansible.builtin.reboot:
+#    msg: "Rebooting machine in 5 seconds"
+
 - name: Linux - Success
   ansible.builtin.debug:
     msg: "Default keyboard layout has changed"
