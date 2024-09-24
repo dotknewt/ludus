@@ -1,4 +1,8 @@
 ---
+- name: Debugging {{ keyboard }}.layout 
+  debug:
+    msg: "{{ keyboard }}.layout OR {{ keyboard }}.value OR {{ keyboard.layout }}.value"
+
 - name: Set XKBLAYOUT to {{ keyboard.layout }} in /etc/default/keyboard
   become: true
   ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard.layout }}"/' /etc/default/keyboard
