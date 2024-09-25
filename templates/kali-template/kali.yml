@@ -31,9 +31,9 @@
       until: result.failed == false
 
     - name: Enable the xrdp.service
-    become: true
-    ansible.builtin.service:
-      name: xrdp.service
-      enabled: true
-      daemon_reload: true
-      state: started
+      become: true
+      ansible.builtin.service:
+        name: xrdp.service
+        enabled: true
+        daemon_reload: true
+        state: started
