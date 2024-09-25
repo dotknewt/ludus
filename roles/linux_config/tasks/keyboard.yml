@@ -1,15 +1,15 @@
 ---
-- name: Debugging {{ keyboard }}.layout 
+- name: Debugging "{{ keyboard.layout[0] }}"
   debug:
-    msg: "{{ keyboard }}.layout OR {{ keyboard }}.value OR {{ keyboard.layout }}.value"
+    msg: "{{ keyboard.layout[0] }}"
 
-- name: Debugging {{ keyboard.layout }} 
-  debug:
-    msg: lookup('ansible.builtin.vars', keyboard.layout )
-
-- name: Set XKBLAYOUT to {{ keyboard.layout }} in /etc/default/keyboard
+- name: Set XKBLAYOUT to "{{ keyboard.layout[0] }}" in /etc/default/keyboard
   become: true
-  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard.layout }}"/' /etc/default/keyboard
+  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ keyboard.layout[0] }}"/' /etc/default/keyboard
 
-- name: Set xkbmap layout to {{ keyboard.layout }}
-  ansible.builtin.shell: setxkbmap {{ keyboard.layout }}
+- name: Set xkbmap layout to "{{ keyboard.layout[0] }}"
+  ansible.builtin.shell: | 
+    echo "setxkbmap {{ keyboard.layout[0] }}" >> /home/{{ username }}/.profile
+
+#- name: Set xkbmap layout to "{{ keyboard.layout[0] }}"
+#  ansible.builtin.shell: setxkbmap {{ keyboard.layout[0] }}
