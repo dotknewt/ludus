@@ -22,10 +22,18 @@
     file: apt.yml
   when: ansible_os_family == "Debian"
 
+- name: Disable the kasmvnc service
+  become: true
+  ansible.builtin.service:
+    name: kasmvnc@1.service
+    daemon_reload: true
+    enabled: false
+    state: stopped
+
 - name: Enable the xrdp.service
   become: true
   ansible.builtin.service:
     name: xrdp.service
-    enabled: true
     daemon_reload: true
+    enabled: true
     state: started
