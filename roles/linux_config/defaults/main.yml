@@ -1,5 +1,7 @@
 ---
-# Not implemented:
-#default_keyboard_layout: us
-#default_rdp: false
-#default_firewall: false
+linux_config_default_keyboard_layout: us
+linux_config_default_username: localuser
+linux_config_default_rdp: false
+linux_config_kali: false
+linux_config_default_firewall: false
+linux_config_packages: false

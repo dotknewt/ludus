@@ -1,0 +1,12 @@
+---
+- name: Apt install {{ packages }}
+  become: true
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: true
+  with_items: "{{ packages }}"
+  register: result
+  retries: 2
+  until: result.failed == false
+  when: ansible_os_family == "Debian"

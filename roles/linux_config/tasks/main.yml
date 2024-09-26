@@ -2,9 +2,15 @@
 - name: Configure keyboard layout
   ansible.builtin.include_tasks:
     file: keyboard.yml
-  when: keyboard is defined
+  when: linux_config_keyboard_layout is defined
 
 - name: Configure rdp
   ansible.builtin.include_tasks:
     file: rdp.yml
-  when: rdp is defined
+  when: linux_config_rdp is defined
+
+- name: Install {{ linux_config_packages }}
+  ansible.builtin.include_tasks:
+    file: packages.yml
+    packages: "{{ linux_config_packages }}"
+  when: linux_config_packages is defined
