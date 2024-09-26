@@ -5,7 +5,7 @@
 
 - ansible.builtin.set_fact: # if username defined
     windows_config_username: "{{ windows_config['username'] }}"
-  when: windows_config['username'] is defined
+  when: windows_config['username']
 
 - ansible.builtin.set_fact: # if default display language is undefined
     windows_config_display_language: "{{ windows_config_default['display_language'] }}"
@@ -13,7 +13,7 @@
 
 - ansible.builtin.set_fact: # if default display language is defined
     windows_config_display_language: "{{ windows_config['display_language'] }}"
-  when: windows_config['display_language'] is defined
+  when: windows_config['display_language']
 
 - name: Set default keyboard in registry
   ansible.windows.win_powershell:
