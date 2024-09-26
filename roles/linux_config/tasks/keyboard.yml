@@ -1,13 +1,17 @@
 ---
-- name: Debug keyboard layout -  {{ linux_config_keyboard_layout }}
+- name: Debug keyboard layout {{ linux_config.keyboard_layout }}
   ansible.builtin.debug:
-    msg: "Keyboard layout: {{ linux_config_keyboard_layout }}"
+    msg: "Keyboard layout[0]: {{ linux_config.keyboard_layout[0] }} - Keyboard layout: {{ linux_config.keyboard_layout }}"
 
-- name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout[0] }}"
+- name: Debug username {{ linux_config.keyboard_layout }}
+  ansible.builtin.debug:
+    msg: "Linux Username[0]: {{ linux_config.username[0] }} - Linux Username: {{ linux_config.username }}"
+
+- name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config.keyboard_layout[0] }}"
   become: true
-  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout[0] }}"/' /etc/default/keyboard
+  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config.keyboard_layout[0] }}"/' /etc/default/keyboard
 
-- name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout[0] }}"
+- name: Generate additional locale in in /etc/locale.gen - "{{ linux_config.keyboard_layout[0] }}"
   become: true
   ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
 
@@ -15,9 +19,9 @@
 #   become: true
 #   ansible.builtin.shell: locale-gen
 
-- name: Set xkbmap layout - "{{ linux_config_keyboard_layout[0] }}"
+- name: Set xkbmap layout - "{{ linux_config.keyboard_layout[0] }}"
   ansible.builtin.shell: |
-    echo "setxkbmap {{ linux_config_keyboard_layout[0] }}" >> /home/{{ linux_config_username }}/.profile
+    echo "setxkbmap {{ linux_config.keyboard_layout[0] }}" >> /home/{{ linux_config.username }}/.profile
 
 # - name: Set xkbmap layout to "{{ keyboard.layout[0] }}"
 #  ansible.builtin.shell: setxkbmap {{ keyboard.layout[0] }}
