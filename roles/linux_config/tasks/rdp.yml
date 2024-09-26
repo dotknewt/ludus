@@ -1,8 +1,7 @@
 ---
 - name: Determine dependencies
   block:
-    - name: Collecting Debian facts
-      ansible.builtin.set_fact:
+    - ansible.builtin.set_fact:
         linux_rdp_dependencies:
           - xorg
           - xrdp
@@ -11,8 +10,7 @@
         - ansible_os_family == "Debian"
         - linux_config['rdp'] is undefined
 
-    - name: Collecting Kali facts
-      ansible.builtin.set_fact:
+    - ansible.builtin.set_fact:
         linux_rdp_dependencies:
           - kali-desktop-xfce
           - xorg
