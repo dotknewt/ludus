@@ -1,5 +1,5 @@
 ---
-- name: Apt install {{ linux_config['packages'] }}
+- name: Apt install {{ packages }}
   become: true
   ansible.builtin.apt:
     name: "{{ packages }}"
