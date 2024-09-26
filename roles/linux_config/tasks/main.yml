@@ -9,7 +9,7 @@
     file: rdp.yml
   when: linux_config_rdp is defined
 
-- name: Install {{ linux_config_packages }}
+- name: Install packages
   ansible.builtin.include_tasks:
     file: packages.yml
     packages: "{{ linux_config_packages }}"
