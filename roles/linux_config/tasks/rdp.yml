@@ -7,7 +7,7 @@
       - task-xfce-desktop
   when: # ansible_os_family == Debian AND rdp != kali
     - ansible_os_family == "Debian"
-    - linux_config['rdp'] != "kali"
+    - not linux_config['kali'] # This should be false for non-kali hosts
 
 - name: Kali facts
   ansible.builtin.set_fact:
@@ -15,7 +15,7 @@
       - kali-desktop-xfce
       - xorg
       - xrdp
-  when: linux_config['rdp'] == "kali"
+  when: linux_config['kali'] # This should be true for kali hosts
 
 - name: Apt install rdp dependencies
   ansible.builtin.include_tasks: packages.yml
