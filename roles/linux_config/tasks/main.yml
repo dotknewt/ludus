@@ -12,5 +12,5 @@
 - name: Install packages
   ansible.builtin.include_tasks:
     file: packages.yml
-    packages: "{{ linux_config_packages }}"
+  #  packages: "{{ linux_config_packages }}"
   when: linux_config_packages is defined
