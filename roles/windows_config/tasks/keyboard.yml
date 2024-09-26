@@ -1,6 +1,6 @@
 ---
 - ansible.builtin.set_fact: # if keyboard layout is undefined
-    windows_config_username: "{{ windows_config['keyboard_layout'] }}"
+    windows_config_username: "{{ windows_config_default['keyboard_layout'] }}"
   when: windows_config['keyboard_layout'] is undefined
 
 - ansible.builtin.set_fact: # if keyboard layout is defined
