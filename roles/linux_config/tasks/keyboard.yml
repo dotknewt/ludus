@@ -1,4 +1,7 @@
 ---
+- name: Debug keyboard layout -  {{ linux_config_keyboard_layout }}
+  ansible.builtin.debug:
+    msg: "Keyboard layout: {{ linux_config_keyboard_layout }}"
 
 - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout[0] }}"
   become: true
