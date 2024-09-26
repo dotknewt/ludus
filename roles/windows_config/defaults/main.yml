@@ -1,5 +1,5 @@
 ---
 windows_config_default:
-  username: localuser
+  username: 'localuser'
   display_language: '0409' # US English
   keyboard_layout: '00000409' # US English

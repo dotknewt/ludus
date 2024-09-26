@@ -1,18 +1,11 @@
 ---
+- ansible.builtin.set_fact:
+    windows_config_username: "{{ windows_config_default['username'] }}"
+  when: windows_config['username'] is undefined
 
-- name: Checking facts
-  block:
-    - ansible.builtin.set_fact:
-        windows_config_keyboard_layout: "{{ windows_config_default['keyboard_layout' }}"
-      when: windows_config['keyboard_layout'] is undefined
-
-    - ansible.builtin.set_fact:
-        windows_config_username: "{{ windows_config_default['username'] }}"
-      when: windows_config['username'] is undefined
-
-    - ansible.builtin.set_fact:
-        windows_config_display_language: "{{ windows_config_default['display_language'] }}"
-      when: windows_config['display_language'] is undefined
+- ansible.builtin.set_fact:
+    windows_config_display_language: "{{ windows_config_default['display_language'] }}"
+  when: windows_config['display_language'] is undefined
 
 - name: Set default keyboard in registry
   ansible.windows.win_powershell:
