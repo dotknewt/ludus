@@ -18,10 +18,9 @@
   when: linux_config['rdp'] == "kali"
 
 - name: Apt install rdp dependencies
-  ansible.builtin.include_tasks:
-    file: packages.yml
+  ansible.builtin.include_tasks: packages.yml
   vars:
-    packages: linux_rdp_dependencies
+    packages: {{ linux_rdp_dependencies }}
   when: ansible_os_family == "Debian"
 
 - name: Disable the kasmvnc service
