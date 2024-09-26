@@ -1,19 +1,28 @@
 ---
-- name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config.keyboard_layout[0] }}"
-  become: true
-  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config.keyboard_layout[0] }}"/' /etc/default/keyboard
+- name: Checking facts
+  block:
+    - ansible.builtin.set_fact:
+        linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout' }}"
+      when: linux_config['keyboard_layout'] is undefined
+    - ansible.builtin.set_fact:
+        linux_config_username: "{{ windows_config_default['username'] }}"
+      when: linux_config_default['username'] is undefined
 
-- name: Generate additional locale in in /etc/locale.gen - "{{ linux_config.keyboard_layout[0] }}"
+- name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config['keyboard_layout'] }}"
   become: true
-  ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
+  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config['keyboard_layout'] }}"/' /etc/default/keyboard
+
+#- name: Generate additional locale in in /etc/locale.gen - "{{ linux_config['keyboard_layout'] }}"
+#  become: true
+#  ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
 
 # - name: Generate additional locale in in /etc/locale.gen
 #   become: true
 #   ansible.builtin.shell: locale-gen
 
-- name: Set xkbmap layout - "{{ linux_config.keyboard_layout[0] }}"
-  ansible.builtin.shell: |
-    echo "setxkbmap {{ linux_config.keyboard_layout[0] }}" >> /home/{{ linux_config.username }}/.profile
+#- name: Set xkbmap layout - "{{ linux_config['keyboard_layout'] }}"
+#  ansible.builtin.shell: |
+#    echo "setxkbmap {{ linux_config['keyboard_layout'] }}" >> /home/{{ linux_config['username'] }}/.profile
 
-# - name: Set xkbmap layout to "{{ keyboard.layout[0] }}"
-#  ansible.builtin.shell: setxkbmap {{ keyboard.layout[0] }}
+# - name: Set xkbmap layout to "{{ linux_config['keyboard_layout'] }}"
+#  ansible.builtin.shell: setxkbmap {{ linux_config['keyboard_layout'] }}

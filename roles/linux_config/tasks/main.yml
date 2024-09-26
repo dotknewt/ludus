@@ -1,23 +1,20 @@
 ---
-- name: Debug keyboard layout
-  ansible.builtin.debug:
-    msg: "Keyboard layout[0]: {{ linux_config.keyboard_layout[0] }} - Keyboard layout: {{ linux_config.keyboard_layout }} - linux config[0]: {{ linux_config[0].keyboard_layout }}"
 
-- name: Debug username
-  ansible.builtin.debug:
-    msg: "Linux Username[0]: {{ linux_config.username[0] }} - Linux Username: {{ linux_config.username }}"
+# - name: "Debug keyboard layout {{ linux_config['keyboard_layout'] }}"
+#  ansible.builtin.debug:
+#    msg: "linux_config['keyboard_layout']: {{ linux_config['keyboard_layout'] }}"
 
 - name: Configure keyboard layout
   ansible.builtin.include_tasks:
     file: keyboard.yml
-  when: linux_config.keyboard_layout is defined
+  when: linux_config['keyboard_layout'] is defined
 
 - name: Configure rdp
   ansible.builtin.include_tasks:
     file: rdp.yml
-  when: linux_config.rdp is defined
+  when: linux_config['rdp'] is defined
 
 - name: Install packages
   ansible.builtin.include_tasks:
     file: packages.yml
-  when: linux_config.packages is defined
+  when: linux_config['packages'] is defined
