@@ -1,0 +1,4 @@
+---
+windows_config_default_username: localuser
+windows_config_default_display_language: '0409' # US English
+windows_config_default_keyboard_layout: '00000409' # US English

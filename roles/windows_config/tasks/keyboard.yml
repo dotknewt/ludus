@@ -1,0 +1,36 @@
+---
+- name: Checking facts
+  block:
+    - ansible.builtin.set_fact:
+        windows_config_keyboard_layout: "{{ windows_config_default_keyboard_layout }}"
+      when: windows_config_keyboard_layout is undefined
+    - ansible.builtin.set_fact:
+        windows_config_display_language: "{{ windows_config_default_display_language }}"
+      when: windows_config_display_language is undefined
+    - ansible.builtin.set_fact:
+        windows_config_username: "{{ windows_config_default_username }}"
+      when: windows_config_default_username is undefined
+
+- name: Set default keyboard in registry
+  ansible.windows.win_powershell:
+    script: |
+      reg add "HKEY_USERS\.DEFAULT\Keyboard Layout\Preload" /v 1 /d {{ windows_config_keyboard_layout }} /f
+
+- name: Set users' default keyboard in registry
+  ansible.windows.win_powershell:
+    script: |
+      reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ windows_config_username }} | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ windows_config_keyboard_layout }} /f
+
+- name: Set language+keyboard combination
+  ansible.windows.win_powershell:
+    script: |
+      Set-WinDefaultInputMethodOverride -InputTip "{{ windows_config_display_language }}:{{ windows_config_keyboard_layout }}"
+
+- name: Set language+keyboard combination for everything
+  ansible.windows.win_powershell:
+    script: |
+      Copy-UserInternationalSettingsToSystem -NewUser $True -WelcomeScreen $True
+
+- name: Reboot after changing keyboard layout
+  ansible.windows.win_reboot:
+    # reboot_timeout: 3600
