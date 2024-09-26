@@ -15,7 +15,7 @@
       - kali-desktop-xfce
       - xorg
       - xrdp
-  when: "{{ linux_config['rdp'] }}" == "kali"
+  when: linux_config['rdp'] == "kali"
 
 - name: Apt install rdp dependencies
   ansible.builtin.include_tasks: packages.yml
