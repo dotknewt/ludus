@@ -1,10 +1,10 @@
 ---
 - ansible.builtin.set_fact: # if keyboard layout is undefined
-    linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout' }}"
+    linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout'] }}"
   when: linux_config['keyboard_layout'] is undefined
 
 - ansible.builtin.set_fact: # if keyboard layout is defined
-    linux_config_keyboard_layout: "{{ linux_config['keyboard_layout' }}"
+    linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
   when: linux_config['keyboard_layout']
 
 - ansible.builtin.set_fact: # if username is undefined
