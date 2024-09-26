@@ -1,8 +1,7 @@
 ---
-
-# - name: "Debug keyboard layout {{ linux_config['keyboard_layout'] }}"
-#  ansible.builtin.debug:
-#    msg: "linux_config['keyboard_layout']: {{ linux_config['keyboard_layout'] }}"
+- name: Gather facts if needed
+  ansible.builtin.setup:
+  when: ansible_os_family is not defined
 
 - name: Configure keyboard layout
   ansible.builtin.include_tasks:
