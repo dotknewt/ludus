@@ -1,40 +1,38 @@
 ---
-- name: Determine dependencies
-  block:
-    - ansible.builtin.set_fact:
-        linux_rdp_dependencies:
-          - xorg
-          - xrdp
-          - task-xfce-desktop
-      when: # ansible_os_family == Debian AND rdp != kali
-        - ansible_os_family == "Debian"
-        - linux_config['rdp'] is undefined
+- ansible.builtin.set_fact:
+    linux_rdp_dependencies:
+      - xorg
+      - xrdp
+      - task-xfce-desktop
+  when: # ansible_os_family == Debian AND rdp != kali
+    - ansible_os_family == "Debian"
+    - linux_config['rdp'] is undefined
 
-    - ansible.builtin.set_fact:
-        linux_rdp_dependencies:
-          - kali-desktop-xfce
-          - xorg
-          - xrdp
-      when: linux_config['rdp'] == "kali"
+- ansible.builtin.set_fact:
+    linux_rdp_dependencies:
+      - kali-desktop-xfce
+      - xorg
+      - xrdp
+  when: linux_config['rdp'] == "kali"
 
-    - name: Apt install dependencies
-      ansible.builtin.include_tasks:
-        file: packages.yml
-        packages: "{{ linux_rdp_dependencies }}"
-      when: ansible_os_family == "Debian"
+- name: Apt install dependencies
+  ansible.builtin.include_tasks:
+    file: packages.yml
+    packages: "{{ linux_rdp_dependencies }}"
+  when: ansible_os_family == "Debian"
 
-    - name: Disable the kasmvnc service
-      become: true
-      ansible.builtin.service:
-        name: kasmvnc@1.service
-        daemon_reload: true
-        enabled: false
-        state: stopped
+- name: Disable the kasmvnc service
+  become: true
+  ansible.builtin.service:
+    name: kasmvnc@1.service
+    daemon_reload: true
+    enabled: false
+    state: stopped
 
-    - name: Enable the xrdp.service
-      become: true
-      ansible.builtin.service:
-        name: xrdp.service
-        daemon_reload: true
-        enabled: true
-        state: started
+- name: Enable the xrdp.service
+  become: true
+  ansible.builtin.service:
+    name: xrdp.service
+    daemon_reload: true
+    enabled: true
+    state: started
