@@ -1,11 +1,19 @@
 ---
-- ansible.builtin.set_fact:
+- ansible.builtin.set_fact: # if keyboard layout is undefined
     linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout' }}"
   when: linux_config['keyboard_layout'] is undefined
 
-- ansible.builtin.set_fact:
+- ansible.builtin.set_fact: # if keyboard layout is defined
+    linux_config_keyboard_layout: "{{ linux_config['keyboard_layout' }}"
+  when: linux_config['keyboard_layout'] is defined
+
+- ansible.builtin.set_fact: # if username is undefined
     linux_config_username: "{{ linux_config_default['username'] }}"
   when: linux_config['username'] is undefined
+
+- ansible.builtin.set_fact: # if username is defined
+    linux_config_username: "{{ linux_config['username'] }}"
+  when: linux_config['username'] is defined
 
 - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config['keyboard_layout'] }}"
   become: true
