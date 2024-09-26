@@ -1,9 +1,9 @@
 ---
-- name: Debug keyboard layout {{ linux_config.keyboard_layout }}
+- name: Debug keyboard layout
   ansible.builtin.debug:
     msg: "Keyboard layout[0]: {{ linux_config.keyboard_layout[0] }} - Keyboard layout: {{ linux_config.keyboard_layout }}"
 
-- name: Debug username {{ linux_config.keyboard_layout }}
+- name: Debug username
   ansible.builtin.debug:
     msg: "Linux Username[0]: {{ linux_config.username[0] }} - Linux Username: {{ linux_config.username }}"
 
