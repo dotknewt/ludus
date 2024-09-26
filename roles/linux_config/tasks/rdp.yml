@@ -18,7 +18,7 @@
 - name: Apt install dependencies
   ansible.builtin.include_tasks:
     file: packages.yml
-    packages: "{{ linux_rdp_dependencies }}"
+  packages: "{{ linux_rdp_dependencies }}"
   when: ansible_os_family == "Debian"
 
 - name: Disable the kasmvnc service
