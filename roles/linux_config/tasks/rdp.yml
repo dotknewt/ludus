@@ -7,7 +7,18 @@
       - task-xfce-desktop
   when: # ansible_os_family == Debian AND rdp != kali
     - ansible_os_family == "Debian"
-    - not linux_config['kali'] # This should be false for non-kali hosts
+    - linux_config['kali'] is undefined # This should not be defined for non-kali hosts
+
+- name: Ubuntu 20.04 facts
+  ansible.builtin.set_fact:
+    linux_rdp_dependencies:
+      - xorg
+      - xrdp
+      - xfce4
+      - xfce4-goodies
+  when: # ansible_os_family == Debian AND rdp != kali
+    - ansible_os_family == "Ubuntu"
+    - ansible_facts['lsb']['release'] == "20.04"
 
 - name: Kali facts
   ansible.builtin.set_fact:
@@ -15,7 +26,7 @@
       - kali-desktop-xfce
       - xorg
       - xrdp
-  when: linux_config['kali'] # This should be true for kali hosts
+  when: linux_config['kali'] is defined # This should only be defined for kali hosts
 
 - name: Apt install rdp dependencies
   ansible.builtin.include_tasks: packages.yml

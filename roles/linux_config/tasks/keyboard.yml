@@ -15,6 +15,10 @@
     linux_config_username: "{{ linux_config['username'] }}"
   when: linux_config['username']
 
+- ansible.builtin.set_fact: # if username is undefined
+    linux_config_username: "{{ linux_config_default['username'] }}"
+  when: linux_config['username'] is undefined
+
 - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
   become: true
   ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
