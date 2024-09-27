@@ -1,0 +1,15 @@
+network: 
+  # action: ["ACCEPT","REJECT","DROP"]
+  external_default: ACCEPT # The default action to apply to traffic leaving the range out to the internet.
+  inter_vlan_default: ACCEPT # The default action to apply to traffic between VLANs.
+  always_blocked_networks: # Networks that ranges should never be able to reach
+    - 192.168.0.0/16 # Must be CIDR notation
+  rules:
+    - name: ACCEPT INTERNAL SUBNET # Rule name will be added as a comment in iptables
+      vlan_src: 254 # VLAN ID >= 2 AND <= 255
+      ip_last_octet_src: 3 # An integer between >= 1 AND <= 255 or a regex string
+      vlan_dst: 254 # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
+      ip_last_octet_dst: 4 # An integer between >= 1 AND <= 255 or a regex string
+      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
+      ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
+      action: ACCEPT #String value matching: ["ACCEPT","REJECT","DROP"]
