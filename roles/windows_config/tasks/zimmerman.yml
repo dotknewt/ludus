@@ -13,18 +13,30 @@
 - name: Download Get-ZimmermanTools.ps1 to {{ dest }}
   ansible.windows.win_powershell:
     script: |
-      Invoke-WebRequest -Uri {{ url }} -OutFile {{ dest }}
-
+      Invoke-WebRequest -Uri $Url -OutFile $Dest
+    executable: pwsh.exe
+    arguments:
+      - -ExecutionPolicy
+      - ByPass
+    parameters:
+      Url: "{{ url }}"
+      Dest: "{{ dest }}"
 # recurse over directories within "dest": 
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
     script: |
-      Get-ChildItem "{{ dest }}" -Recurse -Depth 1
+      Get-ChildItem "$Dest" -Recurse -Depth 1
       | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) 
           { echo $_.FullName }
       };
-    register: additional_usr_paths
+    executable: pwsh.exe
+    arguments:
+      - -ExecutionPolicy
+      - ByPass
+    parameters:
+      Dest: "{{ dest }}"
+    register: pwsh_output
 
 #- name: Recursively append tool paths to users env
 #  ansible.windows.win_powershell:
@@ -38,7 +50,7 @@
 
 - name: Debug additional paths
   ansible.builtin.debug:
-    msg: "PATH: {{ additional_usr_paths }}"
+    msg: "PATH: {{ pwsh_output }}"
 
 #- name: Ensure that {{ dest }} is present in the current user's PATH
 #  ansible.windows.win_path:
