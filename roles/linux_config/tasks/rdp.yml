@@ -28,6 +28,11 @@
         name: xrdp
         groups: ssl-cert
         append: true
+    - name: Add {{ linux_config_username}} user to ssl-cert group
+      ansible.builtin.user:
+        name: "{{ linux_config_username}}"
+        groups: ssl-cert
+        append: true
 
 - name: Kali facts
   when:
