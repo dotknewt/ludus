@@ -1,58 +1,54 @@
 ---
-- name: Determine keyboard layout - Unspecified # Keyboard layout NOT specified in range config
-  block:
-    - name: Layout - {{ linux_config_default['keyboard_layout'] }}
-      ansible.builtin.set_fact:
-        linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout'] }}"
+- name: Layout - {{ linux_config_default['keyboard_layout'] }} # Keyboard layout NOT specified
   when: linux_config['keyboard_layout'] is undefined
+  ansible.builtin.set_fact:
+    linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout'] }}"
 
-- name: Determine keyboard layout - Specified # Keyboard layout specified in range config
-  block:
-    - name: Layout - {{ linux_config['keyboard_layout'] }}
-      ansible.builtin.set_fact:
-        linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
+- name: Layout - {{ linux_config['keyboard_layout'] }} # Keyboard layout specified
   when: linux_config['keyboard_layout'] is defined
+  ansible.builtin.set_fact:
+    linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
 
-- name: Determine username - Unspecified # Username NOT specified in range config
-  block:
-    - name: Username - localuser
-      ansible.builtin.set_fact:
-        linux_config_username: "{{ linux_config_default['username'] }}"
-      when: not linux_config['kali'] and linux_config['username'] is undefined
-    - name: Username - kali
-      ansible.builtin.set_fact:
-        linux_config_username: "kali"
-      when: linux_config['kali'] and linux_config['username'] is undefined
+- name: Determine username - Unspecified # Username NOT specified
   when: (not linux_config['kali'] AND linux_config['username'] is undefined) or
         (linux_config['kali'] AND linux_config['username'] is undefined)
-
-- name: Determine username - Specified # Username specified in range config
   block:
-    - name: Username - {{ linux_config['username'] }} # Prefer specified username regardless of kali value
+    - name: Username - localuser
+      when: not linux_config['kali'] and linux_config['username'] is undefined
       ansible.builtin.set_fact:
-        linux_config_username: "{{ linux_config['username'] }}"
-      when:
-      - linux_config['username'] is defined
+        linux_config_username: "{{ linux_config_default['username'] }}"
+    - name: Username - kali # Kali specified and username undefined
+      when: linux_config['kali'] and linux_config['username'] is undefined
+      ansible.builtin.set_fact:
+        linux_config_username: "kali"
+
+- name: Determine username - Specified # Username specified
   when: (linux_config['kali'] AND linux_config['username'] is defined) or
         (not linux_config['kali'] AND linux_config['username'] is defined)
-
-- name: Configure keyboard layout {{ linux_config_keyboard_layout }} for {{ linux_config_username }}
   block:
-    - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
-      ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
+    - name: Username - {{ linux_config['username'] }} # Prefer specified username regardless of kali value
+      when: linux_config['username'] is defined
+      ansible.builtin.set_fact:
+        linux_config_username: "{{ linux_config['username'] }}"
 
-    - name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout }}"
-      ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
-
-    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
-      ansible.builtin.shell: |
-        echo "setxkbmap {{ linux_config_keyboard_layout }}" >> /home/{{ linux_config_username }}/.profile
-
-    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
-      ansible.builtin.shell: |
-        echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile
+- name: "Configure keyboard layout"
   when:
   - linux_config_username is defined
   - linux_config_keyboard_layout is defined
   become: true
+  block:
+    - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell:
+        cmd: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
 
+    - name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell:
+        cmd: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
+
+    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell:
+        cmd: echo "setxkbmap {{ linux_config_keyboard_layout }}" >> /home/{{ linux_config_username }}/.profile
+
+    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell:
+        cmd: echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile
