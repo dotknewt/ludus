@@ -31,7 +31,8 @@
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
-    script: "C:/Temp/list_paths.ps1"
+    script: |
+      C:/Temp/list_paths.ps1
     executable: pwsh.exe
     arguments:
       - -ExecutionPolicy
