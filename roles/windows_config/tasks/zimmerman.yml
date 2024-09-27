@@ -17,6 +17,12 @@
     parameters:
       Url: "{{ url }}"
       Dest: "{{ dest }}"
+
+- name: Create C:/Temp/ directory
+  ansible.windows.win_file:
+    path: C:/Temp/
+    state: directory
+
 # recurse over directories within "dest": 
 - name: Copy script
   ansible.windows.win_copy:
