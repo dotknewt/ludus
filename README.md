@@ -1,26 +1,23 @@
-# to do
-- role that takes variables to include other roles, i.e:
-  - custom-config-vars: linux,rdp,kali,packages
-  - src: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#id25
+# roles
+## linux_config
+- rdp
+- keyboard
 
+## windows_config
+- keyboard
+- language
 
-linux_config:
-  - rdp
-  - keyboard
+# ranges
+- ctf-range
+- malware-range
+ 
+## examples
+- malware-network
+- defaults
 
-windows_config:
-  - keyboard
-  - language
+# templates
+- kali-template
 
+Other templates are copied from their source repository at [gitlab.com](https://gitlab.com/badsectorlabs/ludus). 
 
-## install packages from a list of variables
-extra_packages:
-  - git
-  - curl
-  - neovim
-  - btop
-  - ..
-
-### kali packages
-kali_packages: [true | false] 
-   
+I’ve at most updated ISO-urls and hashsums to get newer releases og fix breakage.

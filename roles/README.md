@@ -1,21 +1,33 @@
-most roles are just copied from their source as listed in ludus.cloud documentation
-
-# ludus_language_configuration
 ## Linux:
-- configures the keyboard layout on linux hosts.
+- configures the keyboard layout
+- configure xrdp and disable kasm 
 
 ## Windows:
 - configures the keyboard and/or display language
-- role variables require a keyboard layout identifier found on https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-language-pack-default-values?view=windows-11#keyboard-identifiers
+  - keyboard/display language identifier found [learn.microsoft](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-language-pack-default-values?view=windows-11#keyboard-identifiers)
 
+## Example
 ``` yaml
-roles:
-- ludus_language_configuration
-role_vars: # these are the defaults if not set
-    windows_display_language: '0409'
-    windows_keyboard_language: '00000409'
-    windows_username: 'localuser'
-```
+ludus:
+  - vm_name: «{{ range_id }}-kali»
+    roles:
+      - linux_config
+    role_vars:
+      linux_config:
+        keyboard_layout: ‘no’
+        rdp: ‘true’
+        kali: ‘true’
+        username: ‘kali’
+        packages:
+          - ‘neovim’
 
-# ludus_kali_configuration
-barebones role that installs additional kali tools nothing fancy in terms of role_vars etc.
+  - vm_name: «{{ range_id }}-flareVM»
+    roles:
+      - windows_config
+    role_vars:
+      windows_config:
+        keyboard_layout: ‘00000414’
+        display_language: ‘0409’
+        username: ‘localuser’
+
+```
