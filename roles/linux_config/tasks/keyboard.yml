@@ -1,36 +1,55 @@
 ---
-- ansible.builtin.set_fact: # if keyboard layout is undefined
-    linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout'] }}"
+- name: Determine keyboard layout - Unspecified # Keyboard layout NOT specified in range config
+  block:
+    - name: Layout - {{ linux_config_default['keyboard_layout'] }}
+      ansible.builtin.set_fact:
+        linux_config_keyboard_layout: "{{ linux_config_default['keyboard_layout'] }}"
   when: linux_config['keyboard_layout'] is undefined
 
-- ansible.builtin.set_fact: # if keyboard layout is defined
-    linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
+- name: Determine keyboard layout - Specified # Keyboard layout specified in range config
+  block:
+    - name: Layout - {{ linux_config['keyboard_layout'] }}
+      ansible.builtin.set_fact:
+        linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
   when: linux_config['keyboard_layout']
 
-- ansible.builtin.set_fact: # if username is undefined
-    linux_config_username: "{{ linux_config_default['username'] }}"
+- name: Determine username - Unspecified # Username NOT specified in range config
+  block:
+    - name: Username - localuser
+      ansible.builtin.set_fact:
+        linux_config_username: "{{ linux_config_default['username'] }}"
+      when: not linux_config['kali']
+
+    - name: Username - kali
+      ansible.builtin.set_fact:
+        linux_config_username: "kali"
+      when: linux_config['kali']
   when: linux_config['username'] is undefined
 
-- ansible.builtin.set_fact: # if username is defined
-    linux_config_username: "{{ linux_config['username'] }}"
+- name: Determine username - Specified # Username specified in range config
+  block:
+    - name: Username - {{ linux_config['username'] }}
+      ansible.builtin.set_fact:
+        linux_config_username: "{{ linux_config['username'] }}"
   when: linux_config['username']
 
-- ansible.builtin.set_fact: # if username is undefined
-    linux_config_username: "{{ linux_config_default['username'] }}"
-  when: linux_config['username'] is undefined
+- name: Configure keyboard - Step 1
+  block:
+    - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
 
-- name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
+    - name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
+
+    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell: |
+        echo "setxkbmap {{ linux_config_keyboard_layout }}" >> /home/{{ linux_config_username }}/.profile
+
+    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+      ansible.builtin.shell: |
+        echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile
+  when:
+  - linux_config_keyboard_layout is defined
+  - linux_config_username is defined
   become: true
-  ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
 
-- name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout }}"
-  become: true
-  ansible.builtin.shell: sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/' /etc/locale.gen
-
-- name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
-  ansible.builtin.shell: |
-    echo "setxkbmap {{ linux_config_keyboard_layout }}" >> /home/{{ linux_config_username }}/.profile
-
-- name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
-  ansible.builtin.shell: |
-    echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile
