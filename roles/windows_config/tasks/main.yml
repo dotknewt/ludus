@@ -12,3 +12,8 @@
   ansible.builtin.include_tasks:
     file: keyboard.yml
   when: windows_config['keyboard_layout'] is defined
+
+- name: Get Zimmerman Tools
+  ansible.builtin.include_tasks:
+    file: zimmerman.yml
+  when: windows_config['get_zimmerman_tools']

@@ -31,7 +31,8 @@
 - name: Set users' default keyboard in registry
   ansible.windows.win_powershell:
     script: |
-      reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ windows_config_username }} | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ windows_config_keyboard_layout }} /f
+      reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ windows_config_username }}
+      | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ windows_config_keyboard_layout }} /f
 
 - name: Set language+keyboard combination
   ansible.windows.win_powershell:

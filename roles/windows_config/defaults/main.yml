@@ -3,3 +3,6 @@ windows_config_default:
   username: 'localuser'
   display_language: '0409' # US English
   keyboard_layout: '00000409' # US English
+  get_zimmerman_tools: 'false'
+  get_zimmerman_url: "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1"
+  get_zimmerman_dest: "C:/Tools/"

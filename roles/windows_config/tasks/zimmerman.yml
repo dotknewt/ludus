@@ -1,0 +1,48 @@
+---
+# mod env path: https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_path_module.html#ansible-collections-ansible-windows-win-path-module
+# mod env vars: https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_environment_module.html
+
+- name: Setting facts
+  ansible.builtin.set_fact: # url and out path
+    url: "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1"
+    dest: "C:/Tools/"
+  when:
+    - windows_config['get_zimmerman_url']
+    - windows_config['get_zimmerman_dest']
+
+- name: Download Get-ZimmermanTools.ps1 to {{ dest }}
+  ansible.windows.win_powershell:
+    script: |
+      Invoke-WebRequest -Uri {{ url }} -OutFile {{ dest }}
+
+# recurse over directories within "dest": 
+
+- name: Register additional tool paths
+  ansible.windows.win_powershell:
+    script: |
+      Get-ChildItem "{{ dest }}" -Recurse -Depth 1
+      | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) 
+          { echo $_.FullName }
+      };
+    register: additional_usr_paths
+
+#- name: Recursively append tool paths to users env
+#  ansible.windows.win_powershell:
+#    script: |
+#      Get-ChildItem "{{ dest }}" -Recurse -Depth 1
+#      | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) 
+#         { $Env:PATH += ";$($_.FullName)" }
+#      };
+#      [Environment]::SetEnvironmentVariable("Path", "$Env:PATH", "User")
+#    register: additional_usr_paths
+
+- name: Debug additional paths
+  ansible.builtin.debug:
+    msg: "PATH: {{ additional_usr_paths }}"
+
+#- name: Ensure that {{ dest }} is present in the current user's PATH
+#  ansible.windows.win_path:
+#    name: PATH
+#    elements: "{{ additional_usr_paths }}"
+#    scope: user
+#    state: present
