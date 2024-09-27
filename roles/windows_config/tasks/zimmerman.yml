@@ -14,10 +14,6 @@
   ansible.windows.win_powershell:
     script: |
       Invoke-WebRequest -Uri $Url -OutFile $Dest
-    executable: pwsh.exe
-    arguments:
-      - -ExecutionPolicy
-      - ByPass
     parameters:
       Url: "{{ url }}"
       Dest: "{{ dest }}"
@@ -25,17 +21,13 @@
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
-    script: |
-      Get-ChildItem "$Dest" -Recurse -Depth 1
-      | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) 
-          { echo $_.FullName }
-      };
+    script: "files/list_paths.ps1"
     executable: pwsh.exe
     arguments:
       - -ExecutionPolicy
       - ByPass
     parameters:
-      Dest: "{{ dest }}"
+      Dest: "{{ dest }}/net6"
     register: pwsh_output
 
 #- name: Recursively append tool paths to users env
