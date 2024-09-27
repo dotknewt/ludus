@@ -45,4 +45,4 @@
 
 - name: Reboot after changing keyboard layout
   ansible.windows.win_reboot:
-    # reboot_timeout: 3600
+    reboot_timeout: 3600
