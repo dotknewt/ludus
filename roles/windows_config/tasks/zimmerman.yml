@@ -7,8 +7,8 @@
     url: "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1"
     dest: "C:/Tools/"
   when:
-    - windows_config['get_zimmerman_url']
-    - windows_config['get_zimmerman_dest']
+    - windows_config['get_zimmerman_url'] is undefined
+    - windows_config['get_zimmerman_dest'] is undefined
 
 - name: Download Get-ZimmermanTools.ps1 to {{ dest }}
   ansible.windows.win_powershell:
