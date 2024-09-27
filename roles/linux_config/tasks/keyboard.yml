@@ -18,7 +18,7 @@
     - name: Username - localuser
       ansible.builtin.set_fact:
         linux_config_username: "{{ linux_config_default['username'] }}"
-      when: not linux_config['kali']
+      when: linux_config['kali'] is undefined
 
     - name: Username - kali
       ansible.builtin.set_fact:
