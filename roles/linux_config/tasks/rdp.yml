@@ -1,38 +1,40 @@
 ---
 - name: Debian facts
+  when: # ansible_os_family == Debian AND rdp != kali
+    - ansible_os_family == "Debian"
+    - linux_config['kali'] is undefined # This should not be defined for non-kali hosts
   ansible.builtin.set_fact:
     linux_rdp_dependencies:
       - xorg
       - xrdp
       - task-xfce-desktop
-  when: # ansible_os_family == Debian AND rdp != kali
-    - ansible_os_family == "Debian"
-    - linux_config['kali'] is undefined # This should not be defined for non-kali hosts
 
 - name: Ubuntu 20.04 facts
+  when: # ansible_os_family == Debian AND rdp != kali
+    - ansible_os_family == "Debian"
+    - ansible_facts['lsb']['release'] == "20.04"
   ansible.builtin.set_fact:
     linux_rdp_dependencies:
       - xorg
       - xrdp
       - xfce4
       - xfce4-goodies
-  when: # ansible_os_family == Debian AND rdp != kali
-    - ansible_os_family == "Ubuntu"
-    - ansible_facts['lsb']['release'] == "20.04"
 
 - name: Kali facts
+  when:
+    - linux_config['kali'] is defined # This should only be defined for kali hosts
   ansible.builtin.set_fact:
     linux_rdp_dependencies:
       - kali-desktop-xfce
       - xorg
       - xrdp
-  when: linux_config['kali'] is defined # This should only be defined for kali hosts
 
 - name: Apt install rdp dependencies
+  when:
+    - ansible_os_family == "Debian"
   ansible.builtin.include_tasks: packages.yml
   vars:
     packages: "{{ linux_rdp_dependencies }}"
-  when: ansible_os_family == "Debian"
 
 - name: Disable the kasmvnc service
   become: true
