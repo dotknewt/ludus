@@ -13,7 +13,7 @@
   when: linux_config['username'] is undefined
   block:
     - name: Username - localuser
-      when: not linux_config['kali'] or linux_config['kali'] is undefined
+      when: linux_config['kali'] is undefined
       ansible.builtin.set_fact:
         linux_config_username: "{{ linux_config_default['username'] }}"
     - name: Username - kali # Kali specified
