@@ -37,12 +37,14 @@
     packages: "{{ linux_rdp_dependencies }}"
 
 - name: Disable the kasmvnc service
+  when:
+    - linux_config['kali'] is defined
   become: true
   ansible.builtin.service:
     name: kasmvnc@1.service
     daemon_reload: true
-    enabled: false
     state: stopped
+    enabled: false
 
 - name: Enable the xrdp.service
   become: true
