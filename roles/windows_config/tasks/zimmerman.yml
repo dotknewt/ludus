@@ -18,7 +18,7 @@
       Url: "{{ url }}"
       Dest: "{{ dest }}"
 # recurse over directories within "dest": 
-- nam: Copy scripts
+- name: Copy script
   ansible.windows.win_copy:
     src: "files/list_paths.ps1"
     dest: C:/Temp/list_paths.ps1
