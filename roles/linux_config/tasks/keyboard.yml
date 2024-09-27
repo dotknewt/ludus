@@ -10,26 +10,21 @@
     linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
 
 - name: Determine username - Unspecified # Username NOT specified
-  when: (not linux_config['kali'] and linux_config['username'] is undefined) or
-        (linux_config['kali'] and linux_config['username'] is undefined)
+  when: linux_config['username'] is undefined
   block:
     - name: Username - localuser
-      when: not linux_config['kali'] and linux_config['username'] is undefined
+      when: not linux_config['kali'] or linux_config['kali'] is undefined
       ansible.builtin.set_fact:
         linux_config_username: "{{ linux_config_default['username'] }}"
-    - name: Username - kali # Kali specified and username undefined
-      when: linux_config['kali'] and linux_config['username'] is undefined
+    - name: Username - kali # Kali specified
+      when: linux_config['kali']
       ansible.builtin.set_fact:
         linux_config_username: "kali"
 
 - name: Determine username - Specified # Username specified
-  when: (linux_config['kali'] and linux_config['username'] is defined) or
-        (not linux_config['kali'] and linux_config['username'] is defined)
-  block:
-    - name: Username - {{ linux_config['username'] }} # Prefer specified username regardless of kali value
-      when: linux_config['username'] is defined
-      ansible.builtin.set_fact:
-        linux_config_username: "{{ linux_config['username'] }}"
+  when: linux_config['username'] is defined
+  ansible.builtin.set_fact:
+    linux_config_username: "{{ linux_config['username'] }}"
 
 - name: "Configure keyboard layout"
   when: linux_config_username is defined and linux_config_keyboard_layout is defined
