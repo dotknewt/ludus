@@ -18,10 +18,14 @@
       Url: "{{ url }}"
       Dest: "{{ dest }}"
 # recurse over directories within "dest": 
+- nam: Copy scripts
+  ansible.windows.win_copy:
+    src: "files/list_paths.ps1"
+    dest: C:/Temp/list_paths.ps1
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
-    script: "files/list_paths.ps1"
+    script: "C:/Temp/list_paths.ps1"
     executable: pwsh.exe
     arguments:
       - -ExecutionPolicy
