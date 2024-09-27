@@ -11,29 +11,32 @@
     - name: Layout - {{ linux_config['keyboard_layout'] }}
       ansible.builtin.set_fact:
         linux_config_keyboard_layout: "{{ linux_config['keyboard_layout'] }}"
-  when: linux_config['keyboard_layout']
+  when: linux_config['keyboard_layout'] is defined
 
 - name: Determine username - Unspecified # Username NOT specified in range config
   block:
     - name: Username - localuser
       ansible.builtin.set_fact:
         linux_config_username: "{{ linux_config_default['username'] }}"
-      when: linux_config['kali'] is undefined
-
+      when: not linux_config['kali'] and linux_config['username'] is undefined
     - name: Username - kali
       ansible.builtin.set_fact:
         linux_config_username: "kali"
-      when: linux_config['kali']
-  when: linux_config['username'] is undefined
+      when: linux_config['kali'] and linux_config['username'] is undefined
+  when: (not linux_config['kali'] AND linux_config['username'] is undefined) or
+        (linux_config['kali'] AND linux_config['username'] is undefined)
 
 - name: Determine username - Specified # Username specified in range config
   block:
-    - name: Username - {{ linux_config['username'] }}
+    - name: Username - {{ linux_config['username'] }} # Prefer specified username regardless of kali value
       ansible.builtin.set_fact:
         linux_config_username: "{{ linux_config['username'] }}"
-  when: linux_config['username']
+      when:
+      - linux_config['username'] is defined
+  when: (linux_config['kali'] AND linux_config['username'] is defined) or
+        (not linux_config['kali'] AND linux_config['username'] is defined)
 
-- name: Configure keyboard - Step 1
+- name: Configure keyboard layout {{ linux_config_keyboard_layout }} for {{ linux_config_username }}
   block:
     - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
       ansible.builtin.shell: sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/' /etc/default/keyboard
@@ -49,7 +52,7 @@
       ansible.builtin.shell: |
         echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile
   when:
-  - linux_config_keyboard_layout is defined
   - linux_config_username is defined
+  - linux_config_keyboard_layout is defined
   become: true
 
