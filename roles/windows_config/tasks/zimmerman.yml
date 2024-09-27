@@ -13,10 +13,7 @@
 - name: Download Get-ZimmermanTools.ps1 to {{ dest }}
   ansible.windows.win_powershell:
     script: |
-      Invoke-WebRequest -Uri $Url -OutFile $Dest
-    parameters:
-      Url: "{{ url }}"
-      Dest: "{{ dest }}"
+      Invoke-WebRequest -Uri "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1" -OutFile "C:/Tools/"
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
@@ -25,7 +22,6 @@
     arguments:
       - -ExecutionPolicy
       - ByPass
-    parameters:
 
 - name: Recursively append tool paths to users env
   ansible.windows.win_powershell:
