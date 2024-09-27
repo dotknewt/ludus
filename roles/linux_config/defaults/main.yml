@@ -1,8 +1,8 @@
 ---
 linux_config_default:
-  keyboard_layout: us
-  username: localuser
-  rdp: false
-  kali: false
-  firewall: false
-  packages: false
+  keyboard_layout: 'us'
+  username: 'localuser'
+  rdp: 'false'
+  kali: 'false'
+  firewall: 'false'
+  packages: 'false'
