@@ -13,11 +13,11 @@
 - name: Download Get-ZimmermanTools.ps1 to {{ dest }}
   ansible.windows.win_powershell:
     script: |
-      Invoke-WebRequest -Uri "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1" -OutFile "C:/Tools/"
+      Invoke-WebRequest -Uri "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1" -OutFile C:\Tools\Get-ZimmermanTools.ps1
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
-    script: C:/Tools/Get-ZimmermanTools.ps1
+    script: C:\Tools\Get-ZimmermanTools.ps1
     executable: pwsh.exe
     arguments:
       - -ExecutionPolicy
