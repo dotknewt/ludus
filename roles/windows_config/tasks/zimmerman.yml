@@ -17,11 +17,17 @@
 
 - name: Register additional tool paths
   ansible.windows.win_powershell:
-    script: C:\Tools\Get-ZimmermanTools.ps1
+    script: | 
+      pwsh.exe C:\Tools\Get-ZimmermanTools.ps1
     executable: pwsh.exe
     arguments:
       - -ExecutionPolicy
       - ByPass
+
+- name: Append net6 path to users env
+  ansible.windows.win_powershell:
+    script: |
+      $Env:PATH += ";{{ dest }}"
 
 - name: Recursively append tool paths to users env
   ansible.windows.win_powershell:
