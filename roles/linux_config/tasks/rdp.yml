@@ -1,6 +1,6 @@
 ---
 - name: Debian facts
-  when: # ansible_os_family == Debian AND rdp != kali
+  when:
     - ansible_os_family == "Debian"
     - linux_config['kali'] is undefined # This should not be defined for non-kali hosts
   ansible.builtin.set_fact:
