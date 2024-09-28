@@ -19,6 +19,7 @@
       ansible.builtin.set_fact:
         linux_rdp_dependencies:
           - xorg
+          - xorgxrdp
           - xrdp
           - xfce4
           - xubuntu-desktop
@@ -33,11 +34,11 @@
         name: "{{ linux_config_username }}"
         groups: ssl-cert
         append: true
-#    - name: Add {{ linux_config_username }} user to ssl-cert group
-#      ansible.builtin.user:
-#        name: "remnux"
-#        groups: ssl-cert
-#        append: true
+    - name: Add {{ linux_config_username }} user to ssl-cert group
+      ansible.builtin.user:
+        name: "remnux"
+        groups: ssl-cert
+        append: true
 
 - name: Kali facts
   when:
