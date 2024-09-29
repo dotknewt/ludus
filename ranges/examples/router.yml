@@ -1,0 +1,25 @@
+---
+# This key defines the settings for the router VM in your range. It is optional, and by default Ludus will deploy a router VM with the default settings.
+router:
+  vm_name: "{{ range_id }}-router-debian11-x64"
+  hostname: "{{ range_id }}-router"
+  template: debian11-x64-template
+  ram_gb: 2
+  ram_min_gb: 1
+  cpus: 2
+  roles: # Enterprise only
+    - ludus_guacamole_server # You can add roles to the router VM just like any other VM
+  role_vars: # Enterprise only
+    somevar: value
+  outbound_wireguard_config: |- # Enterprise only; Note: this config must have AllowedIPs set to 0.0.0.0/0, split tunnels are not supported (yet)
+    [Interface]
+    PrivateKey = XXXX
+    ...
+  outbound_wireguard_vlans: # Enterprise only; Define the VLANs that the router VM will route traffic for. This key is required if outbound_wireguard_config is defined.
+    - 10
+  inbound_wireguard: # Enterprise only; Must be used with users that have portforwarding enabled at creation time
+    enabled: true # Enable or disable the WireGuard server on the router (default: false)
+    server_cidr: 10.254.254.0/24 # The CIDR of the WireGuard server (default: 10.254.254.0/24)
+    port: 51820 # The port the WireGuard server is listening on (UDP) (default: 51820). Note: This must be 51820 to work with port forwarding.
+    allowed_vlans: # The VLANs that WireGuard clients are allowed to connect to (default: all)
+      - 10
