@@ -24,11 +24,6 @@
           - xfce4
           - xubuntu-desktop
           - xfce4-goodies
-    - name: Add xrdp user to ssl-cert group
-      ansible.builtin.user:
-        name: xrdp
-        groups: ssl-cert
-        append: true
 
 - name: Kali facts
   when:
@@ -55,6 +50,12 @@
     daemon_reload: true
     state: stopped
     enabled: false
+
+- name: Add xrdp user to ssl-cert group
+  ansible.builtin.user:
+    name: xrdp
+    groups: ssl-cert
+    append: true
 
 - name: Enable the xrdp.service
   become: true
