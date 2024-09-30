@@ -23,6 +23,11 @@
       - -ExecutionPolicy
       - ByPass
 
+- name: Append net6 tool path to users env
+  ansible.windows.win_powershell:
+    script: |
+      $Env:PATH += ";$HOME/net6"
+
 - name: Recursively append tool paths to users env
   ansible.windows.win_powershell:
     script: |
