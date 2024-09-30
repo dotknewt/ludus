@@ -13,9 +13,9 @@
 - name: Download Get-ZimmermanTools.ps1 to {{ dest }}Get-ZimmermanTools.ps1
   ansible.windows.win_powershell:
     script: |
-      Invoke-WebRequest -Uri "https://github.com/EricZimmerman/Get-ZimmermanTools/blob/master/Get-ZimmermanTools.ps1" -OutFile C:\Tools\Get-ZimmermanTools.ps1
+      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/EricZimmerman/Get-ZimmermanTools/refs/heads/master/Get-ZimmermanTools.ps1" -OutFile C:\Tools\Get-ZimmermanTools.ps1
 
-- name: Execute Get-ZimmermanTools.ps1
+- name: Get ZimmermanTools 
   ansible.windows.win_powershell:
     script: | 
       powershell.exe C:\Tools\Get-ZimmermanTools.ps1
