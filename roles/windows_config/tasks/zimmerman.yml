@@ -24,16 +24,7 @@
       - -ExecutionPolicy
       - ByPass
 
-- name: Append net6 path to users env
-  ansible.windows.win_powershell:
-    script: |
-      $Env:PATH += ";$Dest"
-    parameters:
-      Dest: "{{ dest }}/net6"
-
 - name: Recursively append tool paths to users env
   ansible.windows.win_powershell:
     script: |
-      Get-ChildItem "$Dest/" -Recurse -Depth 1 | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) { $Env:PATH += ";$($_.FullName)" }}; [Environment]::SetEnvironmentVariable("Path", "$Env:PATH", "User")
-    parameters:
-      Dest: "{{ dest }}/net6"
+      Get-ChildItem "$HOME/net6" -Recurse -Depth 1 | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) { $Env:PATH += ";$($_.FullName)" }}; [Environment]::SetEnvironmentVariable("Path", "$Env:PATH", "User")
