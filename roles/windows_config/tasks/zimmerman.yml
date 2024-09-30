@@ -19,7 +19,6 @@
   ansible.windows.win_powershell:
     script: | 
       powershell.exe C:\Tools\Get-ZimmermanTools.ps1
-    executable: powershell.exe
     arguments:
       - -ExecutionPolicy
       - ByPass
