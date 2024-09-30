@@ -36,4 +36,4 @@
     script: |
       Get-ChildItem "$Dest/net6/" -Recurse -Depth 1 | Foreach-Object { if ( Test-Path -Path $_.FullName -PathType Container ) { $Env:PATH += ";$($_.FullName)" }}; [Environment]::SetEnvironmentVariable("Path", "$Env:PATH", "User")
     parameters:
-      Dest: "{{ dest }}"
+      Dest: "{{ dest }}/net6"
