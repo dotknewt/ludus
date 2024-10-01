@@ -25,6 +25,17 @@
           - xubuntu-desktop
           - xfce4-goodies
 
+- name: User specific configuration
+  become: true
+  when:
+    - linux_config['username'] is defined
+  block:
+    - name: Add {{ linux_config['username'] }} to sudoers 
+      ansible.builtin.user:
+        name: "linux_config['username']"
+        groups: sudo
+        append: true
+
 - name: Kali facts
   when:
     - linux_config['kali'] is defined # This should only be defined for kali hosts

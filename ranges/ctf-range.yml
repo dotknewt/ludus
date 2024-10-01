@@ -36,6 +36,7 @@ ludus:
       linux_config:
         keyboard_layout: 'no'
         rdp: 'true'
+        username: 'remnux'
 
   - vm_name: "{{ range_id }}-flare"
     hostname: "{{ range_id }}-flare"

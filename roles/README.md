@@ -1,6 +1,9 @@
 ## Linux:
 - configures the keyboard layout
-- configure xrdp and disable kasm 
+- configure xrdp and disable kasm
+
+### To Do
+- only remnux user works (on remnux) so user should be added to sudoers
 
 ## Windows:
 - configures the keyboard and/or display language
