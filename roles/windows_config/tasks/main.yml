@@ -16,4 +16,4 @@
 - name: Get Zimmerman Tools
   ansible.builtin.include_tasks:
     file: zimmerman.yml
-  when: windows_config['get_zimmerman_tools']
+  when: windows_config['get_zimmerman_tools'] is defined
