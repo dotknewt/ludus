@@ -5,7 +5,7 @@
 
 - ansible.builtin.set_fact: # if keyboard layout is defined
     windows_config_keyboard_layout: "{{ windows_config['keyboard_layout'] }}"
-  when: windows_config['keyboard_layout']
+  when: windows_config['keyboard_layout'] is defined
 
 - ansible.builtin.set_fact: # if username is undefined
     windows_config_username: "{{ windows_config_default['username'] }}"
@@ -13,7 +13,7 @@
 
 - ansible.builtin.set_fact: # if username defined
     windows_config_username: "{{ windows_config['username'] }}"
-  when: windows_config['username']
+  when: windows_config['username'] is defined
 
 - ansible.builtin.set_fact: # if default display language is undefined
     windows_config_display_language: "{{ windows_config_default['display_language'] }}"
@@ -21,7 +21,7 @@
 
 - ansible.builtin.set_fact: # if default display language is defined
     windows_config_display_language: "{{ windows_config['display_language'] }}"
-  when: windows_config['display_language']
+  when: windows_config['display_language'] is defined
 
 - name: Set default keyboard in registry
   ansible.windows.win_powershell:
