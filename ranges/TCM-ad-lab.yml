@@ -1,6 +1,6 @@
 ludus:
-  - vm_name: "TCM-DC01"
-    hostname: "TCM-DC01"
+  - vm_name: "{{ range_id }}-TCM-DC01"
+    hostname: "{{ range_id }}-TCM-DC01"
     template: win2022-server-x64-template
     vlan: 3
     ip_last_octet: 1
@@ -10,20 +10,21 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      install_additional_tools: false
+      sysprep: false
     domain:
-      fqdn: shellcorp.loc
+      fqdn: shellcorp.localdomain
       role: primary-dc
     roles:
       - windows_config
+      - badsectorlabs.ludus_adcs
     role_vars:
       windows_config:
         keyboard_layout: '00000414'
         display_language: '0409'
         username: 'localuser'
 
-  - vm_name: "TCM-WS01"
-    hostname: "TCM-WS01"
+  - vm_name: "{{ range_id }}-TCM-WS01"
+    hostname: "{{ range_id }}-TCM-WS01"
     template: win11-22h2-x64-enterprise-template
     vlan: 3
     ip_last_octet: 2
@@ -33,9 +34,9 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      install_additional_tools: false
+      sysprep: false
     domain:
-      fqdn: shellcorp.loc
+      fqdn: shellcorp.localdomain
       role: member
     roles:
       - windows_config
@@ -45,8 +46,8 @@ ludus:
         display_language: '0409'
         username: 'localuser'
 
-  - vm_name: "TCM-WS02"
-    hostname: "TCM-WS02"
+  - vm_name: "{{ range_id }}-TCM-WS02"
+    hostname: "{{ range_id }}-TCM-WS02"
     template: win11-22h2-x64-enterprise-template
     vlan: 3
     ip_last_octet: 3
@@ -56,9 +57,9 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      install_additional_tools: false
+      sysprep: false
     domain:
-      fqdn: shellcorp.loc
+      fqdn: shellcorp.localdomain
       role: member
     roles:
       - windows_config
@@ -68,8 +69,8 @@ ludus:
         display_language: '0409'
         username: 'localuser'
 
-  - vm_name: "TCM-kali"
-    hostname: "TCM-kali"
+  - vm_name: "{{ range_id }}-TCM-kali"
+    hostname: "{{ range_id }}-TCM-kali"
     template: kali-x64-desktop-template
     vlan: 3
     ip_last_octet: 5
@@ -87,14 +88,33 @@ ludus:
         rdp: 'true'
         kali: 'true'
 
-
 router:
-  vm_name: "TCM-router"
-  hostname: "TCM-router"
+  vm_name: "{{ range_id }}-TCM-router"
+  hostname: "{{ range_id }}-TCM-router"
   template: debian-11-x64-server-template
   ram_gb: 2
   ram_min_gb: 1
   cpus: 2
+
+network: 
+  inter_vlan_default: ACCEPT # The default rule to apply to traffic between VLANs. Default: ACCEPT
+  external_default: ACCEPT   # The default rule to apply to traffic leaving the range out to the internet. Default: ACCEPT
+  always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
+    - 192.168.0.0/16         # entries must be in CIDR format
+    - 172.16.0.0/12
+  rules: # Specify rules to restrict or allow based on inter_vlan_default. Default: allow all traffic
+    - name: Allow VLAN to VLAN traffic # The rule name will be added as a comment in iptables
+      vlan_src: 3   # Traffic source VLAN
+      vlan_dst: 3   # Traffic destination VLAN. Special value 'public' can be used which is converted to '! 10.ID.0.0/16' in the iptables rule
+      ports: all
+      protocol: all
+      action: ACCEPT # ACCEPT|REJECT|DROP
+    - name: Allow VLAN to INTERNET
+      vlan_src: 3
+      vlan_dst: public
+      ports: all
+      protocol: all
+      action: ACCEPT
 
 defaults:
   snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
