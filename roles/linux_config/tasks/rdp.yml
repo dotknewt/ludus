@@ -13,7 +13,7 @@
   become: true
   when: # ansible_os_family == Debian AND rdp != kali
     - ansible_os_family == "Debian"
-    - ansible_facts['lsb']['release'] == "20.04"
+    - ansible_facts['ansible_lsb']['release'] == "20.04"
   block:
     - name: Listing dependencies
       ansible.builtin.set_fact:

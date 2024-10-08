@@ -3,9 +3,16 @@
   ansible.builtin.setup:
   when: ansible_os_family is undefined
 
-#- name: Debug os family
-#  ansible.builtin.debug:
-#    msg: "{{ ansible_os_family }} {{ ansible_facts['lsb']['release'] }}"
+- name: Debug Task
+  when: linux_config_debug
+  block:
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+
+    - name: Debug os family
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }} {{ ansible_facts['ansible_lsb']['release'] }}"
 
 - name: Check for Linux
   ansible.builtin.fail:
