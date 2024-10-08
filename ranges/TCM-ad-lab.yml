@@ -22,6 +22,8 @@ ludus:
         keyboard_layout: '00000414'
         display_language: '0409'
         username: 'localuser'
+    ansible_groups:
+      - tcm
 
   - vm_name: "{{ range_id }}-TCM-WS01"
     hostname: "{{ range_id }}-TCM-WS01"
@@ -45,7 +47,8 @@ ludus:
         keyboard_layout: '00000414'
         display_language: '0409'
         username: 'localuser'
-
+    ansible_groups:
+      - tcm
   - vm_name: "{{ range_id }}-TCM-WS02"
     hostname: "{{ range_id }}-TCM-WS02"
     template: win11-22h2-x64-enterprise-template
@@ -68,7 +71,8 @@ ludus:
         keyboard_layout: '00000414'
         display_language: '0409'
         username: 'localuser'
-
+    ansible_groups:
+      - tcm
   - vm_name: "{{ range_id }}-TCM-kali"
     hostname: "{{ range_id }}-TCM-kali"
     template: kali-x64-desktop-template
@@ -87,7 +91,8 @@ ludus:
         keyboard_layout: 'no'
         rdp: 'true'
         kali: 'true'
-
+    ansible_groups:
+      - tcm
 router:
   vm_name: "{{ range_id }}-TCM-router"
   hostname: "{{ range_id }}-TCM-router"

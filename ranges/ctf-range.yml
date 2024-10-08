@@ -17,7 +17,9 @@ ludus:
         keyboard_layout: 'no'
         rdp: 'true'
         kali: 'true'
-  
+        ansible_groups: # Groups this VM will be a part of when `ludus range inventory` is run. Deploy with `ludus range deploy -t custom-group`
+          - ctf
+          - kali
   - vm_name: "{{ range_id }}-remnux"
     hostname: "{{ range_id }}-remnux"
     template: remnux-template # ubuntu-20.04-x64-server-template # OR remnux-template
@@ -37,6 +39,9 @@ ludus:
         keyboard_layout: 'no'
         rdp: 'true'
         username: 'remnux'
+    ansible_groups:
+      - ctf
+      - remnux
 
   - vm_name: "{{ range_id }}-flare"
     hostname: "{{ range_id }}-flare"
@@ -59,6 +64,9 @@ ludus:
         display_language: '0409'
         username: 'localuser'
         get_zimmerman_tools: 'true'
+    ansible_groups:
+      - ctf
+      - flarevm
 router:
   vm_name: "{{ range_id }}-router"
   hostname: "{{ range_id }}-router"
