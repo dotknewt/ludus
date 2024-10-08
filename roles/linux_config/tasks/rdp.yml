@@ -30,7 +30,7 @@
   when:
     - linux_config['username'] is defined
   block:
-    - name: Add {{ linux_config['username'] }} to sudoers 
+    - name: Add to sudoers - {{ linux_config['username'] }}
       ansible.builtin.user:
         name: "linux_config['username']"
         groups: sudo
