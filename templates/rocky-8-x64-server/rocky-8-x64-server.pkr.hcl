@@ -1,9 +1,9 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0"
+  default = "sha256:2c735d3b0de921bd671a0e2d08461e3593ac84f64cdaef32e3ed56ba01f74f4b"
 }
 
-# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, win11, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
+# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
 variable "os" {
   type    = string
   default = "l26"
@@ -11,7 +11,7 @@ variable "os" {
 
 variable "iso_url" {
   type    = string
-  default = "https://releases.ubuntu.com/22.04.5/ubuntu-22.04.5-live-server-amd64.iso"
+  default = "https://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.10-x86_64-minimal.iso"
 }
 
 variable "vm_cpu_cores" {
@@ -21,7 +21,7 @@ variable "vm_cpu_cores" {
 
 variable "vm_disk_size" {
   type    = string
-  default = "200G"
+  default = "60G"
 }
 
 variable "vm_memory" {
@@ -31,50 +31,50 @@ variable "vm_memory" {
 
 variable "vm_name" {
   type    = string
-  default = "ubuntu-22.04-x64-server-template"
+  default = "rocky-8-x64-server-template"
 }
 
 variable "ssh_password" {
   type    = string
-  default = "password"
+  default = "root"
 }
 
 variable "ssh_username" {
   type    = string
-  default = "localuser"
+  default = "root"
 }
 
 # This block has to be in each file or packer won't be able to use the variables
 variable "proxmox_url" {
-  type = string
+  type =  string
 }
 variable "proxmox_host" {
-  type = string
+  type =  string
 }
 variable "proxmox_username" {
-  type = string
+  type =  string
 }
 variable "proxmox_password" {
-  type      = string
+  type =  string
   sensitive = true
 }
 variable "proxmox_storage_pool" {
-  type = string
+  type =  string
 }
 variable "proxmox_storage_format" {
-  type = string
+  type =  string
 }
 variable "proxmox_skip_tls_verify" {
-  type = bool
+  type =  bool
 }
 variable "proxmox_pool" {
   type = string
 }
 variable "iso_storage_pool" {
-  type = string
+  type =  string
 }
 variable "ansible_home" {
-  type = string
+  type =  string
 }
 variable "ludus_nat_interface" {
   type = string
@@ -82,20 +82,15 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Ubutntu 22.04 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
+  template_description = "Rocky 8 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
 }
 
-source "proxmox-iso" "ubuntu2204" {
+source "proxmox-iso" "rocky8" {
   boot_command = [
-    "e<down><down><down><end><wait>",
-    " autoinstall<wait>",
-    " ds='nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'",
-    "<wait10>",
-    "<F10>"
+     "<tab> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rocky-8-preseed.cfg<enter><wait>"
   ]
-  boot_key_interval      = "100ms"
-  boot_keygroup_interval = "2s"
-  http_directory         = "./http"
+  boot_key_interval = "100ms"
+  http_directory    = "./http"
 
   communicator    = "ssh"
   cores           = "${var.vm_cpu_cores}"
@@ -105,7 +100,8 @@ source "proxmox-iso" "ubuntu2204" {
     disk_size         = "${var.vm_disk_size}"
     format            = "${var.proxmox_storage_format}"
     storage_pool      = "${var.proxmox_storage_pool}"
-    type              = "virtio"
+    type              = "scsi"
+    ssd               = true
     discard           = true
     io_thread         = true
   }
@@ -134,16 +130,7 @@ source "proxmox-iso" "ubuntu2204" {
 }
 
 build {
-  sources = ["source.proxmox-iso.ubuntu2204"]
-
-  provisioner "ansible" {
-    playbook_file = "ansible/reset-machine-id.yml"
-    use_proxy     = false
-    user = "${var.ssh_username}"
-    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
-    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
-    skip_version_check = true
-  }
+  sources = ["source.proxmox-iso.rocky8"]
 
   provisioner "ansible" {
     playbook_file = "ansible/reset-ssh-host-keys.yml"

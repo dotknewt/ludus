@@ -1,44 +1,45 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+  default = "sha256:c2e6f4dc37ac944e2ed507f87c6188dd4d3179bf4a3f9e110d3c88d1f3294bdc"
 }
 
+# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, win11, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
 variable "os" {
   type    = string
-  default = "win10"
+  default = "l26"
 }
 
 variable "iso_url" {
   type    = string
-  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  default = "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-desktop-amd64.iso"
 }
 
 variable "vm_cpu_cores" {
   type    = string
-  default = "2"
+  default = "4"
 }
 
 variable "vm_disk_size" {
   type    = string
-  default = "250G"
+  default = "200G"
 }
 
 variable "vm_memory" {
   type    = string
-  default = "4096"
+  default = "8192"
 }
 
 variable "vm_name" {
   type    = string
-  default = "win2019-server-x64-no-security-updates-template"
+  default = "ubuntu-24.04-x64-desktop-template"
 }
 
-variable "winrm_password" {
+variable "ssh_password" {
   type    = string
   default = "password"
 }
 
-variable "winrm_username" {
+variable "ssh_username" {
   type    = string
   default = "localuser"
 }
@@ -81,30 +82,22 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Windows Server 2019 64-bit template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
+  template_description = "Ubutntu 24.04 Desktop template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
 }
 
-source "proxmox-iso" "win2019-server-x64-no-security-updates" {
-  additional_iso_files {
-    device           = "sata3"
-    iso_storage_pool = "${var.iso_storage_pool}"
-    unmount          = true
-    cd_label         = "PROVISION"
-    cd_files = [
-      "iso/setup-for-ansible.ps1",
-      "iso/win-updates.ps1",
-      "iso/windows-common-setup.ps1",
-      "Autounattend.xml",
-    ]
-  }
-  additional_iso_files {
-    device           = "sata4"
-    iso_checksum     = "sha256:bdc2ad1727a08b6d8a59d40e112d930f53a2b354bdef85903abaad896214f0a3"
-    iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/virtio-win-0.1.262.iso"
-    iso_storage_pool = "${var.iso_storage_pool}"
-    unmount          = true
-  }
-  communicator    = "winrm"
+source "proxmox-iso" "ubuntu2404" {
+  boot_command = [
+    "e<down><down><down><end><wait>",
+    " autoinstall<wait>",
+    " ds='nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'",
+    "<wait10>",
+    "<F10>"
+  ]
+  boot_key_interval      = "100ms"
+  boot_keygroup_interval = "2s"
+  http_directory         = "./http"
+
+  communicator    = "ssh"
   cores           = "${var.vm_cpu_cores}"
   cpu_type        = "host"
   scsi_controller = "virtio-scsi-single"
@@ -133,28 +126,31 @@ source "proxmox-iso" "win2019-server-x64-no-security-updates" {
   template_description = "${local.template_description}"
   username             = "${var.proxmox_username}"
   vm_name              = "${var.vm_name}"
-  winrm_insecure       = true
-  winrm_password       = "${var.winrm_password}"
-  winrm_use_ssl        = true
-  winrm_username       = "${var.winrm_username}"
+  ssh_password         = "${var.ssh_password}"
+  ssh_username         = "${var.ssh_username}"
+  ssh_wait_timeout     = "30m"
   unmount_iso          = true
-  winrm_timeout        = "6h" // Sometimes the boot and/or updates can be really really slow
   task_timeout         = "20m" // On slow disks the imgcopy operation takes > 1m
 }
 
 build {
-  sources = ["source.proxmox-iso.win2019-server-x64-no-security-updates"]
+  sources = ["source.proxmox-iso.ubuntu2404"]
 
-  provisioner "windows-shell" {
-    scripts = ["scripts/disablewinupdate.bat"]
+  provisioner "ansible" {
+    playbook_file = "ansible/reset-machine-id.yml"
+    use_proxy     = false
+    user = "${var.ssh_username}"
+    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+    skip_version_check = true
   }
 
-  provisioner "powershell" {
-    scripts = ["scripts/disable-hibernate.ps1"]
+  provisioner "ansible" {
+    playbook_file = "ansible/reset-ssh-host-keys.yml"
+    use_proxy     = false
+    user = "${var.ssh_username}"
+    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+    skip_version_check = true
   }
-
-  provisioner "powershell" {
-    scripts = ["scripts/install-virtio-drivers.ps1"]
-  }
-
 }

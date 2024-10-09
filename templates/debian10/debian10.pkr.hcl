@@ -1,16 +1,17 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+  default = "sha512:bc469019b9057073d36ff8f5402c95ff0a0363657358336dc9a05fc6af66276229aa727ec46cf17b84d308f44b825de7f24ea1a256062a14e0f605cd70bae02f"
 }
 
+# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
 variable "os" {
   type    = string
-  default = "win10"
+  default = "l26"
 }
 
 variable "iso_url" {
   type    = string
-  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  default = "https://cdimage.debian.org/cdimage/archive/10.12.0/amd64/iso-cd/debian-10.12.0-amd64-netinst.iso"
 }
 
 variable "vm_cpu_cores" {
@@ -20,7 +21,7 @@ variable "vm_cpu_cores" {
 
 variable "vm_disk_size" {
   type    = string
-  default = "250G"
+  default = "60G"
 }
 
 variable "vm_memory" {
@@ -30,17 +31,17 @@ variable "vm_memory" {
 
 variable "vm_name" {
   type    = string
-  default = "win2019-server-x64-no-security-updates-template"
+  default = "debian-10-x64-server-template"
 }
 
-variable "winrm_password" {
+variable "ssh_password" {
   type    = string
-  default = "password"
+  default = "debian"
 }
 
-variable "winrm_username" {
+variable "ssh_username" {
   type    = string
-  default = "localuser"
+  default = "debian"
 }
 
 # This block has to be in each file or packer won't be able to use the variables
@@ -81,30 +82,22 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Windows Server 2019 64-bit template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
+  template_description = "Debian 10 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => debian:debian"
 }
 
-source "proxmox-iso" "win2019-server-x64-no-security-updates" {
-  additional_iso_files {
-    device           = "sata3"
-    iso_storage_pool = "${var.iso_storage_pool}"
-    unmount          = true
-    cd_label         = "PROVISION"
-    cd_files = [
-      "iso/setup-for-ansible.ps1",
-      "iso/win-updates.ps1",
-      "iso/windows-common-setup.ps1",
-      "Autounattend.xml",
-    ]
-  }
-  additional_iso_files {
-    device           = "sata4"
-    iso_checksum     = "sha256:bdc2ad1727a08b6d8a59d40e112d930f53a2b354bdef85903abaad896214f0a3"
-    iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/virtio-win-0.1.262.iso"
-    iso_storage_pool = "${var.iso_storage_pool}"
-    unmount          = true
-  }
-  communicator    = "winrm"
+source "proxmox-iso" "debian10" {
+  boot_command = [
+    "<down><tab>", # non-graphical install
+    "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-10-preseed.cfg ",
+    "language=en locale=en_US.UTF-8 ",
+    "country=US keymap=us ",
+    "hostname=debian10 domain=local ",
+    "<enter><wait>",
+  ]
+  boot_key_interval = "100ms"
+  http_directory = "./http"
+
+  communicator    = "ssh"
   cores           = "${var.vm_cpu_cores}"
   cpu_type        = "host"
   scsi_controller = "virtio-scsi-single"
@@ -133,28 +126,21 @@ source "proxmox-iso" "win2019-server-x64-no-security-updates" {
   template_description = "${local.template_description}"
   username             = "${var.proxmox_username}"
   vm_name              = "${var.vm_name}"
-  winrm_insecure       = true
-  winrm_password       = "${var.winrm_password}"
-  winrm_use_ssl        = true
-  winrm_username       = "${var.winrm_username}"
-  unmount_iso          = true
-  winrm_timeout        = "6h" // Sometimes the boot and/or updates can be really really slow
+  ssh_password         = "${var.ssh_password}"
+  ssh_username         = "${var.ssh_username}"
+  ssh_wait_timeout     = "30m"
   task_timeout         = "20m" // On slow disks the imgcopy operation takes > 1m
 }
 
 build {
-  sources = ["source.proxmox-iso.win2019-server-x64-no-security-updates"]
+  sources = ["source.proxmox-iso.debian10"]
 
-  provisioner "windows-shell" {
-    scripts = ["scripts/disablewinupdate.bat"]
+  provisioner "ansible" {
+    playbook_file = "ansible/reset-ssh-host-keys.yml"
+    use_proxy     = false
+    user = "${var.ssh_username}"
+    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+    skip_version_check = true
   }
-
-  provisioner "powershell" {
-    scripts = ["scripts/disable-hibernate.ps1"]
-  }
-
-  provisioner "powershell" {
-    scripts = ["scripts/install-virtio-drivers.ps1"]
-  }
-
 }

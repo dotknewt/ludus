@@ -1,6 +1,6 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:9bc6028870aef3f74f4e16b900008179e78b130e6b0b9a140635434a46aa98b0"
+  default = "sha256:f11bda2f2caed8f420802b59f382c25160b114ccc665dbac9c5046e7fceaced2"
 }
 
 # The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, win11, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
@@ -11,7 +11,7 @@ variable "os" {
 
 variable "iso_url" {
   type    = string
-  default = "https://releases.ubuntu.com/22.04.5/ubuntu-22.04.5-live-server-amd64.iso"
+  default = "https://cdimage.ubuntu.com/ubuntu-legacy-server/releases/20.04/release/ubuntu-20.04.1-legacy-server-amd64.iso"
 }
 
 variable "vm_cpu_cores" {
@@ -26,12 +26,12 @@ variable "vm_disk_size" {
 
 variable "vm_memory" {
   type    = string
-  default = "8192"
+  default = "4096"
 }
 
 variable "vm_name" {
   type    = string
-  default = "ubuntu-22.04-x64-server-template"
+  default = "ubuntu-20.04-x64-server-template"
 }
 
 variable "ssh_password" {
@@ -82,19 +82,37 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Ubutntu 22.04 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
+  template_description = "Ubutntu 20.04 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
 }
 
-source "proxmox-iso" "ubuntu2204" {
+source "proxmox-iso" "ubuntu2004" {
   boot_command = [
-    "e<down><down><down><end><wait>",
-    " autoinstall<wait>",
-    " ds='nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'",
-    "<wait10>",
-    "<F10>"
+    "<esc><wait>",
+    "<esc><wait>",
+    "<enter><wait>",
+    "/install/vmlinuz <wait>",
+    "auto <wait>",
+    "console-setup/ask_detect=false ",
+    "debconf/frontend=noninteractive ",
+    "debian-installer=en_US ",
+    "fb=false ",
+    "hostname=ubuntu2004 ",
+    "initrd=/install/initrd.gz ",
+    "kbd-chooser/method=us ",
+    "keyboard-configuration/modelcode=SKIP ",
+    "keyboard-configuration/layout=USA ",
+    "keyboard-configuration/variant=USA ",
+    "locale=en_US ",
+    "passwd/username=localuser ",
+    "passwd/user-fullname=localuser ",
+    "passwd/user-password=password ",
+    "passwd/user-password-again=password ",
+    "noapic ",
+    "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu-2004-preseed.cfg ",
+    " -- <enter>"
   ]
-  boot_key_interval      = "100ms"
-  boot_keygroup_interval = "2s"
+  boot_key_interval      = "20ms"
+  boot_keygroup_interval = "20ms"
   http_directory         = "./http"
 
   communicator    = "ssh"
@@ -134,10 +152,10 @@ source "proxmox-iso" "ubuntu2204" {
 }
 
 build {
-  sources = ["source.proxmox-iso.ubuntu2204"]
+  sources = ["source.proxmox-iso.ubuntu2004"]
 
   provisioner "ansible" {
-    playbook_file = "ansible/reset-machine-id.yml"
+    playbook_file = "ansible/post-boot-config.yml"
     use_proxy     = false
     user = "${var.ssh_username}"
     extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]

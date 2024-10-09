@@ -114,10 +114,10 @@ source "proxmox-iso" "win11-23h2-x64-enterprise" {
       "Autounattend.xml",
     ]
   }
-  additional_iso_files {
+additional_iso_files {
     device           = "sata4"
-    iso_checksum     = "sha256:ebd48258668f7f78e026ed276c28a9d19d83e020ffa080ad69910dc86bbcbcc6"
-    iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso"
+    iso_checksum     = "sha256:bdc2ad1727a08b6d8a59d40e112d930f53a2b354bdef85903abaad896214f0a3"
+    iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/virtio-win-0.1.262.iso"
     iso_storage_pool = "${var.iso_storage_pool}"
     unmount          = true
   }
@@ -138,8 +138,7 @@ source "proxmox-iso" "win11-23h2-x64-enterprise" {
     disk_size         = "${var.vm_disk_size}"
     format            = "${var.proxmox_storage_format}"
     storage_pool      = "${var.proxmox_storage_pool}"
-    type              = "scsi"
-    ssd               = true
+    type              = "virtio"
     discard           = true
     io_thread         = true
   }

@@ -1,16 +1,16 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
+  default = "md5:5b5e08c490ad16b59b1d9fab0def883a"
 }
 
 variable "os" {
   type    = string
-  default = "win10"
+  default = "win8"
 }
 
 variable "iso_url" {
   type    = string
-  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  default = "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO"
 }
 
 variable "vm_cpu_cores" {
@@ -30,7 +30,7 @@ variable "vm_memory" {
 
 variable "vm_name" {
   type    = string
-  default = "win2019-server-x64-no-security-updates-template"
+  default = "win2012r2-server-x64-template"
 }
 
 variable "winrm_password" {
@@ -81,10 +81,10 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Windows Server 2019 64-bit template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
+  template_description = "Windows Server 2012 R2 64-bit template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
 }
 
-source "proxmox-iso" "win2019-server-x64-no-security-updates" {
+source "proxmox-iso" "win2012r2-server-x64" {
   additional_iso_files {
     device           = "sata3"
     iso_storage_pool = "${var.iso_storage_pool}"
@@ -97,7 +97,7 @@ source "proxmox-iso" "win2019-server-x64-no-security-updates" {
       "Autounattend.xml",
     ]
   }
-  additional_iso_files {
+additional_iso_files {
     device           = "sata4"
     iso_checksum     = "sha256:bdc2ad1727a08b6d8a59d40e112d930f53a2b354bdef85903abaad896214f0a3"
     iso_url          = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/virtio-win-0.1.262.iso"
@@ -143,7 +143,7 @@ source "proxmox-iso" "win2019-server-x64-no-security-updates" {
 }
 
 build {
-  sources = ["source.proxmox-iso.win2019-server-x64-no-security-updates"]
+  sources = ["source.proxmox-iso.win2012r2-server-x64"]
 
   provisioner "windows-shell" {
     scripts = ["scripts/disablewinupdate.bat"]
