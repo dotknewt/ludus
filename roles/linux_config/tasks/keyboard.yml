@@ -40,24 +40,24 @@
     - linux_config_keyboard_layout is defined
   become: true
   block:
-    - name: Set XKBLAYOUT in /etc/default/keyboard - "{{ linux_config_keyboard_layout }}"
+    - name: Set XKBLAYOUT in /etc/default/keyboard - "Norwegian"
       ansible.builtin.replace:
         path: /etc/default/keyboard
         regexp: '^XKBLAYOUT=.*'
-        replace: 'XKBLAYOUT="{{ linux_config_keyboard_layout }}"'
+        replace: 'XKBLAYOUT="no"'
         # sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="{{ linux_config_keyboard_layout }}"/'
 
-    - name: Generate additional locale in in /etc/locale.gen - "{{ linux_config_keyboard_layout }}"
+    - name: Generate additional locale in in /etc/locale.gen - "Norwegian"
       ansible.builtin.replace:
         path: /etc/locale.gen
         regexp: '^# nb_NO.UTF-8.*'
         replace: 'nb_NO.UTF-8 UTF-8'
       # sed -i 's/^# nb_NO.UTF-8.*/nb_NO.UTF-8 UTF-8/'
 
-    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+    - name: Set xkbmap layout - "Norwegian"
       ansible.builtin.shell:
-        cmd: echo "setxkbmap {{ linux_config_keyboard_layout }}" >> /home/{{ linux_config_username }}/.profile
+        cmd: echo "setxkbmap no" >> /home/{{ linux_config_username }}/.profile
 
-    - name: Set xkbmap layout - "{{ linux_config_keyboard_layout }}"
+    - name: Set xkbmap layout - "Norwegian"
       ansible.builtin.shell:
         cmd: echo "export LANG=en_US.UTF-8" >> /home/{{ linux_config_username }}/.profile

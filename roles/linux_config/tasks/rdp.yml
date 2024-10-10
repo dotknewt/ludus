@@ -9,21 +9,21 @@
       - xrdp
       - task-xfce-desktop
 
-- name: Ubuntu 20.04 facts
-  become: true
-  when: # ansible_os_family == Debian and lsb-release indicates ubuntu
-    - ansible_os_family == "Debian"
-    - ansible_facts['ansible_lsb']['release'] == "20.04"
-  block:
-    - name: Listing dependencies
-      ansible.builtin.set_fact:
-        linux_rdp_dependencies:
-          - xorg
-          - xorgxrdp
-          - xrdp
-          - xfce4
-          - xubuntu-desktop
-          - xfce4-goodies
+#- name: Ubuntu 20.04 facts
+#  become: true
+#  when: # ansible_os_family == Debian and lsb-release indicates ubuntu
+#    - ansible_os_family == "Debian"
+#    - ansible_facts['ansible_lsb']['release'] == "20.04"
+#  block:
+#    - name: Listing dependencies
+#      ansible.builtin.set_fact:
+#        linux_rdp_dependencies:
+#          - xorg
+#          - xorgxrdp
+#         - xrdp
+#         - xfce4
+#         - xubuntu-desktop
+#         - xfce4-goodies
 
 - name: User specific configuration
   become: true
