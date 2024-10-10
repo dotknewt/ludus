@@ -14,15 +14,16 @@ ludus:
       - linux_config
     role_vars:
       linux_config:
-        keyboard_layout: 'no'
+        keyboard_layout: "no"
         rdp: 'true'
         kali: 'true'
+        linux_config_debug: "true"
 
   - vm_name: "{{ range_id }}-flare"
     hostname: "{{ range_id }}-flare"
     template: flare-vm-template
     vlan: 2
-    ip_last_octet: 3
+    ip_last_octet: 2
     ram_gb: 16
     cpus: 8
     testing:
