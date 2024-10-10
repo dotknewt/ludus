@@ -1,0 +1,1 @@
+foreach ( $role in $(ls ./role*)) { ludus ansible role add -d $role --user CONDEF }
