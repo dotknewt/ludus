@@ -15,9 +15,9 @@
 - defaults
 - router
 
-## templates
+## /templates
 Templates copied from Badsectorlabs' repository at [gitlab.com](https://gitlab.com/badsectorlabs/ludus). 
-I may have modified things like more up to date Virtio drivers for windows, additional packages for kali etc. 
+I may have modified things like more up to date Virtio drivers for windows, additional packages for kali, preseed files..
 
 # Tips & Tricks
 - Create an extra config file to use when running commands that require the admin interface (through ssh tunneling)
