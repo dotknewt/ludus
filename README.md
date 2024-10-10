@@ -27,6 +27,8 @@ Add a role to the playbook file inside ansible/ where applicable
     - windows_language_configuration
 ```
 
+Or add the contents of "templates\custom-template-files\post-boot-config.yml" to a postboot config for linux hosts
+
 # Tips & Tricks
 - Create an extra config file to use when running commands that require the admin interface (through ssh tunneling)
 - Create an alias for creating the SSH tunnel
