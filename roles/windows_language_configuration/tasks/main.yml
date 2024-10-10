@@ -29,7 +29,3 @@
       ansible.windows.win_powershell:
         script: |
           Copy-UserInternationalSettingsToSystem -NewUser $True -WelcomeScreen $True
-
-    - name: Reboot after changing keyboard layout
-      ansible.windows.win_reboot:
-        reboot_timeout: 3600
