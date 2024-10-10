@@ -26,7 +26,7 @@ variable "vm_disk_size" {
 
 variable "vm_memory" {
   type    = string
-  default = "4096"
+  default = "8192"
 }
 
 variable "vm_name" {

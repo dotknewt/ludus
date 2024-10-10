@@ -16,7 +16,7 @@ variable "iso_url" {
 
 variable "vm_cpu_cores" {
   type    = string
-  default = "2"
+  default = "4"
 }
 
 variable "vm_disk_size" {
@@ -26,7 +26,7 @@ variable "vm_disk_size" {
 
 variable "vm_memory" {
   type    = string
-  default = "4096"
+  default = "8192"
 }
 
 variable "vm_name" {
