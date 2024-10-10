@@ -4,7 +4,7 @@
   when: ansible_os_family is undefined
 
 - name: Debug Task
-  when: linux_config_debug
+  when: linux_config_debug is defined
   block:
     - name: Print all available facts
       ansible.builtin.debug:
