@@ -29,3 +29,23 @@
       ansible.builtin.shell:
         cmd: update-grub
       become: true
+
+    - name: Set XKBLAYOUT in /etc/default/keyboard
+      ansible.builtin.replace:
+        path: /etc/default/keyboard
+        regexp: '^XKBLAYOUT=.*'
+        replace: 'XKBLAYOUT="no"'
+
+    - name: Add additional locale in in /etc/locale.gen
+      ansible.builtin.replace:
+        path: /etc/locale.gen
+        regexp: '^# nb_NO.UTF-8.*'
+        replace: 'nb_NO.UTF-8 UTF-8'
+
+    - name: Set xkbmap layout in /home/localuser/.profile
+      ansible.builtin.shell:
+        cmd: echo "setxkbmap no" >> /home/localuser/.profile
+
+    - name: Set environment LANG in /home/localuser/.profile
+      ansible.builtin.shell:
+        cmd: echo "export LANG=en_US.UTF-8" >> /home/localuser/.profile
