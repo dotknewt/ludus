@@ -1,4 +1,5 @@
 - hosts: all
   become: true
   roles:
+    - linux_config
     - badsectorlabs.ludus_remnux
