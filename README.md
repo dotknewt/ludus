@@ -19,6 +19,14 @@
 Templates copied from Badsectorlabs' repository at [gitlab.com](https://gitlab.com/badsectorlabs/ludus). 
 I may have modified things like more up to date Virtio drivers for windows, additional packages for kali, preseed files..
 
+Add a role to the playbook file inside ansible/ where applicable
+``` yaml
+- hosts: all
+  roles:
+    - badsectorlabs.ludus_commandovm
+    - windows_language_configuration
+```
+
 # Tips & Tricks
 - Create an extra config file to use when running commands that require the admin interface (through ssh tunneling)
 - Create an alias for creating the SSH tunnel
