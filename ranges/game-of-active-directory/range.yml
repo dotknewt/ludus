@@ -1,6 +1,6 @@
 ludus:
 # source: https://docs.ludus.cloud/docs/environment-guides/goad
-  - vm_name: "{{ range_id }}-GOAD-DC01"
+  - vm_name: "{{ range_id }}-DC01"
     hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-template
     vlan: 10
@@ -9,7 +9,9 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-  - vm_name: "{{ range_id }}-GOAD-DC02"
+    roles:
+      - windows_language_configuration
+  - vm_name: "{{ range_id }}-DC02"
     hostname: "{{ range_id }}-DC02"
     template: win2019-server-x64-template
     vlan: 10
@@ -18,7 +20,9 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-  - vm_name: "{{ range_id }}-GOAD-DC03"
+    roles:
+      - windows_language_configuration
+  - vm_name: "{{ range_id }}-DC03"
     hostname: "{{ range_id }}-DC03"
     template: win2016-server-x64-template
     vlan: 10
@@ -27,7 +31,9 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-  - vm_name: "{{ range_id }}-GOAD-SRV02"
+    roles:
+      - windows_language_configuration
+  - vm_name: "{{ range_id }}-SRV02"
     hostname: "{{ range_id }}-SRV02"
     template: win2019-server-x64-template
     vlan: 10
@@ -36,7 +42,9 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-  - vm_name: "{{ range_id }}-GOAD-SRV03"
+    roles:
+      - windows_language_configuration
+  - vm_name: "{{ range_id }}-SRV03"
     hostname: "{{ range_id }}-SRV03"
     template: win2019-server-x64-template
     vlan: 10
@@ -45,6 +53,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
+    roles:
+      - windows_language_configuration
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-kali"
     template: kali-x64-desktop-template
@@ -56,3 +66,5 @@ ludus:
     testing:
       snapshot: false
       block_internet: false
+router:
+  vm_name: "{{ range_id }}-router" # The name of the router VM deployed by Ludus
