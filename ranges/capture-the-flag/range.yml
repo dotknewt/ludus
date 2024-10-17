@@ -17,7 +17,6 @@ ludus:
         keyboard_layout: "no"
         rdp: 'true'
         kali: 'true'
-        linux_config_debug: "true"
 
   - vm_name: "{{ range_id }}-flare"
     hostname: "{{ range_id }}-flare"
@@ -32,11 +31,7 @@ ludus:
     windows:
       install_additional_tools: false
     roles:
-      - badsectorlabs.ludus_flarevm
-      - windows_config
-    role_vars:
-      windows_config:
-        get_zimmerman_tools: 'true'
+      - windows_language_configuration
 
 router:
   vm_name: "{{ range_id }}-router"
@@ -51,27 +46,11 @@ network:
   inter_vlan_default: ACCEPT
   always_blocked_networks:
     - 192.168.0.0/16
+    - 172.16.0.0./12
   rules:
     - name: ACCEPT INTERNAL SUBNET
-      vlan_src: 254
-      vlan_dst: 254
+      vlan_src: 2
+      vlan_dst: 2
       protocol: all
       ports: all
       action: ACCEPT
-    - name: DROP VLAN254 to PUBLIC
-      vlan_src: 254
-      vlan_dst: all
-      protocol: all
-      ports: all
-      action: DROP
-defaults:
-  snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
-  stale_hours: 0                           # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
-  ad_domain_functional_level: Win2012R2    # The functional level of each Windows domain created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
-  ad_forest_functional_level: Win2012R2    # The functional level of each Windows forest created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
-  ad_domain_admin: domainadmin             # The domain admin username for every Windows domain
-  ad_domain_admin_password: password       # The domain admin password for every Windows domain
-  ad_domain_user: domainuser               # The domain user username for every Windows domain
-  ad_domain_user_password: password        # The domain user password for every Windows domain
-  ad_domain_safe_mode_password: password   # The domain safe mode password for every Windows domain
-  timezone: Europe/Oslo         
