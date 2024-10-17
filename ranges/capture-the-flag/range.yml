@@ -46,7 +46,7 @@ network:
   inter_vlan_default: ACCEPT
   always_blocked_networks:
     - 192.168.0.0/16
-    - 172.16.0.0./12
+    - 172.16.0.0/12
   rules:
     - name: ACCEPT INTERNAL SUBNET
       vlan_src: 2
