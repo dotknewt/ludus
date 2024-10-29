@@ -1,6 +1,6 @@
 ludus:
   - vm_name: "{{ range_id }}-kali"
-    hostname: "{{ range_id }}-kali"
+    hostname: "KALI"
     template: kali-x64-desktop-template
     vlan: 2
     ip_last_octet: 1
@@ -18,9 +18,9 @@ ludus:
         rdp: 'true'
         kali: 'true'
 
-  - vm_name: "{{ range_id }}-flare"
-    hostname: "{{ range_id }}-flare"
-    template: flare-vm-template
+  - vm_name: "{{ range_id }}-commando-vm"
+    hostname: "COMMANDO-VM"
+    template: commando-vm-template
     vlan: 2
     ip_last_octet: 2
     ram_gb: 16
@@ -32,6 +32,23 @@ ludus:
       install_additional_tools: false
     roles:
       - windows_language_configuration
+      - badsectorlabs.ludus_commandovm
+
+  - vm_name: "{{ range_id }}-flare-vm"
+    hostname: "FLARE-VM"
+    template: flare-vm-template
+    vlan: 2
+    ip_last_octet: 3
+    ram_gb: 16
+    cpus: 4
+    testing:
+      snapshot: true
+      block_internet: true
+    windows:
+      install_additional_tools: false
+    roles:
+      - windows_language_configuration
+      - badsectorlabs.ludus_flarevm
 
 router:
   vm_name: "{{ range_id }}-router"
