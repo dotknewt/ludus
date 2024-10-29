@@ -1,0 +1,15 @@
+ludus:
+  - vm_name: "{{ range_id }}-Commando-VM"
+    hostname: "COMMANDO-VM"
+    template: commando-vm-template
+    vlan: 10
+    ip_last_octet: 1
+    ram_gb: 32
+    cpus: 12
+    windows:
+      install_additional_tools: false
+    testing:
+      snapshot: true
+      block_internet: true
+    roles:
+      - windows_language_configuration
