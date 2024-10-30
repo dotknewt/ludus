@@ -1,6 +1,6 @@
 # constructing-defense
 constructing-defense
-ranges/testing-range/
+ranges/testing-range
 
 ### Ansible ###
 *.retry
