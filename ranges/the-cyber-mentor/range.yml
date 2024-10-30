@@ -12,7 +12,7 @@ ludus:
     windows:
       sysprep: false
     domain:
-      fqdn: shellcorp.localdomain
+      fqdn: evil.local
       role: primary-dc
     roles:
       - windows_language_configuration
@@ -31,7 +31,7 @@ ludus:
     windows:
       sysprep: false
     domain:
-      fqdn: shellcorp.localdomain
+      fqdn: evil.local
       role: member
     roles:
       - windows_language_configuration
@@ -49,7 +49,7 @@ ludus:
     windows:
       sysprep: false
     domain:
-      fqdn: shellcorp.localdomain
+      fqdn: evil.local
       role: member
     roles:
       - windows_language_configuration
@@ -89,13 +89,13 @@ network:
     - 172.16.0.0/12
   rules: # Specify rules to restrict or allow based on inter_vlan_default. Default: allow all traffic
     - name: Allow VLAN to VLAN traffic # The rule name will be added as a comment in iptables
-      vlan_src: 3   # Traffic source VLAN
-      vlan_dst: 3   # Traffic destination VLAN. Special value 'public' can be used which is converted to '! 10.ID.0.0/16' in the iptables rule
+      vlan_src: 10   # Traffic source VLAN
+      vlan_dst: 10   # Traffic destination VLAN. Special value 'public' can be used which is converted to '! 10.ID.0.0/16' in the iptables rule
       ports: all
       protocol: all
       action: ACCEPT # ACCEPT|REJECT|DROP
     - name: Allow VLAN to INTERNET
-      vlan_src: 3
+      vlan_src: 10
       vlan_dst: public
       ports: all
       protocol: all

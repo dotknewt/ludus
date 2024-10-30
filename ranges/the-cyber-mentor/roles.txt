@@ -1,0 +1,3 @@
+badsectorlabs.ludus_adcs
+windows_language_configuration
+linux_config
