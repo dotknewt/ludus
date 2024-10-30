@@ -18,9 +18,9 @@ ludus:
         rdp: 'true'
         kali: 'true'
 
-  - vm_name: "{{ range_id }}-commando-vm"
-    hostname: "COMMANDO-VM"
-    template: commando-vm-template
+  - vm_name: "{{ range_id }}-flare-vm"
+    hostname: "FLARE-VM"
+    template: flare-vm-template
     vlan: 2
     ip_last_octet: 2
     ram_gb: 16
@@ -29,30 +29,14 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      install_additional_tools: false
-    roles:
-      - windows_language_configuration
-      - badsectorlabs.ludus_commandovm
-
-  - vm_name: "{{ range_id }}-flare-vm"
-    hostname: "FLARE-VM"
-    template: flare-vm-template
-    vlan: 2
-    ip_last_octet: 3
-    ram_gb: 16
-    cpus: 4
-    testing:
-      snapshot: true
-      block_internet: true
-    windows:
-      install_additional_tools: false
+      install_additional_tools: true
     roles:
       - windows_language_configuration
       - badsectorlabs.ludus_flarevm
 
 router:
   vm_name: "{{ range_id }}-router"
-  hostname: "{{ range_id }}-router"
+  hostname: "router"
   template: debian-11-x64-server-template
   ram_gb: 2
   ram_min_gb: 1
