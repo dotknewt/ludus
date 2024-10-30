@@ -1,11 +1,11 @@
 ludus:
-  - vm_name: "{{ range_id }}-Commando-VM"
-    hostname: "COMMANDO-VM"
-    template: commando-vm-template
+  - vm_name: "{{ range_id }}-win11"
+    hostname: "win11"
+    template: win11-23h2-x64-enterprise-template
     vlan: 10
     ip_last_octet: 1
-    ram_gb: 32
-    cpus: 12
+    ram_gb: 8
+    cpus: 4
     windows:
       install_additional_tools: false
     testing:
@@ -13,3 +13,31 @@ ludus:
       block_internet: true
     roles:
       - windows_language_configuration
+      - NocteDefensor.ludus_tailscale
+    role_vars:
+      tailscale_state: absent
+      tailscale_authkey: "tskey-auth-zzz"
+      tailscale_api_key: "tskey-api-xxx"
+
+  - vm_name: "{{ range_id }}-kali"
+    hostname: "KALI"
+    template: kali-x64-desktop-template
+    vlan: 2
+    ip_last_octet: 1
+    ram_gb: 16
+    cpus: 8
+    linux: true
+    testing:
+      snapshot: true
+      block_internet: true
+    roles:
+      - linux_config
+      - NocteDefensor.ludus_tailscale
+    role_vars:
+      linux_config:
+        keyboard_layout: "no"
+        rdp: 'true'
+        kali: 'true'
+      tailscale_state: absent
+      tailscale_authkey: "tskey-auth-zzz"
+      tailscale_api_key: "tskey-api-xxx"
