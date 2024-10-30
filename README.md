@@ -40,3 +40,10 @@ function admintunnel { ssh -L 8081:127.0.0.1:8081 user@<Ludus IP> }
 # bash
 alias admintunnel="ssh -L 8081:127.0.0.1:8081 user@<Ludus IP>"
 ```
+
+## Add user alias
+``` powershell
+function addludususer($uname, $uid, $isAdmin) {
+    ludus user add --name "$uname" --userid $uid $isAdmin --url https://127.0.0.1:8081
+    }
+```
