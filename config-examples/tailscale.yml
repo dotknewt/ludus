@@ -1,0 +1,8 @@
+ludus:
+  - vm_name: example
+    roles:                  
+      - NocteDefensor.ludus_tailscale # put this as it appears in `ludus ansible roles list` THIS WILL CHANGE BASED ON WHETHER YOU ADDED THE ROLE BY CLONING THE REPO OR THROUGH ANSIBLE GALAXY COMMAND
+    role_vars:
+      tailscale_state: present # present/absent to add or remove machine from tailnet
+      tailscale_authkey: "tskey-auth-<REDACTED_KEY>"
+      tailscale_api_key: "tskey-api-<REDACTED_KEY>"
