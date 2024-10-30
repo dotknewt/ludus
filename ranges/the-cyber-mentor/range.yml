@@ -1,6 +1,6 @@
 ludus:
-  - vm_name: "{{ range_id }}-TCM-DC01"
-    hostname: "{{ range_id }}-TCM-DC01"
+  - vm_name: "{{ range_id }}-DC01"
+    hostname: "{{ range_id }}-DC01"
     template: win2022-server-x64-template
     vlan: 3
     ip_last_octet: 1
@@ -15,18 +15,11 @@ ludus:
       fqdn: shellcorp.localdomain
       role: primary-dc
     roles:
-      - windows_config
+      - windows_language_configuration
       - badsectorlabs.ludus_adcs
-    role_vars:
-      windows_config:
-        keyboard_layout: '00000414'
-        display_language: '0409'
-        username: 'localuser'
-    ansible_groups:
-      - tcm
 
-  - vm_name: "{{ range_id }}-TCM-WS01"
-    hostname: "{{ range_id }}-TCM-WS01"
+  - vm_name: "{{ range_id }}-WS01"
+    hostname: "{{ range_id }}-WS01"
     template: win11-22h2-x64-enterprise-template
     vlan: 3
     ip_last_octet: 2
@@ -41,16 +34,10 @@ ludus:
       fqdn: shellcorp.localdomain
       role: member
     roles:
-      - windows_config
-    role_vars:
-      windows_config:
-        keyboard_layout: '00000414'
-        display_language: '0409'
-        username: 'localuser'
-    ansible_groups:
-      - tcm
-  - vm_name: "{{ range_id }}-TCM-WS02"
-    hostname: "{{ range_id }}-TCM-WS02"
+      - windows_language_configuration
+
+  - vm_name: "{{ range_id }}-WS02"
+    hostname: "{{ range_id }}-WS02"
     template: win11-22h2-x64-enterprise-template
     vlan: 3
     ip_last_octet: 3
@@ -65,16 +52,9 @@ ludus:
       fqdn: shellcorp.localdomain
       role: member
     roles:
-      - windows_config
-    role_vars:
-      windows_config:
-        keyboard_layout: '00000414'
-        display_language: '0409'
-        username: 'localuser'
-    ansible_groups:
-      - tcm
-  - vm_name: "{{ range_id }}-TCM-kali"
-    hostname: "{{ range_id }}-TCM-kali"
+      - windows_language_configuration
+  - vm_name: "{{ range_id }}-kali"
+    hostname: "{{ range_id }}-kali"
     template: kali-x64-desktop-template
     vlan: 3
     ip_last_octet: 5
@@ -94,8 +74,8 @@ ludus:
     ansible_groups:
       - tcm
 router:
-  vm_name: "{{ range_id }}-TCM-router"
-  hostname: "{{ range_id }}-TCM-router"
+  vm_name: "{{ range_id }}-router"
+  hostname: "{{ range_id }}-router"
   template: debian-11-x64-server-template
   ram_gb: 2
   ram_min_gb: 1
