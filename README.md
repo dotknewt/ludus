@@ -42,8 +42,9 @@ alias admintunnel="ssh -L 8081:127.0.0.1:8081 user@<Ludus IP>"
 ```
 
 ## Add user alias
+Requires an admin configuration file and having run `ludus apikey --config <adminconfig.yml>`
 ``` powershell
 function addludususer($uname, $uid, $isAdmin) {
-    ludus user add --name "$uname" --userid $uid $isAdmin --url https://127.0.0.1:8081
+    ludus user add --name "$uname" --userid $uid $isAdmin --url https://127.0.0.1:8081 --config $HOME/.config/ludus/admin.yml
     }
 ```
