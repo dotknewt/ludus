@@ -20,8 +20,8 @@ ludus:
       - NocteDefensor.ludus_tailscale
     role_vars:
       tailscale_state: present
-      tailscale_authkey: "tskey-auth-k3KX5JFygC11CNTRL-dGpx1pHmVFbBjVKxNy9jFbGnMbrd4vRAa"
-      tailscale_api_key: "tskey-api-kLfv5M9dp521CNTRL-uvGa3ypjq2JhvDogkxED3JH1V3NVLpApD"
+      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
+      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -43,8 +43,8 @@ ludus:
       - NocteDefensor.ludus_tailscale
     role_vars:
       tailscale_state: present
-      tailscale_authkey: "tskey-auth-k3KX5JFygC11CNTRL-dGpx1pHmVFbBjVKxNy9jFbGnMbrd4vRAa"
-      tailscale_api_key: "tskey-api-kLfv5M9dp521CNTRL-uvGa3ypjq2JhvDogkxED3JH1V3NVLpApD"
+      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
+      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
@@ -66,8 +66,8 @@ ludus:
       - NocteDefensor.ludus_tailscale
     role_vars:
       tailscale_state: present
-      tailscale_authkey: "tskey-auth-k3KX5JFygC11CNTRL-dGpx1pHmVFbBjVKxNy9jFbGnMbrd4vRAa"
-      tailscale_api_key: "tskey-api-kLfv5M9dp521CNTRL-uvGa3ypjq2JhvDogkxED3JH1V3NVLpApD"
+      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
+      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-kali"
@@ -89,8 +89,8 @@ ludus:
         rdp: 'true'
         kali: 'true'
       tailscale_state: present
-      tailscale_authkey: "tskey-auth-k3KX5JFygC11CNTRL-dGpx1pHmVFbBjVKxNy9jFbGnMbrd4vRAa"
-      tailscale_api_key: "tskey-api-kLfv5M9dp521CNTRL-uvGa3ypjq2JhvDogkxED3JH1V3NVLpApD"
+      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
+      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
 router:
   vm_name: "{{ range_id }}-router"
