@@ -1,4 +1,4 @@
 - hosts: all
   roles:
-    - badsectorlabs.ludus_commandovm
+    - role_one
     - windows_language_configuration
