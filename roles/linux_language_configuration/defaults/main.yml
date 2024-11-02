@@ -1,0 +1,4 @@
+---
+linux_language_configuration_default_keyboard_layout: 'no'
+linux_language_configuration_default_locale: 'nb_NO.UTF-8 UTF-8'
+linux_language_configuration_default_username: 'localuser'

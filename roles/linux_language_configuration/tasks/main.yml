@@ -1,0 +1,34 @@
+---
+- name: Gather facts if needed
+  ansible.builtin.setup:
+  when: ansible_os_family is undefined
+
+- name: Check for Linux
+  ansible.builtin.fail:
+    msg: This role only supports Linux
+  when: ansible_os_family != "Debian"
+
+- name: Configure keyboard layout
+  ansible.builtin.include_tasks:
+    file: keyboard.yml
+  when: linux_config['keyboard_layout'] is defined
+
+- name: Set XKBLAYOUT in /etc/default/keyboard - "Norwegian"
+  ansible.builtin.replace:
+    path: /etc/default/keyboard
+    regexp: '^XKBLAYOUT=.*'
+    replace: 'XKBLAYOUT="no"'
+
+- name: Generate additional locale in in /etc/locale.gen - "Norwegian"
+  ansible.builtin.replace:
+    path: /etc/locale.gen
+    regexp: '^# {{ linux__language_configuration_default_locale }}'
+    replace: '{{ linux__language_configuration_default_locale }}'
+
+- name: Set xkbmap layout - "Norwegian"
+  ansible.builtin.shell:
+    cmd: echo "setxkbmap no" >> /home/{{ linux__language_configuration_default_username }}/.profile
+
+- name: Set xkbmap layout - "Norwegian"
+  ansible.builtin.shell:
+    cmd: echo "export LANG=en_US.UTF-8" >> /home/{{ linux__language_configuration_default_username }}/.profile

@@ -1,0 +1,17 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: linux_language_configuration
+  author: froggy
+  description: An ansible role that handles configs intended for range deployment to linux guests in ludus
+  company: ShellCorp
+  license: GPLv3
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Linux
+  galaxy_tags:
+    - configuration
+    - ludus
+collections:
+  - community.linux
