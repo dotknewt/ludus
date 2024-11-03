@@ -25,5 +25,3 @@ ludus:
     testing:
       snapshot: true
       block_internet: true
-    roles:
-      - linux_language_configuration
