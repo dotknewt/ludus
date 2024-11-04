@@ -5,7 +5,7 @@ for DIR in $(ls .); do
     if [[ "$DIR" == "manual-setup-required" || "$DIR" == "README.md" ]]; then
         continue
     else
-        ludus templates add -d $DIR # -f
+        ludus templates add -d $DIR
     fi
 done
 
