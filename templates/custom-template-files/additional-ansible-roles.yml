@@ -1,4 +1,0 @@
-- hosts: all
-  roles:
-    - role_one
-    - windows_language_configuration
