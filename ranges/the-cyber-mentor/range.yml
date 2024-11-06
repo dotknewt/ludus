@@ -17,11 +17,6 @@ ludus:
     roles:
       - windows_language_configuration
       - badsectorlabs.ludus_adcs
-      - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
-      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -40,11 +35,6 @@ ludus:
       role: member
     roles:
       - windows_language_configuration
-      - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
-      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
@@ -63,11 +53,6 @@ ludus:
       role: member
     roles:
       - windows_language_configuration
-      - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
-      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-kali"
@@ -80,25 +65,14 @@ ludus:
     testing:
       snapshot: true
       block_internet: true
-    roles:
-      - linux_config
-      - NocteDefensor.ludus_tailscale
-    role_vars:
-      linux_config:
-        keyboard_layout: 'no'
-        rdp: 'true'
-        kali: 'true'
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kDGB8if6Yd11CNTRL-xEAbVh7FLU4Yx73btXMsU48CCvJGw4CL"
-      tailscale_api_key: "tskey-api-kBk9xFLoJC11CNTRL-VSKy6X6HJQBMkYDxvdPqQBnAM9uovVnh8"
 
 router:
   vm_name: "{{ range_id }}-router"
   hostname: "{{ range_id }}-router"
   template: debian-11-x64-server-template
-  ram_gb: 1
+  ram_gb: 2
   ram_min_gb: 1
-  cpus: 1
+  cpus: 2
 
 network: 
   inter_vlan_default: ACCEPT # The default rule to apply to traffic between VLANs. Default: ACCEPT
@@ -106,19 +80,6 @@ network:
   always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
     - 192.168.0.0/16         # entries must be in CIDR format
     - 172.16.0.0/12
-  rules: # Specify rules to restrict or allow based on inter_vlan_default. Default: allow all traffic
-    - name: Allow VLAN to VLAN traffic # The rule name will be added as a comment in iptables
-      vlan_src: 3   # Traffic source VLAN
-      vlan_dst: 3   # Traffic destination VLAN. Special value 'public' can be used which is converted to '! 10.ID.0.0/16' in the iptables rule
-      ports: all
-      protocol: all
-      action: ACCEPT # ACCEPT|REJECT|DROP
-    - name: Allow VLAN to INTERNET
-      vlan_src: 3
-      vlan_dst: public
-      ports: all
-      protocol: all
-      action: ACCEPT
 
 defaults:
   snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
