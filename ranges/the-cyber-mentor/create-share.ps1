@@ -1,0 +1,1 @@
+New-SmbShare -Name "hackme" -Description "Hack my Share" -Path "C:\Shares\hackme" -FullAccess 'Everyone'
