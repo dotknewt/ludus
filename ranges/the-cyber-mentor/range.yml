@@ -49,6 +49,7 @@ ludus:
               - Enterprise Admins
               - Group Policy Creator Owners
               - Schema Admins
+              - Remote Desktop Users
           - name: SQLservice
             firstname: SQL
             surname: Service
@@ -63,6 +64,7 @@ ludus:
               - Enterprise Admins
               - Group Policy Creator Owners
               - Schema Admins
+              - Remote Desktop Users
           - name: fcastle
             firstname: Frank
             surname: Castle
@@ -72,6 +74,7 @@ ludus:
             description: Domain User
             groups:
               - Domain Users
+              - Remote Desktop Users
           - name: pparker
             firstname: Peter
             surname: Parker
@@ -81,6 +84,7 @@ ludus:
             description: Domain User
             groups:
               - Domain Users
+              - Remote Desktop Users
       tailscale_state: present
       tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
       tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
