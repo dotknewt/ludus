@@ -10,7 +10,8 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      sysprep: false
+      sysprep: true
+      install_additional_tools: false
     domain:
       fqdn: evil.local
       role: primary-dc
@@ -18,7 +19,84 @@ ludus:
       - windows_language_configuration
       - badsectorlabs.ludus_adcs
       - NocteDefensor.ludus_tailscale
+      - ludus-ad-content
     role_vars:
+      ludus_adcs_esc1: false
+      ludus_adcs_esc2: false
+      ludus_adcs_esc3: false
+      ludus_adcs_esc3_cra: false
+      ludus_adcs_esc4: false
+      ludus_adcs_esc6: false
+      ludus_adcs_esc8: false
+      ludus_adcs_esc13: false
+      ludus_ad:
+        ous:
+          - name: Norway
+            path: DC=evil,DC=local
+            description: Norwegian subsidiary
+          - name: Germany
+            path: DC=evil,DC=local
+            description: German subsidiary
+        groups:
+          - name: Groups
+            scope: global
+            path: "OU=Norway,DC=evil,DC=local"
+            description: Norwegian Sales Department
+          - name: Sales Germany
+            scope: global
+            path: "OU=Germany,DC=evil,DC=local"
+            description: German Sales Department
+          - name: IT
+            scope: global
+            path: "DC=evil,DC=local"
+            description: IT Department
+        users:
+          - name: tstark
+            firstname: Tony
+            surname: Stark
+            display_name: Tony Stark
+            password: GFVfPS432QkKN2YdQwJL
+            path: "DC=evil,DC=local"
+            description: IT Domain Administrator
+            groups:
+              - Administrators
+              - Domain Admins
+              - Domain Users
+              - Enterprise Admins
+              - Group Policy Creator Owners
+              - Schema Admins
+          - name: SQLservice
+            firstname: SQL
+            surname: Service
+            display_name: SQL Service
+            password: MYpassword123#
+            path: "DC=evil,DC=local"
+            description: The password is MYpassword123#
+            groups:
+              - Administrators
+              - Domain Admins
+              - Domain Users
+              - Enterprise Admins
+              - Group Policy Creator Owners
+              - Schema Admins
+          - name: fcastle
+            firstname: Frank
+            surname: Castle
+            display_name: Frank Castle
+            password: Password1
+            path: "DC=evil,DC=local"
+            description: Domain User
+            groups:
+              - Domain Users
+          - name: pparker
+            firstname: Peter
+            surname: Parker
+            display_name: Peter Parker
+            password: Password2
+            path: "DC=evil,DC=local"
+            description: Domain User
+            groups:
+              - Domain Users
       tailscale_state: present
       tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
       tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
@@ -34,7 +112,8 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      sysprep: false
+      sysprep: true
+      install_additional_tools: true
     domain:
       fqdn: evil.local
       role: member
@@ -57,30 +136,13 @@ ludus:
       snapshot: true
       block_internet: true
     windows:
-      sysprep: false
+      sysprep: true
+      install_additional_tools: true
     domain:
       fqdn: evil.local
       role: member
     roles:
       - windows_language_configuration
-      - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
-
-  - vm_name: "{{ range_id }}-kali"
-    hostname: "{{ range_id }}-kali"
-    template: kali-x64-desktop-template
-    vlan: 3
-    ip_last_octet: 5
-    ram_gb: 16
-    cpus: 8
-    linux: true
-    testing:
-      snapshot: true
-      block_internet: true
-    roles:
       - NocteDefensor.ludus_tailscale
     role_vars:
       tailscale_state: present
@@ -101,7 +163,6 @@ network:
   always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
     - 192.168.0.0/16         # entries must be in CIDR format
     - 172.16.0.0/12
-
 defaults:
   snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
   stale_hours: 0                           # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
