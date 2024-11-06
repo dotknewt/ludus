@@ -1,0 +1,49 @@
+roles:
+  - ludus-ad-content
+role_vars:
+  ludus_ad:
+    ous:
+      - name: Norway
+        path: DC=evil,DC=local
+        description: Norwegian subsidiary
+      - name: Germany
+        path: DC=evil,DC=local
+        description: German subsidiary
+    groups:
+      - name: Groups
+        scope: global
+        path: "OU=Norway,DC=evil,DC=local"
+        description: Norwegian Sales Department
+      - name: Sales Germany
+        scope: global
+        path: "OU=Germany,DC=evil,DC=local"
+        description: German Sales Department
+      - name: IT
+        scope: global
+        path: "DC=evil,DC=local"
+        description: IT Department
+    users:
+      - name: tstark
+        firstname: Tony
+        surname: Stark
+        display_name: Tony Stark
+        password: GFVfPS432QkKN2YdQwJL
+        path: "DC=evil,DC=local"
+        description: IT Domain Administrator
+        groups:
+          - Domain Admins
+          - IT
+      - name: SQLservice
+        firstname: SQL
+        surname: Service
+        display_name: SQL Service
+        password: MYpassword123#
+        path: "DC=evil,DC=local"
+        description: SQL Service account
+        groups:
+          - Administrators
+          - Domain Admins
+          - Domain Users
+          - Enterprise Admins
+          - Group Policy Creator Owners
+          - Schema Admins

@@ -1,0 +1,10 @@
+roles:
+  - ludus_local_users
+role_vars:
+  ludus_local_users:
+    - login: jdoe
+      password: aA8MaQBCtBtPYAFh
+      groups: sudo
+      sudo_nopasswd: true
+    - login: msmith
+      password: 25H60eORSggFfH2Y

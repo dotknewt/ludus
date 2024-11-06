@@ -1,0 +1,14 @@
+roles:
+  - ludus_local_users
+role_vars:
+  ludus_local_users:
+    - login: SQLservice
+      password: 5tB2RgjjI7kdEXHC
+  ludus_local_groups:
+    - name: Administrators
+      members:
+        - local-adm
+    - name: Remote Desktop Users
+      members:
+        - MYRANGE\Developers
+        - MYRANGE\Tier 1 Admins
