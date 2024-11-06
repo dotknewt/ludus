@@ -31,32 +31,16 @@ ludus:
       ludus_adcs_esc13: false
       ludus_ad:
         ous:
-          - name: Norway
-            path: DC=evil,DC=local
-            description: Norwegian subsidiary
-          - name: Germany
-            path: DC=evil,DC=local
-            description: German subsidiary
-        groups:
           - name: Groups
-            scope: global
-            path: "OU=Norway,DC=evil,DC=local"
-            description: Norwegian Sales Department
-          - name: Sales Germany
-            scope: global
-            path: "OU=Germany,DC=evil,DC=local"
-            description: German Sales Department
-          - name: IT
-            scope: global
-            path: "DC=evil,DC=local"
-            description: IT Department
+            path: DC=evil,DC=local
+            description: Groups
         users:
           - name: tstark
             firstname: Tony
             surname: Stark
             display_name: Tony Stark
             password: GFVfPS432QkKN2YdQwJL
-            path: "DC=evil,DC=local"
+            path: "OU=Users,DC=evil,DC=local"
             description: IT Domain Administrator
             groups:
               - Administrators
@@ -70,7 +54,7 @@ ludus:
             surname: Service
             display_name: SQL Service
             password: MYpassword123#
-            path: "DC=evil,DC=local"
+            path: "OU=Users,DC=evil,DC=local"
             description: The password is MYpassword123#
             groups:
               - Administrators
@@ -84,7 +68,7 @@ ludus:
             surname: Castle
             display_name: Frank Castle
             password: Password1
-            path: "DC=evil,DC=local"
+            path: "OU=Users,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
@@ -93,7 +77,7 @@ ludus:
             surname: Parker
             display_name: Peter Parker
             password: Password2
-            path: "DC=evil,DC=local"
+            path: "OU=Users,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
