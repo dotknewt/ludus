@@ -66,5 +66,10 @@ ludus:
     testing:
       snapshot: false
       block_internet: false
+
 router:
   vm_name: "{{ range_id }}-router" # The name of the router VM deployed by Ludus
+
+notify:
+  urls:
+    - "discord://SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib@1304131341004050502?SplitLines=No"
