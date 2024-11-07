@@ -22,4 +22,4 @@ global_role_vars:
 
 notify:
   urls:
-    - "discord://1304131341004050502@SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib"
+    - "discord://SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib@1304131341004050502"
