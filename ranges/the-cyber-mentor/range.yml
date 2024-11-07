@@ -34,6 +34,14 @@ ludus:
           - name: Groups
             path: DC=evil,DC=local
             description: Groups
+          - name: Norway
+            path: DC=evil,DC=local
+            description: Norwegian OU
+        groups:
+          - name: Norwegian IT
+            scope: global
+            path: "OU=Norway,DC=evil,DC=local"
+            description: Norwegian IT Department
         users:
           - name: tstark
             firstname: Tony
