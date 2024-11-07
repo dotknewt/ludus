@@ -47,4 +47,8 @@ Requires an admin configuration file and having run `ludus apikey --config <admi
 function addludususer($uname, $uid, $isAdmin) {
     ludus user add --name "$uname" --userid $uid $isAdmin --url https://127.0.0.1:8081 --config $HOME/.config/ludus/admin.yml
     }
+
+function shareludurange($targetUID, $sourceUID) {
+    ludus range access grant --target "$targetUID" --source "$sourceUID"
+    }
 ```
