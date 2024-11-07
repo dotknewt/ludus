@@ -1,6 +1,6 @@
 ludus:
-  - vm_name: "{{ range_id }}-DC" # The name of the VM in Proxmox. You can use the `{{ range_id }}` template string which resolves to your range ID (i.e. JS)
-    hostname: "{{ range_id }}-DC"   # The hostname for the VM. Note: Windows host names are limited to 15 characters due to NETBIOS
+  - vm_name: "{{ range_id }}-DC01" # The name of the VM in Proxmox. You can use the `{{ range_id }}` template string which resolves to your range ID (i.e. JS)
+    hostname: "{{ range_id }}-DC01"   # The hostname for the VM. Note: Windows host names are limited to 15 characters due to NETBIOS
     template: win2022-server-x64-template  # The template that will be the base for this VM (`ludus templates list` to get a list of them)
     vlan: 10            # The VLAN for this VM. This number will be the third octet of the VM's IP and must be 2<=vlan<=255
     ip_last_octet: 11   # The last octet for this VM's IP address. Must be unique in the VLAN.
@@ -16,10 +16,6 @@ ludus:
       - role_sysmon_install
       - role_collectorinstall_dc
       - windows_language_configuration
-    role_vars:
-      ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
-    linux: false          # Set this to true for linux VMs - leave undefined or false for Windows/macOS VMs
-    macOS : false         # Set this to true for macOS VMs - leave undefined or false for Windows/Linux VMs
     testing:                # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
       snapshot: true        # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
       block_internet: true  # Cut this VM off from the internet during testing. Default true
@@ -58,7 +54,6 @@ ludus:
       ludus_adcs_esc6: false
       ludus_adcs_esc8: false
       ludus_adcs_esc13: false
-      ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
 
   - vm_name: "{{ range_id }}-WIN11V"
     hostname: "{{ range_id }}-WIN11V"
@@ -80,8 +75,6 @@ ludus:
       - role_sysmon_install
       - role_collectorinstall_win11v
       - windows_language_configuration
-    role_vars:
-      ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
 
   - vm_name: "{{ range_id }}-WIN11A"
     hostname: "{{ range_id }}-WIN11A"
@@ -103,8 +96,6 @@ ludus:
       - role_sysmon_install
       - role_collectorinstall_win11a
       - windows_language_configuration
-    role_vars:
-      ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
 
   - vm_name: "{{ range_id }}-linuxa"
     hostname: "{{ range_id }}-linuxa"
@@ -127,8 +118,13 @@ ludus:
       - role_linux_logging
       - role_minikube
       - role_collectorinstall_linuxv
-    role_vars:
-      ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
+
+global_role_vars:
+  ludus_sumo_logic_token: "U1VNT0N0a0pqcVpFdFAwUERyaEd6dGlhN2I1dEdaQUFodHRwczovL2NvbGxlY3RvcnMuZGUuc3Vtb2xvZ2ljLmNvbQ=="
+
+notify:
+  urls:
+    - "discord://SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib@1304131341004050502?SplitLines=No"
 
 router:
   vm_name: "{{ range_id }}-router" # The name of the router VM deployed by Ludus
