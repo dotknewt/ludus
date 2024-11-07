@@ -92,9 +92,6 @@ ludus:
             groups:
               - Domain Users
               - Remote Desktop Users
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -115,10 +112,6 @@ ludus:
     roles:
       - windows_language_configuration
       - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
 
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
@@ -139,10 +132,6 @@ ludus:
     roles:
       - windows_language_configuration
       - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
 
   - vm_name: "{{ range_id }}-KALI"
     hostname: "{{ range_id }}-KALI"
@@ -157,10 +146,11 @@ ludus:
     linux: true
     roles:
       - NocteDefensor.ludus_tailscale
-    role_vars:
-      tailscale_state: present
-      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
+
+global_role_vars:
+  tailscale_state: present
+  tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
+  tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
 
 router:
   vm_name: "{{ range_id }}-router"
