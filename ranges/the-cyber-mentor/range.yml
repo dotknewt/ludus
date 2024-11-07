@@ -136,6 +136,24 @@ ludus:
       tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
       tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
 
+  - vm_name: "{{ range_id }}-KALI"
+    hostname: "{{ range_id }}-KALI"
+    template: kali-x64-desktop-template
+    vlan: 3
+    ip_last_octet: 4
+    ram_gb: 16
+    cpus: 4
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - NocteDefensor.ludus_tailscale
+    role_vars:
+      tailscale_state: present
+      tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
+      tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
+
 router:
   vm_name: "{{ range_id }}-router"
   hostname: "{{ range_id }}-router"
