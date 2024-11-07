@@ -179,5 +179,5 @@ defaults:
   timezone: Europe/Oslo         
 
 notify:
- urls:
-  - "discord://1304131341004050502@SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib"
+  urls:
+    - "discord://1304131341004050502@SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib"
