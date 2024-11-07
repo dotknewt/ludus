@@ -1,0 +1,62 @@
+{
+	"acls": [
+        {
+        "acls": [
+        //{ // OWNER access
+        //    "action": "accept",
+        //    "src":    ["autogroup:owner"],
+        //    "dst":    ["*:*"],
+        //},
+        //{ // SELF access
+        //    "action": "accept",
+        //    "src":    ["autogroup:member"],
+        //    "dst":    ["autogroup:self:*"],
+        //},
+        { // SSH access
+			"action": "accept",
+			"src":    ["autogroup:owner"],
+			"proto":  "tcp",
+			"dst":    ["*:22"],
+		},
+        { // LUDUS wireguard
+			"action": "accept",
+			"src":    ["group:ludus-users"],
+			"proto":  "udp",
+			"dst":    ["tag:ludus:51820"],
+		},
+		{ // LUDUS access
+			"action": "accept",
+			"src":    ["group:ludus-users"],
+			"proto":  "tcp",
+			"dst":    ["tag:ludus:8006,8080"],
+		},
+		{ // TCM RANGE access
+			"action": "accept",
+			"src":    ["group:adm", "tag:tcm", "tag:adm"],
+			"dst":    ["tag:tcm:*"],
+		},
+		{ // MAM RANGE access
+			"action": "accept",
+			"src":    ["group:mam", "group:adm"],
+			"dst":    ["tag:mam:*"],
+		},
+	],
+	"tagOwners": { // destination assets
+		"tag:ludus": ["autogroup:owner"],
+		"tag:adm":   ["group:adm"],
+		"tag:tcm":   ["group:adm"],
+		"tag:mam":   ["group:mam"],
+	},
+	"groups": { 
+		"group:ludus-users": [ // source asset owners
+			"voodoo-badger@github",
+			"morten.marin@gmail.com",
+		],
+		"group:adm": [ 
+			"voodoo-badger@github",
+		],
+		"group:mam": [
+			"morten.marin@gmail.com",
+		],
+	},
+}
