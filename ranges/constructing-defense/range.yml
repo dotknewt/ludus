@@ -15,7 +15,7 @@ ludus:
       - role_gpo_deploy
       - role_sysmon_install
       - role_collectorinstall_dc
-      - windows_language_configuration
+      - role_windows_language_configuration
     testing:                # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
       snapshot: true        # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
       block_internet: true  # Cut this VM off from the internet during testing. Default true
@@ -39,7 +39,7 @@ ludus:
     roles:
       - badsectorlabs.ludus_adcs
       - role_collectorinstall_certer
-      - windows_language_configuration
+      - role_windows_language_configuration
     role_vars:
       ludus_adcs_domain: condef.local
       ludus_adcs_ca_host: CERTER
@@ -74,7 +74,7 @@ ludus:
     roles:
       - role_sysmon_install
       - role_collectorinstall_win11v
-      - windows_language_configuration
+      - role_windows_language_configuration
 
   - vm_name: "{{ range_id }}-WIN11A"
     hostname: "{{ range_id }}-WIN11A"
@@ -95,7 +95,7 @@ ludus:
     roles: 
       - role_sysmon_install
       - role_collectorinstall_win11a
-      - windows_language_configuration
+      - role_windows_language_configuration
 
   - vm_name: "{{ range_id }}-linuxa"
     hostname: "{{ range_id }}-linuxa"

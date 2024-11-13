@@ -1,0 +1,31 @@
+---
+- name: Gather facts if needed
+  ansible.builtin.setup:
+  when: ansible_os_family is not defined
+
+- name: Check for Windows
+  ansible.builtin.fail:
+    msg: This role only supports Windows
+  when: ansible_os_family != "Windows"
+
+- name: Configure language and keyboard settings
+  block:
+    - name: Set the default keyboard layout to {{ windows_language_configuration_default_keyboard_layout }} in registry
+      ansible.windows.win_powershell:
+        script: |
+          reg add "HKEY_USERS\.DEFAULT\Keyboard Layout\Preload" /v 1 /d {{ windows_language_configuration_default_keyboard_layout }} /f
+
+    - name: Set the default keyboard layout for {{ windows_language_configuration_default_username }} in registry
+      ansible.windows.win_powershell:
+        script: |
+          reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ windows_language_configuration_default_username }} | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ windows_language_configuration_default_keyboard_layout }} /f
+      
+    - name: Set the display language and keyboard layout combination
+      ansible.windows.win_powershell:
+        script: |
+          Set-WinDefaultInputMethodOverride -InputTip "{{ windows_language_configuration_default_display_language }}:{{ windows_language_configuration_default_keyboard_layout }}"
+
+    - name: Set {{ windows_language_configuration_default_display_language }}:{{ windows_language_configuration_default_keyboard_layout }} as default everywhere
+      ansible.windows.win_powershell:
+        script: |
+          Copy-UserInternationalSettingsToSystem -NewUser $True -WelcomeScreen $True
