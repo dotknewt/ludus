@@ -1,7 +1,6 @@
 ludus:
-# source: https://docs.ludus.cloud/docs/environment-guides/goad
-  - vm_name: "{{ range_id }}-DC01"
-    hostname: "GOAD-DC01"
+  - vm_name: "{{ range_id }}-GOAD-DC01"
+    hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 10
@@ -9,10 +8,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-    roles:
-      - windows_language_configuration
-  - vm_name: "{{ range_id }}-DC02"
-    hostname: "GOAD-DC02"
+  - vm_name: "{{ range_id }}-GOAD-DC02"
+    hostname: "{{ range_id }}-DC02"
     template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 11
@@ -20,10 +17,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-    roles:
-      - windows_language_configuration
-  - vm_name: "{{ range_id }}-DC03"
-    hostname: "GOAD-DC03"
+  - vm_name: "{{ range_id }}-GOAD-DC03"
+    hostname: "{{ range_id }}-DC03"
     template: win2016-server-x64-template
     vlan: 10
     ip_last_octet: 12
@@ -31,10 +26,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-    roles:
-      - windows_language_configuration
-  - vm_name: "{{ range_id }}-SRV02"
-    hostname: "GOAD-SRV02"
+  - vm_name: "{{ range_id }}-GOAD-SRV02"
+    hostname: "{{ range_id }}-SRV02"
     template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 22
@@ -42,10 +35,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-    roles:
-      - windows_language_configuration
-  - vm_name: "{{ range_id }}-SRV03"
-    hostname: "GOAD-SRV03"
+  - vm_name: "{{ range_id }}-GOAD-SRV03"
+    hostname: "{{ range_id }}-SRV03"
     template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 23
@@ -53,10 +44,8 @@ ludus:
     cpus: 2
     windows:
       sysprep: true
-    roles:
-      - windows_language_configuration
   - vm_name: "{{ range_id }}-kali"
-    hostname: "GOAD-kali"
+    hostname: "{{ range_id }}-kali"
     template: kali-x64-desktop-template
     vlan: 10
     ip_last_octet: 99
@@ -67,9 +56,4 @@ ludus:
       snapshot: false
       block_internet: false
 
-router:
-  vm_name: "{{ range_id }}-router" # The name of the router VM deployed by Ludus
 
-#notify:
-#  urls:
-#    - "discord://SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib@1304131341004050502?SplitLines=No"
