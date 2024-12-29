@@ -3,7 +3,7 @@ roles:
 role_vars:
   ludus_local_users:
     - login: SQLservice
-      password: 5tB2RgjjI7kdEXHC
+      password: 5tB2RgjjI7da4kdEXHC
   ludus_local_groups:
     - name: Administrators
       members:

@@ -10,7 +10,7 @@ role_vars:
         path: DC=evil,DC=local
         description: German subsidiary
     groups:
-      - name: Groups
+      - name: Sales Norway
         scope: global
         path: "OU=Norway,DC=evil,DC=local"
         description: Norwegian Sales Department
@@ -31,8 +31,13 @@ role_vars:
         path: "DC=evil,DC=local"
         description: IT Domain Administrator
         groups:
-          - Domain Admins
           - IT
+          - Administrators
+          - Users
+          - Domain Admins
+          - Domain Users
+          - Enterprise Admins
+          - Enterprise Users
       - name: SQLservice
         firstname: SQL
         surname: Service
