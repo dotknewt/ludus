@@ -1,9 +1,9 @@
 ludus:
-  - vm_name: "{{ range_id }}-DC01"
+  - vm_name: "{{ range_id }}-dc01"
     hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-template
     vlan: 10
-    ip_last_octet: 10
+    ip_last_octet: 11
     ram_gb: 8
     cpus: 4
     windows:
@@ -11,11 +11,11 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-DC02"
+  - vm_name: "{{ range_id }}-dc02"
     hostname: "{{ range_id }}-DC02"
     template: win2019-server-x64-template
     vlan: 10
-    ip_last_octet: 20
+    ip_last_octet: 12
     ram_gb: 8
     cpus: 4
     windows:
@@ -23,11 +23,11 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-SRV01"
+  - vm_name: "{{ range_id }}-srv01"
     hostname: "{{ range_id }}-SRV01"
     template: win2019-server-x64-template
     vlan: 10
-    ip_last_octet: 31
+    ip_last_octet: 21
     ram_gb: 8
     cpus: 4
     windows:
@@ -35,11 +35,11 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-SRV02"
+  - vm_name: "{{ range_id }}-srv02"
     hostname: "{{ range_id }}-SRV02"
     template: win2019-server-x64-template
     vlan: 10
-    ip_last_octet: 32
+    ip_last_octet: 22
     ram_gb: 8
     cpus: 4
     windows:
@@ -47,11 +47,11 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-SRV03"
+  - vm_name: "{{ range_id }}-srv03"
     hostname: "{{ range_id }}-SRV03"
     template: win2019-server-x64-template
     vlan: 10
-    ip_last_octet: 33
+    ip_last_octet: 23
     ram_gb: 8
     cpus: 4
     windows:
@@ -63,7 +63,7 @@ ludus:
     hostname: "{{ range_id }}-SLIVER"
     template: debian-12-x64-server-template
     vlan: 10
-    ip_last_octet: 50
+    ip_last_octet: 100
     ram_gb: 2
     cpus: 1
     linux: true   
@@ -71,7 +71,7 @@ ludus:
     hostname: "{{ range_id }}-KALI"
     template: kali-x64-desktop-template
     vlan: 10
-    ip_last_octet: 100
+    ip_last_octet: 101
     ram_gb: 8
     cpus: 4
     linux: true

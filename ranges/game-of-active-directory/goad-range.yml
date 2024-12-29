@@ -1,18 +1,6 @@
 ludus:
-  - vm_name: "{{ range_id }}-GOAD-DC01"
+  - vm_name: "{{ range_id }}-dc01"
     hostname: "{{ range_id }}-DC01"
-    template: win2019-server-x64-template
-    vlan: 10
-    ip_last_octet: 10
-    ram_gb: 8
-    cpus: 4
-    windows:
-      sysprep: true
-    testing:
-      snapshot: true
-      block_internet: false
-  - vm_name: "{{ range_id }}-GOAD-DC02"
-    hostname: "{{ range_id }}-DC02"
     template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 11
@@ -23,9 +11,9 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-GOAD-DC03"
-    hostname: "{{ range_id }}-DC03"
-    template: win2016-server-x64-template
+  - vm_name: "{{ range_id }}-dc02"
+    hostname: "{{ range_id }}-DC02"
+    template: win2019-server-x64-template
     vlan: 10
     ip_last_octet: 12
     ram_gb: 8
@@ -35,7 +23,31 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-GOAD-SRV02"
+  - vm_name: "{{ range_id }}-dc03"
+    hostname: "{{ range_id }}-DC03"
+    template: win2016-server-x64-template
+    vlan: 10
+    ip_last_octet: 13
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    testing:
+      snapshot: true
+      block_internet: false
+  - vm_name: "{{ range_id }}-srv01"
+    hostname: "{{ range_id }}-SRV01"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 21
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    testing:
+      snapshot: true
+      block_internet: false
+  - vm_name: "{{ range_id }}-srv02"
     hostname: "{{ range_id }}-SRV02"
     template: win2019-server-x64-template
     vlan: 10
@@ -47,7 +59,7 @@ ludus:
     testing:
       snapshot: true
       block_internet: false
-  - vm_name: "{{ range_id }}-GOAD-SRV03"
+  - vm_name: "{{ range_id }}-srv03"
     hostname: "{{ range_id }}-SRV03"
     template: win2019-server-x64-template
     vlan: 10
@@ -60,29 +72,18 @@ ludus:
       snapshot: true
       block_internet: false
   - vm_name: "{{ range_id }}-sliver01"
-    hostname: "{{ range_id }}-sliver01"
+    hostname: "{{ range_id }}-SLIVER"
     template: debian-12-x64-server-template
     vlan: 10
-    ip_last_octet: 2
+    ip_last_octet: 100
     ram_gb: 2
     cpus: 1
     linux: true   
   - vm_name: "{{ range_id }}-kali01"
-    hostname: "{{ range_id }}-kali01"
+    hostname: "{{ range_id }}-KALI"
     template: kali-x64-desktop-template
     vlan: 10
-    ip_last_octet: 100
-    ram_gb: 8
-    cpus: 4
-    linux: true
-    testing:
-      snapshot: true
-      block_internet: false
-  - vm_name: "{{ range_id }}-kali02"
-    hostname: "{{ range_id }}-kali02"
-    template: kali-x64-desktop-template
-    vlan: 10
-    ip_last_octet: 200
+    ip_last_octet: 101
     ram_gb: 8
     cpus: 4
     linux: true
