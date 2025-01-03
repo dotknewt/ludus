@@ -22,24 +22,35 @@ ludus:
     role_vars:
       ludus_ad:
         ous:
-          - name: Groups
+          - name: Mars
             path: DC=evil,DC=local
-            description: Groups
+            description: Marsian Space Subsidiary
+          - name: Germany
+            path: DC=evil,DC=local
+            description: German Subsidiary
           - name: Norway
             path: DC=evil,DC=local
-            description: Norwegian OU
+            description: Norwegian Subsidiary
         groups:
-          - name: Norwegian IT
+          - name: Sales Mars
             scope: global
-            path: "OU=Norway,DC=evil,DC=local"
-            description: Norwegian IT Department
+            path: "OU=Mars,DC=evil,DC=local"
+            description: Mars Sales Department
+          - name: Sales Germany
+            scope: global
+            path: "OU=Germany,DC=evil,DC=local"
+            description: Germany Sales Department
+          - name: IT
+            scope: global
+            path: "DC=evil,DC=local"
+            description: IT Department
         users:
           - name: tstark
             firstname: Tony
             surname: Stark
             display_name: Tony Stark
             password: GFVfPS432QkKN2YdQwJL
-            path: "OU=Users,DC=evil,DC=local"
+            path: "DC=evil,DC=local"
             description: IT Domain Administrator
             groups:
               - Administrators
@@ -54,7 +65,7 @@ ludus:
             surname: Service
             display_name: SQL Service
             password: MYpassword123#
-            path: "OU=Users,DC=evil,DC=local"
+            path: "DC=evil,DC=local"
             description: The password is MYpassword123#
             groups:
               - Administrators
@@ -68,7 +79,7 @@ ludus:
             surname: Castle
             display_name: Frank Castle
             password: Password1
-            path: "OU=Users,DC=evil,DC=local"
+            path: "DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
@@ -78,7 +89,7 @@ ludus:
             surname: Parker
             display_name: Peter Parker
             password: Password2
-            path: "OU=Users,DC=evil,DC=local"
+            path: "DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
