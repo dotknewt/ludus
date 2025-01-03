@@ -58,7 +58,7 @@
           "daemon_mode": false,
           "daemon": \{
           "host": "",
-          "port": 12345
+          "port": {{ sliver_server_port }}
           \},
           "logs": \{
           "level": 4,

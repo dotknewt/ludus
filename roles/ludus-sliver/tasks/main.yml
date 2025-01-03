@@ -28,13 +28,3 @@
   ansible.builtin.include_tasks:
     file: install-client.yml
   when: sliver_client is true
-
-- name: Configure rdp
-  ansible.builtin.include_tasks:
-    file: rdp.yml
-  when: linux_config['rdp'] is defined
-
-# - name: Install packages
-#  ansible.builtin.include_tasks:
-#    file: packages.yml
-#  when: linux_config['packages'] is defined # This does not work as expected
