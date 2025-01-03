@@ -1,6 +1,7 @@
+---
 - name: Setup Debian (sliver C2 installation)
   hosts: all
-  become_method: sudo
+  become: true
   tasks:
     - name: Update all packages to their latest version
       ansible.builtin.apt:
@@ -42,6 +43,7 @@
         url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-server_linux
         dest: /usr/local/bin/sliver-server
         mode: '0755'
+
     - name: Create a directory for sliver-server config if it does not exist
       ansible.builtin.file:
         path: /home/debian/.sliver/configs
@@ -50,11 +52,11 @@
         group: debian
         mode: '0755'
 
-    - name: 
+    - name:
       ansible.builtin.copy:
         dest: /home/debian/.sliver/configs/server.json
         content: |
-          '{
+          \{
           "daemon_mode": false,
           "daemon": \{
           "host": "",
@@ -71,7 +73,7 @@
           \},
           "watch_tower": null,
           "go_proxy": ""
-          }'
+          \}
         owner: debian
         group: debian
         mode: '0644'

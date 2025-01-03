@@ -1,6 +1,7 @@
+---
 - name: Setup Debian (sliver C2 installation)
   hosts: all
-  become_method: sudo
+  become: true
   tasks:
     - name: Update all packages to their latest version
       ansible.builtin.apt:
