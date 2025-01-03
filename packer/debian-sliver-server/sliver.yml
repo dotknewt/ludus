@@ -38,9 +38,9 @@
 
     - name: Install metasploit nightly
       become: true
-      ansible.builtin.apt:
-        deb: /tmp/msfinstall
-        state: present
+      ansible.builtin.script:
+        cmd: /bin/bash /tmp/msfinstall
+
 
     - name: Download sliver installer
       ansible.builtin.get_url:
@@ -50,18 +50,10 @@
 
     - name: Install sliver server and client
       become: true
-      ansible.builtin.apt:
-        deb: /tmp/sliver-install
-        state: present
+      ansible.builtin.script:
+        cmd: /bin/bash /tmp/sliver-install
 
-    - name: Add debian to the ssl-cert group
-      become: true
-      ansible.builtin.user:
-        name: debian
-        groups: ssl-cert
-        append: true
-
-    - name: Create .vnc directory for VNC user
+    - name: Create .ssh directory for Debian user
       ansible.builtin.file:
         path: /home/debian/.ssh
         state: directory
