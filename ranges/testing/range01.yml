@@ -15,7 +15,6 @@ ludus:
       - ludus-sliver
     role_vars:
       sliver_server: true
-      sliver_server_port: 112233
 
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
