@@ -17,6 +17,7 @@ ludus:
       role: primary-dc
     roles:
       - windows_language_configuration
+      - badsectorlabs.ludus_adcs
       - ludus-ad-content
     role_vars:
       ludus_ad:
