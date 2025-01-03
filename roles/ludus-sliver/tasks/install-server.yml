@@ -110,6 +110,6 @@
     - name: Enable sliver-server daemon service
       become: true
       ansible.builtin.systemd:
-        name: regenerate_ssh_host_keys
+        name: sliver-server.service
         enabled: true
         state: started
