@@ -16,6 +16,22 @@ ludus:
     role_vars:
       sliver_server: true
 
+  - vm_name: "{{ range_id }}-kali"
+    hostname: "{{ range_id }}-KALI"
+    template: kali-custom-desktop-template
+    vlan: 2
+    ip_last_octet: 200
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    testing:
+      snapshot: false
+      block_internet: false
+    roles:
+      - ludus-sliver
+    role_vars:
+      sliver_client: true   
+
 notify:
   urls:
      - "discord://VlZYPl7lWSeOxZ_GVSbPZA6XWODeMgGn1_2zimegrPd3f3iX95LCw4H7gp3vNEAqQadF@1322815398306910239?SplitLines=No"

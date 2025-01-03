@@ -34,7 +34,7 @@
     - name: Install metasploit nightly
       become: true
       ansible.builtin.script:
-        cmd: /bin/bash /tmp/msfinstall
+        cmd: if [ ! -f "$(which msfconsole)" ]; then /bin/bash /tmp/msfinstall; fi
 
     - name: Download sliver server
       ansible.builtin.get_url:
@@ -50,7 +50,7 @@
         group: debian
         mode: '0755'
 
-    - name:
+    - name: Create custom sliver-server configuration
       ansible.builtin.copy:
         dest: /home/debian/.sliver/configs/server.json
         content: |
