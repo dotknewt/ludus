@@ -1,0 +1,111 @@
+---
+- name: Setup Debian (sliver C2 installation)
+  hosts: all
+  become_method: sudo
+  tasks:
+    - name: Try an apt install
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - mingw-w64
+          - ca-certificates
+          - curl
+        state: present
+        update_cache: true
+      register: apt_result
+      ignore_errors: true
+
+    # This is a fix for the "python3-apt must be installed and visible from /usr/bin/python3" error in Kali 2024.4
+    - name: Fix apt for ansible if needed
+      become: true
+      ansible.builtin.shell:
+        cmd: |
+          echo "Python-apt bug 2 found, fixing from source..." >> /tmp/debian-install.log && \
+          DEBIAN_FRONTEND=noninteractive apt install -y python3-setuptools dpkg-dev python3-dev libapt-pkg-dev >> /tmp/debian-install.log 2>&1 && \
+          git clone https://salsa.debian.org/apt-team/python-apt >> /tmp/debian-install.log 2>&1 && cd python-apt && \
+          git checkout 2.9.6 >> /tmp/debian-install.log 2>&1 && \
+          python3 setup.py build >> /tmp/debian-install.log 2>&1 && \
+          python3 setup.py install >> /tmp/debian-install.log 2>&1
+      when: apt_result.failed
+
+    - name: Install packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - mingw-w64
+          - ca-certificates
+          - ssl-cert
+          - curl
+        state: present
+      register: result
+      retries: 2
+      until: result.failed == false
+
+    - name: Download metasploit-framework installer
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb
+        dest: /tmp/msfinstall
+        mode: '0755'
+
+    - name: Install metasploit nightly
+      become: true
+      ansible.builtin.apt:
+        deb: /tmp/msfinstall
+        state: present
+
+    - name: Download sliver installer
+      ansible.builtin.get_url:
+        url: https://sliver.sh/install
+        dest: /tmp/sliver-install
+        mode: '0755'
+
+    - name: Install sliver server and client
+      become: true
+      ansible.builtin.apt:
+        deb: /tmp/sliver-install
+        state: present
+
+    - name: Add debian to the ssl-cert group
+      become: true
+      ansible.builtin.user:
+        name: debian
+        groups: ssl-cert
+        append: true
+
+    - name: Create .vnc directory for VNC user
+      ansible.builtin.file:
+        path: /home/debian/.ssh
+        state: directory
+        mode: '0755'
+        owner: debian
+        group: debian
+
+    - name: Create sliver-server service
+      become: true
+      ansible.builtin.blockinfile:
+        path: /etc/systemd/system/sliver.service
+        create: true
+        block: |
+          [Unit]
+          Description=Sliver
+          After=network.target
+          StartLimitIntervalSec=0
+
+          [Service]
+          Type=simple
+          Restart=on-failure
+          RestartSec=3
+          User=root
+          ExecStart=/root/sliver-server daemon
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable the sliver service
+      become: true
+      ansible.builtin.service:
+        name: sliver.service
+        enabled: true
+        daemon_reload: true
