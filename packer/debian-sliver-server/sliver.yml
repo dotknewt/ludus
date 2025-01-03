@@ -63,26 +63,26 @@
         owner: debian
         group: debian
 
-    - name: Create sliver-server service
-      become: true
-      ansible.builtin.blockinfile:
-        path: /etc/systemd/system/sliver.service
-        create: true
-        block: |
-          [Unit]
-          Description=Sliver
-          After=network.target
-          StartLimitIntervalSec=0
-
-          [Service]
-          Type=simple
-          Restart=on-failure
-          RestartSec=3
-          User=root
-          ExecStart=/root/sliver-server daemon
-
-          [Install]
-          WantedBy=multi-user.target
+#    - name: Create sliver-server service
+#      become: true
+#      ansible.builtin.blockinfile:
+#        path: /etc/systemd/system/sliver.service
+#        create: true
+#        block: |
+#          [Unit]
+#          Description=Sliver
+#          After=network.target
+#          StartLimitIntervalSec=0
+#
+#          [Service]
+#          Type=simple
+#          Restart=on-failure
+#          RestartSec=3
+#          User=root
+#          ExecStart=/root/sliver-server daemon
+#
+#          [Install]
+#          WantedBy=multi-user.target
 
     - name: Enable the sliver service
       become: true
