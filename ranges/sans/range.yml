@@ -94,7 +94,7 @@ ludus:
       sysprep: true
     domain:
       fqdn: evil.local
-      role: secondary-dc
+      role: alt-dc
     roles:
       - badsectorlabs.ludus_adcs
       - windows_language_configuration
@@ -151,8 +151,8 @@ ludus:
     template: debian-sliver-server-template
     vlan: 99
     ip_last_octet: 100
-    ram_gb: 4
-    cpus: 2
+    ram_gb: 8
+    cpus: 4
     linux: true
     testing:
       snapshot: false
