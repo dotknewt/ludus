@@ -146,6 +146,18 @@ ludus:
     roles:
       - windows_language_configuration
 
+  - vm_name: "{{ range_id }}-sliver"
+    hostname: "{{ range_id }}-SLIVER"
+    template: debian-sliver-server-template
+    vlan: 99
+    ip_last_octet: 100
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    testing:
+      snapshot: false
+      block_internet: false
+
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template

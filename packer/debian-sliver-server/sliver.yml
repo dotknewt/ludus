@@ -16,19 +16,6 @@
       register: apt_result
       ignore_errors: true
 
-    # This is a fix for the "python3-apt must be installed and visible from /usr/bin/python3" error in Kali 2024.4
-    - name: Fix apt for ansible if needed
-      become: true
-      ansible.builtin.shell:
-        cmd: |
-          echo "Python-apt bug 2 found, fixing from source..." >> /tmp/debian-install.log && \
-          DEBIAN_FRONTEND=noninteractive apt install -y python3-setuptools dpkg-dev python3-dev libapt-pkg-dev >> /tmp/debian-install.log 2>&1 && \
-          git clone https://salsa.debian.org/apt-team/python-apt >> /tmp/debian-install.log 2>&1 && cd python-apt && \
-          git checkout 2.9.6 >> /tmp/debian-install.log 2>&1 && \
-          python3 setup.py build >> /tmp/debian-install.log 2>&1 && \
-          python3 setup.py install >> /tmp/debian-install.log 2>&1
-      when: apt_result.failed
-
     - name: Install packages
       become: true
       ansible.builtin.apt:
@@ -110,35 +97,34 @@
         enabled: true
         daemon_reload: true
 
-    - name: Create and enable SSH host keys regeneration service
-      hosts: all
+    - name: Create systemd service file for SSH host keys regeneration
       become: true
-      tasks:
-        - name: Create systemd service file for SSH host keys regeneration
-          ansible.builtin.copy:
-            dest: /etc/systemd/system/regenerate_ssh_host_keys.service
-            content: |
-              [Unit]
-              Description=Regenerate SSH host keys
-              Before=ssh.service
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/regenerate_ssh_host_keys.service
+        content: |
+          [Unit]
+          Description=Regenerate SSH host keys
+          Before=ssh.service
 
-              [Service]
-              Type=oneshot
-              ExecStartPre=-/bin/sh -c "/bin/rm -f -v /etc/ssh/ssh_host_*_key*"
-              ExecStart=/usr/bin/ssh-keygen -A -v
-              ExecStartPost=/bin/systemctl disable regenerate_ssh_host_keys
+          [Service]
+          Type=oneshot
+          ExecStartPre=-/bin/sh -c "/bin/rm -f -v /etc/ssh/ssh_host_*_key*"
+          ExecStart=/usr/bin/ssh-keygen -A -v
+          ExecStartPost=/bin/systemctl disable regenerate_ssh_host_keys
 
-              [Install]
-              WantedBy=multi-user.target
-            owner: root
-            group: root
-            mode: '0644'
+          [Install]
+          WantedBy=multi-user.target
+        owner: root
+        group: root
+        mode: '0644'
 
-        - name: Reload systemd daemon
-          ansible.builtin.systemd:
-            daemon_reload: true
+    - name: Reload systemd daemon
+      become: true
+      ansible.builtin.systemd:
+        daemon_reload: true
 
-        - name: Enable SSH host keys regeneration service
-          ansible.builtin.systemd:
-            name: regenerate_ssh_host_keys
-            enabled: true
+    - name: Enable SSH host keys regeneration service
+      become: true
+      ansible.builtin.systemd:
+        name: regenerate_ssh_host_keys
+        enabled: true
