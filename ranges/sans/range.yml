@@ -4,8 +4,8 @@ ludus:
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 10
-    ram_gb: 4
-    cpus: 2
+    ram_gb: 8
+    cpus: 4
     testing:
       snapshot: true
       block_internet: true
@@ -20,6 +20,41 @@ ludus:
       - badsectorlabs.ludus_adcs
       - ludus-ad-content
     role_vars:
+      # This pulls the netbios_name out of the domain assigned to this machine in the ludus range config
+      ludus_adcs_domain: "{{ (ludus | selectattr('vm_name', 'match', inventory_hostname))[0].domain.fqdn.split('.')[0] }}"
+      # This pulls the vm_name of the primary-dc for the domain assigned to this machine in the ludus range config
+      ludus_adcs_dc: "{{ (ludus | selectattr('domain', 'defined') | selectattr('domain.fqdn', 'match', ludus_adcs_domain) | selectattr('domain.role', 'match', 'primary-dc'))[0].hostname }}"
+      # This pulls the hostname from the ludus config for this host
+      ludus_adcs_ca_host: "{{ (ludus | selectattr('vm_name', 'match', inventory_hostname))[0].hostname }}"
+      ludus_adcs_domain_username: "{{ ludus_adcs_domain }}\\{{ defaults.ad_domain_admin }}"
+      ludus_adcs_domain_password: "{{ defaults.ad_domain_admin_password }}"
+      ludus_adcs_ca_common_name: "{{ ludus_adcs_domain }}-CA"
+      ludus_adcs_esc1: true
+      ludus_adcs_esc2: true
+      ludus_adcs_esc3: true
+      ludus_adcs_esc3_cra: true
+      ludus_adcs_esc4: true
+      ludus_adcs_esc5: true
+      ludus_adcs_esc6: true
+      ludus_adcs_esc7: true
+      ludus_adcs_esc8: true
+      ludus_adcs_esc9: true
+      ludus_adcs_esc11: true
+      ludus_adcs_esc13: true
+      ludus_adcs_esc15: true
+      # Vars for specific ESCs
+      ludus_adcs_esc5_user: esc5user
+      ludus_adcs_esc5_password: ESC5password
+      ludus_adcs_esc7_ca_manager_user: esc7_camgr_user
+      ludus_adcs_esc7_ca_manager_password: ESC7password
+      ludus_adcs_esc7_cert_manager_user: esc7_certmgr_user
+      ludus_adcs_esc7_cert_manager_password: ESC7password
+      ludus_adcs_esc9_user: esc9user
+      ludus_adcs_esc9_password: ESC9password
+      ludus_adcs_esc13_user: esc13user
+      ludus_adcs_esc13_password: ESC13password
+      ludus_adcs_esc13_group: esc13group
+      ludus_adcs_esc13_template: ESC13
       ludus_ad:
         ous:
           - name: Mars
@@ -95,30 +130,21 @@ ludus:
               - Domain Users
               - Remote Desktop Users
 
-  - vm_name: "{{ range_id }}-DC02"
-    hostname: "{{ range_id }}-DC02"
+  - vm_name: "{{ range_id }}-SRV01"
+    hostname: "{{ range_id }}-SRV01"
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 20
-    ram_gb: 4
-    cpus: 2
+    ram_gb: 8
+    cpus: 4
     windows:
       sysprep: true
     domain:
       fqdn: evil.local
-      role: alt-dc
+      role: member
     roles:
-      - badsectorlabs.ludus_adcs
+      - badsectorlabs.ludus_mssql
       - windows_language_configuration
-    role_vars:
-      ludus_adcs_esc1: true
-      ludus_adcs_esc2: true
-      ludus_adcs_esc3: true
-      ludus_adcs_esc3_cra: true
-      ludus_adcs_esc4: true
-      ludus_adcs_esc6: true
-      ludus_adcs_esc8: true
-      ludus_adcs_esc13: true
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -161,7 +187,7 @@ ludus:
   - vm_name: "{{ range_id }}-sliver"
     hostname: "{{ range_id }}-SLIVER"
     template: debian-sliver-server-template
-    vlan: 99
+    vlan: 10
     ip_last_octet: 100
     ram_gb: 8
     cpus: 4
@@ -173,7 +199,7 @@ ludus:
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template
-    vlan: 99
+    vlan: 10
     ip_last_octet: 99
     ram_gb: 8
     cpus: 4
@@ -190,35 +216,10 @@ router:
   cpus: 2
 
 network: 
-  inter_vlan_default: REJECT # The default rule to apply to traffic between VLANs. Default: ACCEPT
+  inter_vlan_default: ACCEPT # The default rule to apply to traffic between VLANs. Default: ACCEPT
   always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
     - 192.168.0.0/16         # entries must be in CIDR format
     - 172.16.0.0/12
-  rules:
-    - name: Only allow windows to kali on 443
-      vlan_src: 10
-      vlan_dst: 99
-      protocol: tcp
-      ports: 443
-      action: ACCEPT
-    - name: Only allow windows to kali on 80
-      vlan_src: 10
-      vlan_dst: 99
-      protocol: tcp
-      ports: 80
-      action: ACCEPT
-    - name: Only allow windows to kali on 8080
-      vlan_src: 10
-      vlan_dst: 99
-      protocol: tcp
-      ports: 8080
-      action: ACCEPT          
-    - name: Allow kali to all windows
-      vlan_src: 99
-      vlan_dst: 10
-      protocol: all
-      ports: all
-      action: ACCEPT
 defaults:
   snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
   stale_hours: 0                           # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
