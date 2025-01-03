@@ -34,7 +34,10 @@
     - name: Install metasploit nightly
       become: true
       ansible.builtin.script:
-        cmd: if [ ! -f "$(which msfconsole)" ]; then /bin/bash /tmp/msfinstall; fi
+        cmd: /bin/bash /tmp/msfinstall
+      args:
+        chdir: /opt
+        creates: /opt/metasploit-framework/bin/msfconsole
 
     - name: Download sliver server
       ansible.builtin.get_url:
