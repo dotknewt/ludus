@@ -22,6 +22,7 @@
         name:
           - git
           - gpg
+          - gpg-agent
           - mingw-w64
           - ca-certificates
           - ssl-cert
