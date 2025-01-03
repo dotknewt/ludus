@@ -49,28 +49,29 @@
         owner: debian
         group: debian
         mode: '0755'
+
     - name: 
       ansible.builtin.copy:
         dest: /home/debian/.sliver/configs/server.json
         content: |
-        {
+          '{
           "daemon_mode": false,
-          "daemon": {
+          "daemon": \{
           "host": "",
           "port": 12345
-          },
-          "logs": {
+          \},
+          "logs": \{
           "level": 4,
           "grpc_unary_payloads": false,
           "grpc_stream_payloads": false,
           "tls_key_logger": false
-          },
-          "jobs": {
+          \},
+          "jobs": \{
           "multiplayer": null
-          },
+          \},
           "watch_tower": null,
           "go_proxy": ""
-        }
+          }'
         owner: debian
         group: debian
         mode: '0644'
