@@ -21,6 +21,7 @@
       ansible.builtin.apt:
         name:
           - git
+          - gpg
           - mingw-w64
           - ca-certificates
           - ssl-cert
