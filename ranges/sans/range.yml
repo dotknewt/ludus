@@ -20,7 +20,7 @@ ludus:
       - badsectorlabs.ludus_adcs
       - ludus-ad-content
     role_vars:
-      ludus_adcs_ca_common_name: "{{ ludus_adcs_domain }}-CA"
+      #ludus_adcs_ca_common_name: "{{ ludus_adcs_domain }}-CA"
       ludus_adcs_esc1: true
       ludus_adcs_esc2: true
       ludus_adcs_esc3: true
