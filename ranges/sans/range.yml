@@ -188,7 +188,7 @@ ludus:
 
   - vm_name: "{{ range_id }}-sliver"
     hostname: "{{ range_id }}-SLIVER"
-    template: debian-sliver-server-template
+    template: debian-12-x64-server-template
     vlan: 2
     ip_last_octet: 100
     ram_gb: 8
@@ -197,6 +197,10 @@ ludus:
     testing:
       snapshot: false
       block_internet: false
+    roles:
+      - ludus-sliver
+    role_vars:
+      sliver_server: true
 
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
@@ -209,6 +213,10 @@ ludus:
     testing:
       snapshot: false
       block_internet: false
+    roles:
+      - ludus-sliver
+    role_vars:
+      sliver_client: true
 
 router:
   vm_name: "{{ range_id }}-router"
