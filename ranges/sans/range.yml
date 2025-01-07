@@ -87,6 +87,7 @@ ludus:
               - Group Policy Creator Owners
               - Schema Admins
               - Remote Desktop Users
+              - IIS_IUSRS
           - name: SQLservice
             firstname: SQL
             surname: Service
@@ -101,6 +102,7 @@ ludus:
               - Enterprise Admins
               - Group Policy Creator Owners
               - Schema Admins
+              - IIS_IUSRS
           - name: fcastle
             firstname: Frank
             surname: Castle
@@ -111,6 +113,7 @@ ludus:
             groups:
               - Domain Users
               - Remote Desktop Users
+              - IIS_IUSRS
           - name: pparker
             firstname: Peter
             surname: Parker
