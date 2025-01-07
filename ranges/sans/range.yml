@@ -128,7 +128,7 @@ ludus:
   - vm_name: "{{ range_id }}-DC02"
     hostname: "{{ range_id }}-DC02"
     template: win2012r2-server-x64-template
-    vlan: 2
+    vlan: 5
     ip_last_octet: 12
     ram_gb: 8
     cpus: 4
@@ -144,7 +144,7 @@ ludus:
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
     template: win11-22h2-x64-enterprise-template
-    vlan: 2
+    vlan: 10
     ip_last_octet: 20
     ram_gb: 8
     cpus: 4
@@ -163,7 +163,7 @@ ludus:
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
     template: win10-21h2-x64-enterprise-template
-    vlan: 2
+    vlan: 10
     ip_last_octet: 31
     ram_gb: 8
     cpus: 4
@@ -182,7 +182,7 @@ ludus:
   - vm_name: "{{ range_id }}-sliver"
     hostname: "{{ range_id }}-SLIVER"
     template: debian-12-x64-server-template
-    vlan: 2
+    vlan: 10
     ip_last_octet: 100
     ram_gb: 8
     cpus: 4
@@ -198,7 +198,7 @@ ludus:
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template
-    vlan: 2
+    vlan: 10
     ip_last_octet: 200
     ram_gb: 8
     cpus: 4
