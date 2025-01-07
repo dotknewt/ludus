@@ -135,7 +135,6 @@ ludus:
       fqdn: evil.local
       role: alt-dc
     roles:
-      - badsectorlabs.ludus_adcs
       - windows_language_configuration
     
 
