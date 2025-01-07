@@ -78,7 +78,7 @@ ludus:
             firstname: Frank
             surname: Castle
             display_name: Frank Castle
-            password: Password1
+            password: Summer2024!
             path: "DC=evil,DC=local"
             description: Domain User
             groups:
@@ -88,7 +88,7 @@ ludus:
             firstname: Peter
             surname: Parker
             display_name: Peter Parker
-            password: Password2
+            password: Spring2024!
             path: "DC=evil,DC=local"
             description: Domain User
             groups:
@@ -225,10 +225,10 @@ defaults:
   ad_domain_functional_level: Win2012R2    # The functional level of each Windows domain created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
   ad_forest_functional_level: Win2012R2    # The functional level of each Windows forest created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
   ad_domain_admin: domainadmin             # The domain admin username for every Windows domain
-  ad_domain_admin_password: password       # The domain admin password for every Windows domain
+  ad_domain_admin_password: Evil2024_Welcome!       # The domain admin password for every Windows domain
   ad_domain_user: domainuser               # The domain user username for every Windows domain
-  ad_domain_user_password: password        # The domain user password for every Windows domain
-  ad_domain_safe_mode_password: password   # The domain safe mode password for every Windows domain
+  ad_domain_user_password: Evil_Welcome2024!        # The domain user password for every Windows domain
+  ad_domain_safe_mode_password: Evil_Safe_Mode_Password   # The domain safe mode password for every Windows domain
   timezone: Europe/Oslo         
 
 notify:
