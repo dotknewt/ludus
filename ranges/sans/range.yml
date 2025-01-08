@@ -3,7 +3,7 @@ ludus:
     hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-no-security-updates-template
     vlan: 2
-    ip_last_octet: 11
+    ip_last_octet: 1
     ram_gb: 8
     cpus: 4
     testing:
@@ -16,68 +16,58 @@ ludus:
       fqdn: evil.local
       role: primary-dc
     roles:
-      - windows_language_configuration
-      - badsectorlabs.ludus_adcs
-      - ludus-ad-content
+      - ludus-configure-language-windows
+      - badsectorlabs.ludus_adcs # Configure Primary DC
+      - ludus-ad-content  # Create AD Content OU's, Groups and Users
     role_vars:
-      #ludus_adcs_ca_common_name: "{{ ludus_adcs_domain }}-CA"
-      ludus_adcs_esc1: true
-      ludus_adcs_esc2: true
-      ludus_adcs_esc3: true
-      ludus_adcs_esc3_cra: true
-      ludus_adcs_esc4: true
-      ludus_adcs_esc5: true
-      ludus_adcs_esc6: true
-      ludus_adcs_esc7: true
-      ludus_adcs_esc8: true
-      ludus_adcs_esc9: true
-      ludus_adcs_esc11: true
-      ludus_adcs_esc13: true
-      ludus_adcs_esc15: true
-      # Vars for specific ESCs
-      ludus_adcs_esc5_user: esc5user
-      ludus_adcs_esc5_password: ESC5password
-      ludus_adcs_esc7_ca_manager_user: esc7_camgr_user
-      ludus_adcs_esc7_ca_manager_password: ESC7password
-      ludus_adcs_esc7_cert_manager_user: esc7_certmgr_user
-      ludus_adcs_esc7_cert_manager_password: ESC7password
-      ludus_adcs_esc9_user: esc9user
-      ludus_adcs_esc9_password: ESC9password
-      ludus_adcs_esc13_user: esc13user
-      ludus_adcs_esc13_password: ESC13password
-      ludus_adcs_esc13_group: esc13group
-      ludus_adcs_esc13_template: ESC13
       ludus_ad:
         ous:
-          - name: Mars
+          - name: IT
             path: DC=evil,DC=local
-            description: Marsian Space Subsidiary
-          - name: Germany
-            path: DC=evil,DC=local
-            description: German Subsidiary
+            description: Global IT Department
           - name: Norway
+            path: "OU=IT,DC=evil,DC=local"
+            description: Norwegian IT Subsidiary
+          - name: Sweden
+            path: "OU=IT,DC=evil,DC=local"
+            description: Swedish IT Subsidiary
+          - name: Sales
             path: DC=evil,DC=local
             description: Norwegian Subsidiary
+          - name: Norway
+            path: "OU=Sales,DC=evil,DC=local"
+            description: Norwegian Sales Subsidiary
+          - name: Sweden
+            path: "OU=Sales,DC=evil,DC=local"
+            description: Swedish Sales Subsidiary
         groups:
-          - name: Sales Mars
+          - name: SecOps
             scope: global
-            path: "OU=Mars,DC=evil,DC=local"
-            description: Mars Sales Department
-          - name: Sales Germany
+            path: "OU=IT,DC=evil,DC=local"
+            description: Global IT SecOps Group
+          - name: IT Norway
             scope: global
-            path: "OU=Germany,DC=evil,DC=local"
-            description: Germany Sales Department
-          - name: IT
+            path: "OU=Norway,,OU=IT,DC=evil,DC=local"
+            description: Norwegian IT Department
+          - name: Sales Norway
             scope: global
-            path: "DC=evil,DC=local"
-            description: IT Department
+            path: "OU=Norway,OU=Sales,DC=evil,DC=local"
+            description: Norwegian Sales Department
+          - name: IT Sweden
+            scope: global
+            path: "OU=Sweden,OU=IT,DC=evil,DC=local"
+            description: Swedish IT Department
+          - name: Sales Sweden
+            scope: global
+            path: "OU=Sweden,OU=Sales,DC=evil,DC=local"
+            description: Swedish Sales Department
         users:
           - name: tstark
             firstname: Tony
             surname: Stark
             display_name: Tony Stark
             password: GFVfPS432QkKN2YdQwJL
-            path: "DC=evil,DC=local"
+            path: "OU=IT,DC=evil,DC=local"
             description: IT Domain Administrator
             groups:
               - Administrators
@@ -88,12 +78,15 @@ ludus:
               - Schema Admins
               - Remote Desktop Users
               - IIS_IUSRS
+              - SecOps
+              - IT Norway
+              - IT Sweden
           - name: SQLservice
             firstname: SQL
             surname: Service
             display_name: SQL Service
             password: MYpassword123#
-            path: "DC=evil,DC=local"
+            path: "OU=IT,DC=evil,DC=local"
             description: The password is MYpassword123#
             groups:
               - Administrators
@@ -103,33 +96,40 @@ ludus:
               - Group Policy Creator Owners
               - Schema Admins
               - IIS_IUSRS
+              - IT Sweden
+              - IT Norway
           - name: fcastle
             firstname: Frank
             surname: Castle
             display_name: Frank Castle
             password: Summer2024!
-            path: "DC=evil,DC=local"
+            path: "OU=Norway,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
               - Remote Desktop Users
               - IIS_IUSRS
+              - IT Norway
+              - Sales Norway
           - name: pparker
             firstname: Peter
             surname: Parker
             display_name: Peter Parker
             password: Spring2024!
-            path: "DC=evil,DC=local"
+            path: "OU=Sweden,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
               - Remote Desktop Users
+              - IT Norway
+              - IT Sweden
+              - Sales Sweden
 
   - vm_name: "{{ range_id }}-DC02"
     hostname: "{{ range_id }}-DC02"
     template: win2012r2-server-x64-template
     vlan: 5
-    ip_last_octet: 12
+    ip_last_octet: 1
     ram_gb: 8
     cpus: 4
     windows:
@@ -144,7 +144,7 @@ ludus:
     hostname: "{{ range_id }}-WS01"
     template: win11-22h2-x64-enterprise-template
     vlan: 10
-    ip_last_octet: 20
+    ip_last_octet: 11
     ram_gb: 8
     cpus: 4
     testing:
@@ -157,13 +157,30 @@ ludus:
       fqdn: evil.local
       role: member
     roles:
-      - windows_language_configuration
+      - ludus-configure-language-windows
+      - ludus-install-sysmon
+      - ludus-local-users
+    role_vars:
+      ludus_local_users:
+        - login: fcastle
+          password: Summer2024!
+      ludus_local_groups:
+        - name: Administrators
+          members:
+            - fcastle
+            - EVIL\SecOps
+            - EVIL\IT Norway
+            - EVIL\IT Sweden
+        - name: Remote Desktop Users
+          members:
+            - EVIL\SecOps
+            - EVIL\IT Norway
 
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
     template: win10-21h2-x64-enterprise-template
     vlan: 10
-    ip_last_octet: 31
+    ip_last_octet: 12
     ram_gb: 8
     cpus: 4
     testing:
@@ -176,9 +193,23 @@ ludus:
       fqdn: evil.local
       role: member
     roles:
-      - windows_language_configuration
+      - ludus-configure-language-windows
+      - ludus-install-sysmon
+      - ludus-local-users
+    role_vars:
+      ludus_local_users:
+        - login: pparker
+          password: Spring2024!
+      ludus_local_groups:
+        - name: Administrators
+          members:
+            - EVIL\IT Sweden
+        - name: Remote Desktop Users
+          members:
+            - EVIL\SecOps
+            - EVIL\IT Sweden
 
-  - vm_name: "{{ range_id }}-sliver"
+  - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
     template: debian-12-x64-server-template
     vlan: 10
@@ -192,7 +223,7 @@ ludus:
     roles:
       - ludus-install-sliver-server
 
-  - vm_name: "{{ range_id }}-kali"
+  - vm_name: "{{ range_id }}-KALI"
     hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template
     vlan: 10
@@ -218,6 +249,7 @@ network:
   always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
     - 192.168.0.0/16         # entries must be in CIDR format
     - 172.16.0.0/12
+
 defaults:
   snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
   stale_hours: 0                           # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)

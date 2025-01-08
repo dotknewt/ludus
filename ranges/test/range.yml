@@ -16,46 +16,58 @@ ludus:
       fqdn: evil.local
       role: primary-dc
     roles:
-      - windows_language_configuration
+      - ludus-configure-language-windows
       - badsectorlabs.ludus_adcs # Configure Primary DC
       - ludus-ad-content  # Create AD Content OU's, Groups and Users
     role_vars:
       ludus_ad:
         ous:
+          - name: IT
+            path: DC=evil,DC=local
+            description: Global IT Department
           - name: Norway
+            path: "OU=IT,DC=evil,DC=local"
+            description: Norwegian IT Subsidiary
+          - name: Sweden
+            path: "OU=IT,DC=evil,DC=local"
+            description: Swedish IT Subsidiary
+          - name: Sales
             path: DC=evil,DC=local
             description: Norwegian Subsidiary
+          - name: Norway
+            path: "OU=Sales,DC=evil,DC=local"
+            description: Norwegian Sales Subsidiary
           - name: Sweden
-            path: DC=evil,DC=local
-            description: Swedish Subsidiary
+            path: "OU=Sales,DC=evil,DC=local"
+            description: Swedish Sales Subsidiary
         groups:
-          - name: IT Global
+          - name: SecOps
             scope: global
-            path: "DC=evil,DC=local"
-            description: Global IT Group
-          - name: Sales Norway
-            scope: global
-            path: "OU=Norway,DC=evil,DC=local"
-            description: Norwegian Sales Department
+            path: "OU=IT,DC=evil,DC=local"
+            description: Global IT SecOps Group
           - name: IT Norway
             scope: global
-            path: "OU=Norway,DC=evil,DC=local"
+            path: "OU=Norway,,OU=IT,DC=evil,DC=local"
             description: Norwegian IT Department
-          - name: Sales Sweden
+          - name: Sales Norway
             scope: global
-            path: "OU=Sweden,DC=evil,DC=local"
-            description: Swedish Sales Department
+            path: "OU=Norway,OU=Sales,DC=evil,DC=local"
+            description: Norwegian Sales Department
           - name: IT Sweden
             scope: global
-            path: "OU=Sweden,DC=evil,DC=local"
+            path: "OU=Sweden,OU=IT,DC=evil,DC=local"
             description: Swedish IT Department
+          - name: Sales Sweden
+            scope: global
+            path: "OU=Sweden,OU=Sales,DC=evil,DC=local"
+            description: Swedish Sales Department
         users:
           - name: tstark
             firstname: Tony
             surname: Stark
             display_name: Tony Stark
             password: GFVfPS432QkKN2YdQwJL
-            path: "DC=evil,DC=local"
+            path: "OU=IT,DC=evil,DC=local"
             description: IT Domain Administrator
             groups:
               - Administrators
@@ -66,12 +78,15 @@ ludus:
               - Schema Admins
               - Remote Desktop Users
               - IIS_IUSRS
+              - SecOps
+              - IT Norway
+              - IT Sweden
           - name: SQLservice
             firstname: SQL
             surname: Service
             display_name: SQL Service
             password: MYpassword123#
-            path: "DC=evil,DC=local"
+            path: "OU=IT,DC=evil,DC=local"
             description: The password is MYpassword123#
             groups:
               - Administrators
@@ -81,27 +96,34 @@ ludus:
               - Group Policy Creator Owners
               - Schema Admins
               - IIS_IUSRS
+              - IT Sweden
+              - IT Norway
           - name: fcastle
             firstname: Frank
             surname: Castle
             display_name: Frank Castle
             password: Summer2024!
-            path: "DC=evil,DC=local"
+            path: "OU=Norway,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
               - Remote Desktop Users
               - IIS_IUSRS
+              - IT Norway
+              - Sales Norway
           - name: pparker
             firstname: Peter
             surname: Parker
             display_name: Peter Parker
             password: Spring2024!
-            path: "DC=evil,DC=local"
+            path: "OU=Sweden,DC=evil,DC=local"
             description: Domain User
             groups:
               - Domain Users
               - Remote Desktop Users
+              - IT Norway
+              - IT Sweden
+              - Sales Sweden
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -120,8 +142,9 @@ ludus:
       fqdn: evil.local
       role: member
     roles:
-      - windows_language_configuration
+      - ludus-configure-language-windows
       - ludus-local-users
+      - ludus-install-sysmon
     role_vars:
       ludus_local_users:
         - login: fcastle
