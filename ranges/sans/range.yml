@@ -138,8 +138,7 @@ ludus:
       fqdn: evil.local
       role: alt-dc
     roles:
-      - windows_language_configuration
-    
+      - ludus-configure-language-windows    
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -191,9 +190,7 @@ ludus:
       snapshot: false
       block_internet: false
     roles:
-      - ludus-sliver
-    role_vars:
-      sliver_server: true
+      - ludus-install-sliver-server
 
   - vm_name: "{{ range_id }}-kali"
     hostname: "{{ range_id }}-KALI"
@@ -207,9 +204,7 @@ ludus:
       snapshot: false
       block_internet: false
     roles:
-      - ludus-sliver
-    role_vars:
-      sliver_client: true
+      - ludus-install-sliver-client
 
 router:
   vm_name: "{{ range_id }}-router"

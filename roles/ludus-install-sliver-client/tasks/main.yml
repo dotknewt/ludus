@@ -1,0 +1,52 @@
+---
+- name: Gather facts if needed
+  ansible.builtin.setup:
+  when: ansible_os_family is undefined
+
+- name: Debug Task
+  when: linux_config_debug is defined
+  block:
+    - name: Print all available facts
+      ansible.builtin.debug:
+        var: ansible_facts
+
+    - name: Debug os family
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }} {{ ansible_facts['ansible_lsb']['release'] }}"
+
+- name: Check for Linux
+  ansible.builtin.fail:
+    msg: This role only supports Linux
+  when: ansible_os_family != "Debian"
+
+- name: Setup Debian (sliver C2 installation)
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Install required packages
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - gpg
+          - gpg-agent
+          - mingw-w64
+          - ca-certificates
+          - curl
+        state: present
+        autoremove: true
+        clean: true
+      register: result
+      retries: 2
+      until: result.failed == false
+
+    - name: Download sliver server
+      ansible.builtin.get_url:
+        url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_linux
+        dest: /usr/local/bin/sliver
+        mode: '0755'

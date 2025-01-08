@@ -1,4 +1,0 @@
----
-sliver_server: false
-sliver_server_port: 31337
-sliver_client: false
