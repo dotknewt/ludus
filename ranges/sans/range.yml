@@ -47,7 +47,7 @@ ludus:
             description: Global IT SecOps Group
           - name: IT Norway
             scope: global
-            path: "OU=Norway,,OU=IT,DC=evil,DC=local"
+            path: "OU=Norway,OU=IT,DC=evil,DC=local"
             description: Norwegian IT Department
           - name: Sales Norway
             scope: global
