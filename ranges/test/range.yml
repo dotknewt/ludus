@@ -2,7 +2,7 @@ ludus:
   - vm_name: "{{ range_id }}-DC01"
     hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-no-security-updates-template
-    vlan: 2
+    vlan: 100
     ip_last_octet: 11
     ram_gb: 8
     cpus: 4
@@ -16,7 +16,7 @@ ludus:
       fqdn: evil.local
       role: primary-dc
     roles:
-      - ludus-configure-language-windows
+      - ludus-configure-language-windows # custom role
       - badsectorlabs.ludus_adcs # Configure Primary DC
       - ludus-ad-content  # Create AD Content OU's, Groups and Users
     role_vars:
@@ -128,7 +128,7 @@ ludus:
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
     template: win10-21h2-x64-enterprise-template
-    vlan: 10
+    vlan: 100
     ip_last_octet: 2
     ram_gb: 8
     cpus: 4
@@ -159,6 +159,27 @@ ludus:
             - EVIL\pparker
             - EVIL\fcastle
             - EVIL\tstark
+
+network: 
+  # action: ["ACCEPT","REJECT","DROP"]
+  external_default: DROP # The default action to apply to traffic leaving the range out to the internet.
+  inter_vlan_default: DROP # The default action to apply to traffic between VLANs.
+  always_blocked_networks: # Networks that ranges should never be able to reach
+    - 192.168.0.0/16 # Must be CIDR notation
+    - 172.16.0.0/12
+  rules:
+    - name: ACCEPT INTERNAL SUBNET # Rule name will be added as a comment in iptables
+      vlan_src: 100 # VLAN ID >= 2 AND <= 255
+      vlan_dst: 100 # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
+      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
+      ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
+      action: ACCEPT #String value matching: ["ACCEPT","REJECT","DROP"]
+    - name: DROP PUBLIC NETWORKS
+      vlan_src: 100 # VLAN ID >= 2 AND <= 255
+      vlan_dst: public # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
+      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
+      ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
+      action: DROP #String value matching: ["ACCEPT","REJECT","DROP"]
 
 notify:
   urls:

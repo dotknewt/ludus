@@ -1,0 +1,15 @@
+proxmox_node: ludus # proxmox node
+proxmox_interface: eth0 # eno2
+proxmox_invalid_cert: true # ignore invalid certificate
+proxmox_url: https://127.0.0.1:8006 # url as seen from proxmox itself
+proxmox_hostname: ludus 
+proxmox_local_ip: 192.168.0.100 
+proxmox_public_ip: 192.168.0.100 # endpoint IP for wireguard config
+proxmox_gateway: 192.168.0.1
+proxmox_netmask: 255.255.255.0
+proxmox_vm_storage_pool: ludus # name of storage pool for vm-disks
+proxmox_vm_storage_format: raw # format: raw, qcow2
+proxmox_iso_storage_pool: local # where ISO's are stored
+ludus_nat_interface: vmbr1000 # automatically generated during ludus install
+prevent_user_ansible_add: true # only admin users can add ansible roles or collections
+license_key: community
