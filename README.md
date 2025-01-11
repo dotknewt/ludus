@@ -1,6 +1,7 @@
 # Roles
-### Install all available badsectorlabs' roles
+### Install all publicly available badsectorlabs' roles
 ``` bash
+# List was complete on sept 2024
 badsectorlabsRoles="ludus_adcs ludus_commandovm ludus_flarevm ludus_remnux ludus_emux ludus_elastic_agent ludus_elastic_container ludus_mssql ludus_vulhub ludus_bloodhound_ce"
 
 for role in $badsectorlabsRoles; do # add each
@@ -8,7 +9,7 @@ for role in $badsectorlabsRoles; do # add each
 done
 ```
 
-## Local roles
+## Local/custom roles
 ### roles/ludus-configure-language-windows
 - configure keyboard layout and language
 
