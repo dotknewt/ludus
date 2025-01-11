@@ -135,21 +135,21 @@ ludus:
       - ludus-configure-language-windows
       - ludus-install-sysmon
       - ludus-local-users
-#    role_vars:
-#      ludus_local_users:
-#        - login: fcastle
-#          password: Summer2024!
-#      ludus_local_groups:
-#        - name: Administrators
-#          members:
-#            - fcastle
-#            - EVIL\SecOps
-#            - EVIL\IT Norway
-#            - EVIL\IT Sweden
-#        - name: Remote Desktop Users
-#          members:
-#            - EVIL\SecOps
-#            - EVIL\IT Norway
+    role_vars:
+      ludus_local_users:
+        - login: fcastle
+          password: Summer2024!
+      ludus_local_groups:
+        - name: Administrators
+          members:
+            - fcastle
+            - EVIL\SecOps
+            - EVIL\IT Norway
+            - EVIL\IT Sweden
+        - name: Remote Desktop Users
+          members:
+            - EVIL\SecOps
+            - EVIL\IT Norway
 
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
@@ -171,18 +171,18 @@ ludus:
       - ludus-configure-language-windows
       - ludus-install-sysmon
       - ludus-local-users
-#    role_vars:
-#      ludus_local_users:
-#        - login: pparker
-#          password: Spring2024!
-#      ludus_local_groups:
-#        - name: Administrators
-#          members:
-#            - EVIL\IT Sweden
-#        - name: Remote Desktop Users
-#          members:
-#            - EVIL\SecOps
-#            - EVIL\IT Sweden
+    role_vars:
+      ludus_local_users:
+        - login: pparker
+          password: Spring2024!
+      ludus_local_groups:
+        - name: Administrators
+          members:
+            - EVIL\IT Sweden
+        - name: Remote Desktop Users
+          members:
+            - EVIL\SecOps
+            - EVIL\IT Sweden
 
   - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
