@@ -39,6 +39,10 @@ for DIR in $(ls ./roles); do
 done
 ```
 
+# Range Deployment
+## Deploying only specific roles
+```ludus range deploy -t user-defined-roles --only-roles NocteDefensor.ludus_tailscale --user XYZ```
+
 # Ludus client configuration tricks
 - Create an extra config file to use when running commands that require the admin interface (through ssh tunneling)
 - Create an alias for creating the SSH tunnel

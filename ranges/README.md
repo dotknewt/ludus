@@ -18,7 +18,3 @@ for role in $badsectorlabsRoles; do # add each
 done
 ```
 
-# Range Deployment
-
-## Deploying only specific roles
-```ludus range deploy -t user-defined-roles --only-roles NocteDefensor.ludus_tailscale --user XYZ```
