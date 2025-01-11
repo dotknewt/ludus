@@ -22,45 +22,25 @@ ludus:
     role_vars:
       ludus_ad:
         ous:
-          - name: IT
-            path: DC=evil,DC=local
-            description: Global IT Department
           - name: Norway
-            path: "OU=IT,DC=evil,DC=local"
-            description: Norwegian IT Subsidiary
-          - name: Sweden
-            path: "OU=IT,DC=evil,DC=local"
-            description: Swedish IT Subsidiary
-          - name: Sales
-            path: DC=evil,DC=local
+            path: "DC=evil,DC=local"
             description: Norwegian Subsidiary
-          - name: Norway
-            path: "OU=Sales,DC=evil,DC=local"
-            description: Norwegian Sales Subsidiary
           - name: Sweden
-            path: "OU=Sales,DC=evil,DC=local"
-            description: Swedish Sales Subsidiary
+            path: "DC=evil,DC=local"
+            description: Swedish Subsidiary
         groups:
           - name: SecOps
             scope: global
-            path: "OU=IT,DC=evil,DC=local"
-            description: Global IT SecOps Group
+            path: "DC=evil,DC=local"
+            description: Global Security Operations Department
           - name: IT Norway
             scope: global
-            path: "OU=Norway,OU=IT,DC=evil,DC=local"
+            path: "OU=Norway,DC=evil,DC=local"
             description: Norwegian IT Department
-          - name: Sales Norway
-            scope: global
-            path: "OU=Norway,OU=Sales,DC=evil,DC=local"
-            description: Norwegian Sales Department
           - name: IT Sweden
             scope: global
             path: "OU=Sweden,OU=IT,DC=evil,DC=local"
             description: Swedish IT Department
-          - name: Sales Sweden
-            scope: global
-            path: "OU=Sweden,OU=Sales,DC=evil,DC=local"
-            description: Swedish Sales Department
         users:
           - name: tstark
             firstname: Tony
@@ -123,7 +103,6 @@ ludus:
               - Remote Desktop Users
               - IT Norway
               - IT Sweden
-              - Sales Sweden
 
   - vm_name: "{{ range_id }}-DC02"
     hostname: "{{ range_id }}-DC02"
