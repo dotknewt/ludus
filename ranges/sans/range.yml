@@ -39,7 +39,7 @@ ludus:
             description: Norwegian IT Department
           - name: IT Sweden
             scope: global
-            path: "OU=Sweden,OU=IT,DC=evil,DC=local"
+            path: "OU=Sweden,DC=evil,DC=local"
             description: Swedish IT Department
         users:
           - name: tstark
