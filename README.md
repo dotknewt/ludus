@@ -22,6 +22,9 @@ done
 ### roles/ludus-install-sliver-client
 - install sliver client on a debian host (kali defaults expected)
 
+### roles/ludus-install-remnux
+- copy of badsectorlabs' role. hash frequently changes, so prefer using local version
+
 ## Install all roles in a directory
 ``` powershell
 foreach ( $role in $(Get-Childitem ./roles/role_*)) { ludus ansible role add -d $role [[ --user [name]] -g ] }
