@@ -1,0 +1,40 @@
+---
+- name: Add the REMnux user to the host
+  ansible.builtin.user:
+    name: remnux
+    password: "{{ 'malware' | password_hash('sha512', 'mysecretsalt') }}"
+    shell: /bin/bash
+  register: created_user
+
+- name: Install pre-requisites
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - curl
+    state: present
+    update_cache: true
+
+- name: Get remnux-cli
+  ansible.builtin.get_url:
+    url: https://REMnux.org/remnux-cli
+    dest: /usr/local/bin/remnux-cli
+    checksum: sha256:c8c6d6830cfeb48c9ada2b49c76523c8637d95dc41d00aac345282fb47021f8e
+    mode: "774"
+
+- name: Chmod remnux-cli
+  ansible.builtin.file:
+    dest: /usr/local/bin/remnux-cli
+    mode: a+x
+
+- name: Run the REMnux installer - This will take a long time!
+  ansible.builtin.shell: /usr/local/bin/remnux-cli install --mode=cloud
+  become: true
+  register: remnux_install
+
+- name: Reboot
+  ansible.builtin.reboot:
+  when: not remnux_install.failed
+
+- name: Success
+  ansible.builtin.debug:
+    msg: "REMnux install has finished!"
