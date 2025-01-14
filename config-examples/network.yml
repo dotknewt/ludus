@@ -1,4 +1,4 @@
-network: 
+network: # https://docs.ludus.cloud/docs/networking
   # action: ["ACCEPT","REJECT","DROP"]
   external_default: ACCEPT # The default action to apply to traffic leaving the range out to the internet.
   inter_vlan_default: ACCEPT # The default action to apply to traffic between VLANs.
