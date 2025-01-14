@@ -149,8 +149,8 @@ ludus:
 
 global_role_vars:
   tailscale_state: present
-  tailscale_authkey: "tskey-auth-kYkdnVmzR211CNTRL-PdYf2DH3NnPDvpPmKxRbnPGACXP6pAkx"
-  tailscale_api_key: "tskey-api-kuxpidB1aa11CNTRL-nwmToMvCvaUcetiNJFpgaUmh8zCLv2Vk"
+  tailscale_authkey: "tskey-auth-<KEY>"
+  tailscale_api_key: "tskey-api-<KEY>"
 
 router:
   vm_name: "{{ range_id }}-router"
@@ -180,4 +180,4 @@ defaults:
 
 notify:
   urls:
-    - "discord://SYZOeBmcmTPbL9E37aaZVozbAfgnypxmAka-Tljbdc2ygPhGZnidb-251f0361cudGib@1304131341004050502?SplitLines=No"
+    - "discord://SYZOeBmcmTQbL9E37aaZVozbAgfnypxmAka-Tljbdc2ygPhGZnidb-263f0361cudGib@1304431341904050602?SplitLines=No"
