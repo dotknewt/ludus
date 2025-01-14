@@ -82,7 +82,7 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Debian 12 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => debian:debian"
+  template_description = "Debian 12.8 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => debian:debian"
 }
 
 source "proxmox-iso" "debian12" {
@@ -138,7 +138,7 @@ build {
   sources = ["source.proxmox-iso.debian12"]
 
   provisioner "ansible" {
-    playbook_file = "../ansible/reset-ssh-host-keys.yml"
+    playbook_file = "./ansible/reset-ssh-host-keys.yml"
     use_proxy     = false
     user = "${var.ssh_username}"
     extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
