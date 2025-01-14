@@ -1,20 +1,14 @@
 ludus:
-  - vm_name: "{{ range_id }}-WS01"
-    hostname: "{{ range_id }}-WS01"
-    template: win11-23h2-x64-enterprise-template
+  - vm_name: "{{ range_id }}-REMNUX"
+    hostname: "{{ range_id }}-REMNUX"
+    template: remnux-custom-template
     vlan: 200
-    ip_last_octet: 2
+    ip_last_octet: 1
     ram_gb: 16
     cpus: 8
     testing:
       snapshot: true
       block_internet: true
-    windows:
-      sysprep: false
-      install_additional_tools: true
-    roles:
-      - ludus-configure-language-windows
-      - ludus-install-sysmon
 
 router:
   vm_name: "{{ range_id }}-router"
