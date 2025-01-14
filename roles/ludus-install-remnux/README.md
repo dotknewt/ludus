@@ -2,6 +2,8 @@
 
 An Ansible Role that installs [REMnux](https://remnux.org/) on Ubuntu 20.04 systems.
 
+## NB: This role should probably only be used to create a remnux template!
+
 ## Requirements
 
 You must have the ubuntu-20.04-x64-server-template built on your ludus host. You can add it with:
