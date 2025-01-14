@@ -26,7 +26,7 @@ None.
 ```yaml
 - hosts: remnux_hosts
   roles:
-    - badsectorlabs.ludus_remnux
+    - ludus-install-remnux
 ```
 
 ## Example Ludus Range Config
@@ -42,7 +42,7 @@ ludus:
     cpus: 4
     linux: true
     roles:
-      - badsectorlabs.ludus_remnux
+      - ludus-install-remnux
 ```
 
 ## License
@@ -51,4 +51,4 @@ GPLv3
 
 ## Author Information
 
-This role was created by [Bad Sector Labs](https://github.com/badsectorlabs), for [Ludus](https://ludus.cloud/).
+This role was modified from the original created by [Bad Sector Labs](https://github.com/badsectorlabs), for [Ludus](https://ludus.cloud/).
