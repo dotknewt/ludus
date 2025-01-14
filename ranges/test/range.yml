@@ -1,185 +1,60 @@
 ludus:
-  - vm_name: "{{ range_id }}-DC01"
-    hostname: "{{ range_id }}-DC01"
-    template: win2019-server-x64-no-security-updates-template
-    vlan: 100
-    ip_last_octet: 11
-    ram_gb: 8
-    cpus: 4
-    testing:
-      snapshot: true
-      block_internet: true
-    windows:
-      sysprep: true
-      install_additional_tools: false
-    domain:
-      fqdn: evil.local
-      role: primary-dc
-    roles:
-      - ludus-configure-language-windows # custom role
-      - badsectorlabs.ludus_adcs # Configure Primary DC
-      - ludus-ad-content  # Create AD Content OU's, Groups and Users
-    role_vars:
-      ludus_ad:
-        ous:
-          - name: IT
-            path: DC=evil,DC=local
-            description: Global IT Department
-          - name: Norway
-            path: "OU=IT,DC=evil,DC=local"
-            description: Norwegian IT Subsidiary
-          - name: Sweden
-            path: "OU=IT,DC=evil,DC=local"
-            description: Swedish IT Subsidiary
-          - name: Sales
-            path: DC=evil,DC=local
-            description: Norwegian Subsidiary
-          - name: Norway
-            path: "OU=Sales,DC=evil,DC=local"
-            description: Norwegian Sales Subsidiary
-          - name: Sweden
-            path: "OU=Sales,DC=evil,DC=local"
-            description: Swedish Sales Subsidiary
-        groups:
-          - name: SecOps
-            scope: global
-            path: "OU=IT,DC=evil,DC=local"
-            description: Global IT SecOps Group
-          - name: IT Norway
-            scope: global
-            path: "OU=Norway,,OU=IT,DC=evil,DC=local"
-            description: Norwegian IT Department
-          - name: Sales Norway
-            scope: global
-            path: "OU=Norway,OU=Sales,DC=evil,DC=local"
-            description: Norwegian Sales Department
-          - name: IT Sweden
-            scope: global
-            path: "OU=Sweden,OU=IT,DC=evil,DC=local"
-            description: Swedish IT Department
-          - name: Sales Sweden
-            scope: global
-            path: "OU=Sweden,OU=Sales,DC=evil,DC=local"
-            description: Swedish Sales Department
-        users:
-          - name: tstark
-            firstname: Tony
-            surname: Stark
-            display_name: Tony Stark
-            password: GFVfPS432QkKN2YdQwJL
-            path: "OU=IT,DC=evil,DC=local"
-            description: IT Domain Administrator
-            groups:
-              - Administrators
-              - Domain Admins
-              - Domain Users
-              - Enterprise Admins
-              - Group Policy Creator Owners
-              - Schema Admins
-              - Remote Desktop Users
-              - IIS_IUSRS
-              - SecOps
-              - IT Norway
-              - IT Sweden
-          - name: SQLservice
-            firstname: SQL
-            surname: Service
-            display_name: SQL Service
-            password: MYpassword123#
-            path: "OU=IT,DC=evil,DC=local"
-            description: The password is MYpassword123#
-            groups:
-              - Administrators
-              - Domain Admins
-              - Domain Users
-              - Enterprise Admins
-              - Group Policy Creator Owners
-              - Schema Admins
-              - IIS_IUSRS
-              - IT Sweden
-              - IT Norway
-          - name: fcastle
-            firstname: Frank
-            surname: Castle
-            display_name: Frank Castle
-            password: Summer2024!
-            path: "OU=Norway,DC=evil,DC=local"
-            description: Domain User
-            groups:
-              - Domain Users
-              - Remote Desktop Users
-              - IIS_IUSRS
-              - IT Norway
-              - Sales Norway
-          - name: pparker
-            firstname: Peter
-            surname: Parker
-            display_name: Peter Parker
-            password: Spring2024!
-            path: "OU=Sweden,DC=evil,DC=local"
-            description: Domain User
-            groups:
-              - Domain Users
-              - Remote Desktop Users
-              - IT Norway
-              - IT Sweden
-              - Sales Sweden
-
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
-    template: win10-21h2-x64-enterprise-template
-    vlan: 100
+    template: win11-23h2-x64-enterprise-template
+    vlan: 200
     ip_last_octet: 2
-    ram_gb: 8
-    cpus: 4
+    ram_gb: 16
+    cpus: 8
     testing:
       snapshot: true
       block_internet: true
     windows:
-      sysprep: true
+      sysprep: false
       install_additional_tools: true
-    domain:
-      fqdn: evil.local
-      role: member
     roles:
       - ludus-configure-language-windows
-      - ludus-local-users
       - ludus-install-sysmon
-    role_vars:
-      ludus_local_users:
-        - login: fcastle
-          password: Password!
-      ludus_local_groups:
-        - name: Administrators
-          members:
-            - fcastle
-        - name: Remote Desktop Users
-          members:
-            - EVIL\IT Global
-            - EVIL\pparker
-            - EVIL\fcastle
-            - EVIL\tstark
+
+router:
+  vm_name: "{{ range_id }}-router"
+  hostname: "{{ range_id }}-router"
+  template: debian-11-x64-server-template
+  ram_gb: 2
+  ram_min_gb: 1
+  cpus: 2
 
 network: 
-  # action: ["ACCEPT","REJECT","DROP"]
-  external_default: DROP # The default action to apply to traffic leaving the range out to the internet.
-  inter_vlan_default: DROP # The default action to apply to traffic between VLANs.
-  always_blocked_networks: # Networks that ranges should never be able to reach
-    - 192.168.0.0/16 # Must be CIDR notation
+  external_default: ACCEPT
+  inter_vlan_default: ACCEPT
+  always_blocked_networks:
+    - 192.168.0.0/16
     - 172.16.0.0/12
   rules:
-    - name: ACCEPT INTERNAL SUBNET # Rule name will be added as a comment in iptables
-      vlan_src: 100 # VLAN ID >= 2 AND <= 255
-      vlan_dst: 100 # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
-      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
-      ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
-      action: ACCEPT #String value matching: ["ACCEPT","REJECT","DROP"]
-    - name: DROP PUBLIC NETWORKS
-      vlan_src: 100 # VLAN ID >= 2 AND <= 255
-      vlan_dst: public # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
-      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
-      ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
-      action: DROP #String value matching: ["ACCEPT","REJECT","DROP"]
+    - name: ACCEPT INTERNAL SUBNET TRAFFIC
+      vlan_src: 200
+      vlan_dst: 200
+      protocol: all
+      ports: all
+      action: ACCEPT
+    - name: ACCEPT PUBLIC NETWORK TRAFFIC
+      vlan_src: 200
+      vlan_dst: public
+      protocol: all
+      ports: all
+      action: ACCEPT
+
+defaults:
+  snapshot_with_RAM: true
+  stale_hours: 0
+  ad_domain_functional_level: Win2012R2
+  ad_forest_functional_level: Win2012R2
+  ad_domain_admin: domainadmin
+  ad_domain_admin_password: password
+  ad_domain_user: domainuser
+  ad_domain_user_password: password
+  ad_domain_safe_mode_password: password
+  timezone: Europe/Oslo
 
 notify:
   urls:
