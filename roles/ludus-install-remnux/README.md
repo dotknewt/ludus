@@ -31,22 +31,6 @@ None.
     - ludus-install-remnux
 ```
 
-## Example Ludus Range Config
-
-```yaml
-ludus:
-  - vm_name: "{{ range_id }}-REMnux"
-    hostname: "{{ range_id }}-REMnux"
-    template: ubuntu-20.04-x64-server-template
-    vlan: 99
-    ip_last_octet: 3
-    ram_gb: 6
-    cpus: 4
-    linux: true
-    roles:
-      - ludus-install-remnux
-```
-
 ## License
 
 GPLv3
