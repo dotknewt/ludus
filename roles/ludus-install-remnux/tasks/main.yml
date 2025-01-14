@@ -14,20 +14,20 @@
     state: present
     update_cache: true
 
-- name: Get remnux-cli
+- name: Get remnux
   ansible.builtin.get_url:
     url: https://REMnux.org/remnux-cli
-    dest: /usr/local/bin/remnux-cli
+    dest: /usr/local/bin/remnux
     checksum: sha256:c8c6d6830cfeb48c9ada2b49c76523c8637d95dc41d00aac345282fb47021f8e
     mode: "774"
 
-- name: Chmod remnux-cli
+- name: Chmod remnux
   ansible.builtin.file:
-    dest: /usr/local/bin/remnux-cli
+    dest: /usr/local/bin/remnux
     mode: a+x
 
 - name: Run the REMnux installer - This will take a long time!
-  ansible.builtin.shell: /usr/local/bin/remnux-cli install --mode=cloud
+  ansible.builtin.shell: /usr/local/bin/remnux install --mode=cloud
   become: true
   register: remnux_install
 

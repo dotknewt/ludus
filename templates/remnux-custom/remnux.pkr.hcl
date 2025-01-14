@@ -1,9 +1,9 @@
 variable "iso_checksum" {
   type    = string
-  default = "sha512:9da6ae5b63a72161d0fd4480d0f090b250c4f6bf421474e4776e82eea5cb3143bf8936bf43244e438e74d581797fe87c7193bbefff19414e33932fe787b1400f"
+  default = "sha256:0e79e00bf844929d40825b1f0e8634415cda195ba23bae0b041911fde4dfe018"
 }
 
-# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
+# The operating system. Can be wxp, w2k, w2k3, w2k8, wvista, win7, win8, win10, win11, l24 (Linux 2.4), l26 (Linux 2.6+), solaris or other. Defaults to other.
 variable "os" {
   type    = string
   default = "l26"
@@ -11,12 +11,12 @@ variable "os" {
 
 variable "iso_url" {
   type    = string
-  default = "https://cdimage.debian.org/cdimage/archive/12.1.0/amd64/iso-cd/debian-12.1.0-amd64-netinst.iso"
+  default = "http://archive.ubuntu.com/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/mini.iso"
 }
 
 variable "vm_cpu_cores" {
   type    = string
-  default = "2"
+  default = "4"
 }
 
 variable "vm_disk_size" {
@@ -31,17 +31,17 @@ variable "vm_memory" {
 
 variable "vm_name" {
   type    = string
-  default = "debian-sliver-server-template"
+  default = "remnux-custom-template"
 }
 
 variable "ssh_password" {
   type    = string
-  default = "debian"
+  default = "password"
 }
 
 variable "ssh_username" {
   type    = string
-  default = "debian"
+  default = "localuser"
 }
 
 # This block has to be in each file or packer won't be able to use the variables
@@ -82,21 +82,38 @@ variable "ludus_nat_interface" {
 ####
 
 locals {
-  template_description = "Debian 12 template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => debian:debian"
+  template_description = "REMnux (Ubutntu 20.04) Custom template built ${legacy_isotime("2006-01-02 03:04:05")} username:password => localuser:password"
 }
 
-source "proxmox-iso" "debian12" {
+source "proxmox-iso" "remnux" {
   boot_command = [
-    "<down><tab>", # non-graphical install
-    "<wait>preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-12-preseed.cfg ",
-    "<wait>language=en locale=en_US.UTF-8 ",
-    "<wait>country=US keymap=us ",
-    "<wait>hostname=debian12 domain=local ",
+    "<esc><wait>",
+    "<esc><wait>",
     "<enter><wait>",
+    "/install/vmlinuz <wait>",
+    "auto <wait>",
+    "console-setup/ask_detect=false ",
+    "debconf/frontend=noninteractive ",
+    "debian-installer=en_US ",
+    "fb=false ",
+    "hostname=remnux ",
+    "initrd=/install/initrd.gz ",
+    "kbd-chooser/method=us ",
+    "keyboard-configuration/modelcode=SKIP ",
+    "keyboard-configuration/layout=USA ",
+    "keyboard-configuration/variant=USA ",
+    "locale=en_US ",
+    "passwd/username=localuser ",
+    "passwd/user-fullname=localuser ",
+    "passwd/user-password=password ",
+    "passwd/user-password-again=password ",
+    "noapic ",
+    "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/remnux.cfg ",
+    " -- <enter>"
   ]
-  boot_key_interval = "100ms"
-  boot_wait         = "15s"
-  http_directory    = "./http"
+  boot_key_interval      = "20ms"
+  boot_keygroup_interval = "20ms"
+  http_directory         = "./http"
 
   communicator    = "ssh"
   cores           = "${var.vm_cpu_cores}"
@@ -135,15 +152,24 @@ source "proxmox-iso" "debian12" {
 }
 
 build {
-  sources = ["source.proxmox-iso.debian12"]
+  sources = ["source.proxmox-iso.remnux"]
 
   provisioner "ansible" {
+    playbook_file = "ansible/post-boot-config.yml"
     use_proxy     = false
     user = "${var.ssh_username}"
     extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
-    playbook_file      = "./sliver.yml"
     ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
     skip_version_check = true
   }
-}
 
+  provisioner "ansible" {
+    playbook_file = "ansible/install-remnux.yml"
+    use_proxy     = false
+    user = "${var.ssh_username}"
+    extra_arguments = ["--extra-vars", "{ansible_python_interpreter: /usr/bin/python3, ansible_password: ${var.ssh_password}, ansible_sudo_pass: ${var.ssh_password}}"]
+    ansible_env_vars = ["ANSIBLE_HOME=${var.ansible_home}", "ANSIBLE_LOCAL_TEMP=${var.ansible_home}/tmp", "ANSIBLE_PERSISTENT_CONTROL_PATH_DIR=${var.ansible_home}/pc", "ANSIBLE_SSH_CONTROL_PATH_DIR=${var.ansible_home}/cp"]
+    skip_version_check = true
+    timeout = "4h"
+  }
+}
