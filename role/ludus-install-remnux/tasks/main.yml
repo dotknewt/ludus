@@ -6,13 +6,43 @@
     shell: /bin/bash
   register: created_user
 
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: true
+
 - name: Install pre-requisites
   ansible.builtin.apt:
     name:
       - gnupg
       - curl
+      - ubuntu-desktop
+      - xrdp
     state: present
-    update_cache: true
+
+# adduser xrdp ssl-cert 
+# systemctl restart xrdp
+- name: Create a directory if it does not exist  # Avoid errors with range-management tasks
+  ansible.builtin.file:
+    path: /etc/cloud/cloud.cfg.d/
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Add the user 'xrdp' to the group 'ssl-cert'
+  ansible.builtin.user:
+    name: xrdp
+    groups: ssl-cert
+    append: yes
+
+- name: Enable sliver-server daemon service
+  become: true
+  ansible.builtin.systemd:
+    name: xrdp.service
+    enabled: true
+    state: started
 
 - name: Get remnux
   ansible.builtin.get_url:
