@@ -13,16 +13,16 @@ done
 ### roles/ludus-configure-language-windows
 - configure keyboard layout and language
 
-### roles/ludus-install-sysmon
+### role/ludus-install-sysmon
 - downloads and installs sysmon tools to C:\SysmonFiles\
 
-### roles/ludus-install-sliver-server
+### role/ludus-install-sliver-server
 - install sliver server and client on a debian host (debian defaults expected)
 
-### roles/ludus-install-sliver-client
+### role/ludus-install-sliver-client
 - install sliver client on a debian host (kali defaults expected)
 
-### roles/ludus-install-remnux
+### role/ludus-install-remnux
 - copy of badsectorlabs' role. hash frequently changes, so prefer using local version
 
 ## Install all roles in a directory
@@ -74,4 +74,10 @@ function shareludurange($targetUID, $sourceUID) {
 ## Bash Aliases
 ``` bash
 alias admintunnel="ssh -L 8081:127.0.0.1:8081 user@<Ludus IP>"
+
+sharerange () {
+    range=$1
+    user=$2
+    ludus range access grant --target $range --source $user
+}
 ```
