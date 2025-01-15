@@ -1,7 +1,7 @@
 ludus:
   - vm_name: "{{ range_id }}-REMNUX"
     hostname: "{{ range_id }}-REMNUX"
-    template: remnux-custom-template
+    template: ubuntu-20.04-x64-server-template #remnux-custom-template
     vlan: 200
     ip_last_octet: 1
     ram_gb: 16
@@ -9,6 +9,9 @@ ludus:
     testing:
       snapshot: true
       block_internet: true
+    linux: true
+    roles:
+      - ludus-install-remnux
 
 router:
   vm_name: "{{ range_id }}-router"
