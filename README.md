@@ -2,10 +2,15 @@
 ### Install all publicly available badsectorlabs' roles
 ``` bash
 # List was complete on sept 2024
-badsectorlabsRoles="ludus_adcs ludus_commandovm ludus_flarevm ludus_remnux ludus_emux ludus_elastic_agent ludus_elastic_container ludus_mssql ludus_vulhub ludus_bloodhound_ce"
+badsectorlabsRolesGlobal="ludus_adcs ludus_elastic_agent ludus_elastic_container ludus_mssql ludus_vulhub ludus_bloodhound_ce"
+badsectorlabsRolesLocal="ludus_commandovm ludus_flarevm ludus_remnux ludus_emux "
 
-for role in $badsectorlabsRoles; do # add each
+for role in $badsectorlabsRolesLocal; do # add each
     ludus ansible role add "badsectorlabs.$role"
+done
+
+for role in $badsectorlabsRolesGlobal; do # add each
+    ludus ansible role add "badsectorlabs.$role -g"
 done
 ```
 
@@ -27,13 +32,13 @@ done
 
 ## Install all roles in a directory
 ``` powershell
-foreach ( $role in $(Get-Childitem ./roles/role_*)) { ludus ansible role add -d $role [[ --user [name]] -g ] }
+foreach ( $role in $(Get-Childitem ./role/ludus-*)) { ludus ansible role add -d $role [[ --user [name]] -g ] }
 
 ```
 
 ``` bash
 # Assumes a roles directory
-for DIR in $(ls ./roles); do
+for DIR in $(ls ./role); do
     if [[ "$DIR" == "manual-setup-required" || "$DIR" == "README.md" ]]; then
         continue
     else
