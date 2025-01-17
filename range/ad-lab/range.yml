@@ -133,7 +133,6 @@ ludus:
       role: member
     roles:
       - ludus-configure-language-windows
-      - ludus-install-sysmon
       - ludus-local-users
     role_vars:
       ludus_local_users:
@@ -169,7 +168,6 @@ ludus:
       role: member
     roles:
       - ludus-configure-language-windows
-      - ludus-install-sysmon
       - ludus-local-users
     role_vars:
       ludus_local_users:
