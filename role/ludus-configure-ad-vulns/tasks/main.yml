@@ -11,7 +11,6 @@
   include_tasks: vulns/shares.yml
   when: ludus_ad_vulns_openshares is true
 
-
 - name: Make user kerberoastable by setting SPN
   include_tasks: vulns/kerberoasting.yml
   when: ludus_ad_vulns_kerberoasting is true
