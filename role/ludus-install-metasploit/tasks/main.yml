@@ -1,0 +1,33 @@
+- name: Gather facts if needed
+  when: ansible_os_family is undefined
+  ansible.builtin.setup:
+
+- name: ludus-install-metasploit variables
+  debug:
+    msg:
+      - "ludus_install_metasploit: {{ ludus_install_metasploit }}"
+      - "ansible_os_family: {{ ansible_os_family }}"
+
+- name: Check for Debian
+  ansible.builtin.fail:
+    msg: This role only supports Debian
+  when: ansible_os_family != "Debian"
+
+- name: Install metasploit-framework
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Install metasploit-framework
+      block:
+        - name: Download metasploit-framework installer
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb
+            dest: /tmp/msfinstall
+            mode: '0755'
+
+        - name: Execute metasploit-framework installer
+          become: true
+          ansible.builtin.script:
+            cmd: /bin/bash /tmp/msfinstall
+          args:
+            chdir: /opt
+            creates: /opt/metasploit-framework/bin/msfconsole
