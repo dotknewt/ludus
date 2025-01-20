@@ -1,7 +1,7 @@
 ludus:
-  - vm_name: "{{ range_id }}-REMNUX"
-    hostname: "{{ range_id }}-REMNUX"
-    template: remnux-custom-template #ubuntu-20.04-x64-server-template #remnux-custom-template
+  - vm_name: "{{ range_id }}-sliver-server1"
+    hostname: "{{ range_id }}-sliver-server1"
+    template: debian-latest-server-template
     vlan: 200
     ip_last_octet: 1
     ram_gb: 16
@@ -10,6 +10,61 @@ ludus:
       snapshot: true
       block_internet: true
     linux: true
+    roles:
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver_server: true
+      ludus_install_sliver_port: 12345
+
+  - vm_name: "{{ range_id }}-sliver-client"
+    hostname: "{{ range_id }}-sliver-client"
+    template: kali-custom-desktop-template
+    vlan: 200
+    ip_last_octet: 2
+    ram_gb: 16
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver_client: true
+
+  - vm_name: "{{ range_id }}-metasploit"
+    hostname: "{{ range_id }}-metasploit"
+    template: debian-latest-server-template
+    vlan: 200
+    ip_last_octet: 3
+    ram_gb: 16
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver_client: true
+      ludus_install_metasploit: true
+
+  - vm_name: "{{ range_id }}-sliver-server2"
+    hostname: "{{ range_id }}-sliver-server2"
+    template: debian-latest-server-template
+    vlan: 200
+    ip_last_octet: 4
+    ram_gb: 16
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver_server: true
+      ludus_install_metasploit: true
 
 router:
   vm_name: "{{ range_id }}-router"
@@ -18,26 +73,6 @@ router:
   ram_gb: 2
   ram_min_gb: 1
   cpus: 2
-
-network: 
-  external_default: ACCEPT
-  inter_vlan_default: ACCEPT
-  always_blocked_networks:
-    - 192.168.0.0/16
-    - 172.16.0.0/12
-  rules:
-    - name: ACCEPT INTERNAL SUBNET TRAFFIC
-      vlan_src: 200
-      vlan_dst: 200
-      protocol: all
-      ports: all
-      action: ACCEPT
-    - name: ACCEPT PUBLIC NETWORK TRAFFIC
-      vlan_src: 200
-      vlan_dst: public
-      protocol: all
-      ports: all
-      action: ACCEPT
 
 defaults:
   snapshot_with_RAM: true
@@ -50,7 +85,3 @@ defaults:
   ad_domain_user_password: password
   ad_domain_safe_mode_password: password
   timezone: Europe/Oslo
-
-notify:
-  urls:
-     - "discord://VlZYPl7lWSeOxZ_GVSbPZA6XWODeMgGn1_2zimegrPd3f3iX95LCw4H7gp3vNEAqQadF@1322815398306910239?SplitLines=No"
