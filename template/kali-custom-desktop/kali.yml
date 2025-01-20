@@ -59,7 +59,7 @@
           - wget
           - kali-linux-core
           - kali-desktop-xfce
-          # - kali-linux-default # This takes forever (2+ hours) and really slows down template building
+          - kali-linux-default # This takes forever (2+ hours) and really slows down template building
         state: present
       register: result
       retries: 2
