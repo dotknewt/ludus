@@ -1,0 +1,82 @@
+---
+- name: Sliver Server - Debug variables
+  debug:
+    msg:
+      - "ludus_install_sliver_port: {{ ludus_install_sliver_port }}"
+
+- name: Install sliver-server
+  block:
+    - name: Download sliver server
+      ansible.builtin.get_url:
+        url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-server_linux
+        dest: /usr/local/bin/sliver-server
+        mode: '0755'
+
+    - name: Create a directory for sliver-server config if it does not exist
+      ansible.builtin.file:
+        path: /home/debian/.sliver/configs
+        state: directory
+        owner: debian
+        group: debian
+        mode: '0755'
+
+    - name: Create custom sliver-server configuration
+      ansible.builtin.copy:
+        dest: /home/debian/.sliver/configs/server.json
+        content: |
+          \{
+          "daemon_mode": false,
+          "daemon": \{
+          "host": "",
+          "port": {{ ludus_install_sliver_port }}
+          \},
+          "logs": \{
+          "level": 4,
+          "grpc_unary_payloads": false,
+          "grpc_stream_payloads": false,
+          "tls_key_logger": false
+          \},
+          "jobs": \{
+          "multiplayer": null
+          \},
+          "watch_tower": null,
+          "go_proxy": ""
+          \}
+        owner: debian
+        group: debian
+        mode: '0644'
+
+    - name: Create sliver-server daemon service
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/sliver-server.service
+        content: |
+          [Unit]
+          Description=Sliver Server
+          After=network.target
+          StartLimitIntervalSec=0
+
+          [Service]
+          Type=simple
+          Restart=on-failure
+          RestartSec=3
+          User=debian
+          ExecStart=/usr/local/bin/sliver-server daemon
+
+          [Install]
+          WantedBy=multi-user.target
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd daemon
+      become: true
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Enable sliver-server daemon service
+      become: true
+      ansible.builtin.systemd:
+        name: sliver-server.service
+        enabled: true
+        state: started

@@ -1,0 +1,13 @@
+---
+- name: Sliver Client - Debug variables
+  debug:
+    msg:
+      - "ludus_install_sliver_client: {{ ludus_install_sliver_client }}"
+
+- name: Setup sliver C2 client
+  block:
+    - name: Download sliver client
+      ansible.builtin.get_url:
+        url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_linux
+        dest: /usr/local/bin/sliver
+        mode: '0755'

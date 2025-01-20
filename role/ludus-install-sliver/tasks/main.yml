@@ -1,0 +1,60 @@
+---
+- name: Gather facts if needed
+  when: ansible_os_family is undefined
+  ansible.builtin.setup:
+
+- name: Check for Linux
+  when: ansible_os_family != "Debian"
+  ansible.builtin.fail:
+    msg: This role only supports Linux
+
+- name: Sliver Main - Debug variables
+  debug:
+    msg:
+      - "ansible_os_family: {{ ansible_os_family }}"
+      - "ludus_install_sliver_server: {{ ludus_install_sliver_server }}"
+      - "ludus_install_sliver_client: {{ ludus_install_sliver_client }}"
+      - "ludus_install_metasploit: {{ ludus_install_metasploit }}"
+
+- name: Install sliver
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Apt upgrade 
+      become: true
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: true
+        autoremove: true
+        clean: true
+      register: result
+      retries: 2
+      until: result.failed == false
+
+    - name: Apt install requirements
+      become: true
+      ansible.builtin.apt:
+        name:
+          - git
+          - gpg
+          - gpg-agent
+          - mingw-w64
+          - ca-certificates
+          - curl
+        state: present
+      register: result
+      retries: 2
+      until: result.failed == false
+
+    - name: Install sliver-client 
+      when: ludus_install_sliver_client is true
+      include_tasks: client.yml
+
+    - name: Install sliver-server 
+      when: ludus_install_sliver_server is true
+      include_tasks: server.yml
+    
+    - name: Include role - ludus-install-metasploit 
+      when: ludus_install_metasploit is true
+      ansible.builtin.include_role:
+        name: ludus-install-metasploit
+    

@@ -1,0 +1,5 @@
+---
+ludus_install_sliver_server: false
+ludus_install_sliver_port: 31337
+ludus_install_sliver_client: false
+ludus_install_metasploit: false
