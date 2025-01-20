@@ -1,5 +1,14 @@
 # ludus-install-sliver
 
+# role_vars:
+
+``` yaml
+ludus_install_sliver_server: false
+ludus_install_sliver_server: false
+ludus_install_sliver_port: 31337
+ludus_install_metasploit: true # depends on role: ludus-install-metasploit
+```
+
 # example vm definitions
 
 ``` yaml
@@ -17,8 +26,9 @@
     roles:
       - ludus-install-sliver
     role_vars:
-      ludus_install_sliver_server: true
-      ludus_install_sliver_port: 12345
+      ludus_install_sliver:
+        server: true
+        port: 12345
 
   - vm_name: "{{ range_id }}-sliver-client"
     hostname: "{{ range_id }}-sliver-client"
@@ -34,7 +44,8 @@
     roles:
       - ludus-install-sliver
     role_vars:
-      ludus_install_sliver_client: true
+      ludus_install_sliver:
+        client: true
 
   - vm_name: "{{ range_id }}-metasploit"
     hostname: "{{ range_id }}-metasploit"
@@ -50,8 +61,9 @@
     roles:
       - ludus-install-sliver
     role_vars:
-      ludus_install_sliver_client: true
-      ludus_install_metasploit: true
+      ludus_install_sliver:
+        client: true
+        metasploit: true
 
   - vm_name: "{{ range_id }}-sliver-server2"
     hostname: "{{ range_id }}-sliver-server2"
@@ -67,7 +79,8 @@
     roles:
       - ludus-install-sliver
     role_vars:
-      ludus_install_sliver_server: true
-      ludus_install_metasploit: true
+      ludus_install_sliver:
+        server: true
+        metasploit: true # depends on role: ludus-install-metasploit
 
 ```

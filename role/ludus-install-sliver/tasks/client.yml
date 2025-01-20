@@ -1,9 +1,4 @@
 ---
-- name: Sliver Client - Debug variables
-  debug:
-    msg:
-      - "ludus_install_sliver_client: {{ ludus_install_sliver_client }}"
-
 - name: Setup sliver C2 client
   block:
     - name: Download sliver client

@@ -2,7 +2,7 @@
 - name: Sliver Server - Debug variables
   debug:
     msg:
-      - "ludus_install_sliver_port: {{ ludus_install_sliver_port }}"
+      - "ludus_install_sliver.port: {{ ludus_install_sliver.port | default('31337') }}"
 
 - name: Install sliver-server
   block:
@@ -28,7 +28,7 @@
           "daemon_mode": false,
           "daemon": \{
           "host": "",
-          "port": {{ ludus_install_sliver_port }}
+          "port": {{ ludus_install_sliver.port | default('31337') }}
           \},
           "logs": \{
           "level": 4,

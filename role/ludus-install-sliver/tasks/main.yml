@@ -12,9 +12,10 @@
   debug:
     msg:
       - "ansible_os_family: {{ ansible_os_family }}"
-      - "ludus_install_sliver_server: {{ ludus_install_sliver_server }}"
-      - "ludus_install_sliver_client: {{ ludus_install_sliver_client }}"
-      - "ludus_install_metasploit: {{ ludus_install_metasploit }}"
+      - "ludus_install_sliver: {{ ludus_install_sliver }}"
+      #- "ludus_install_sliver.server: {{ ludus_install_sliver.server }}"
+      #- "ludus_install_sliver.client: {{ ludus_install_sliver.client }}"
+      #- "ludus_install_sliver.metasploit: {{ ludus_install_sliver.metasploit }}"
 
 - name: Install sliver
   when: ansible_os_family == "Debian"
@@ -46,15 +47,15 @@
       until: result.failed == false
 
     - name: Install sliver-client 
-      when: ludus_install_sliver_client is true
+      when: ludus_install_sliver.client is true
       include_tasks: client.yml
 
     - name: Install sliver-server 
-      when: ludus_install_sliver_server is true
+      when: ludus_install_sliver.server is true
       include_tasks: server.yml
     
     - name: Include role - ludus-install-metasploit 
-      when: ludus_install_metasploit is true
+      when: ludus_install_sliver.metasploit is true
       ansible.builtin.include_role:
         name: ludus-install-metasploit
     
