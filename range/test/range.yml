@@ -1,74 +1,19 @@
 ludus:
-  - vm_name: "{{ range_id }}-sliver-server1"
-    hostname: "{{ range_id }}-sliver-server1"
-    template: debian-latest-server-template
-    vlan: 200
-    ip_last_octet: 1
+  - vm_name: "{{ range_id }}-WS01"
+    hostname: "{{ range_id }}-WS01"
+    template: win11-22h2-x64-enterprise-template
+    vlan: 10
+    ip_last_octet: 11
     ram_gb: 16
     cpus: 8
     testing:
       snapshot: true
       block_internet: true
-    linux: true
+    windows:
+      sysprep: false
+      install_additional_tools: false
     roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        server: true
-        port: 12345
-
-  - vm_name: "{{ range_id }}-sliver-client"
-    hostname: "{{ range_id }}-sliver-client"
-    template: kali-custom-desktop-template
-    vlan: 200
-    ip_last_octet: 2
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
-    linux: true
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        client: true
-
-  - vm_name: "{{ range_id }}-metasploit"
-    hostname: "{{ range_id }}-metasploit"
-    template: debian-latest-server-template
-    vlan: 200
-    ip_last_octet: 3
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
-    linux: true
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        client: true
-        metasploit: true
-
-  - vm_name: "{{ range_id }}-sliver-server2"
-    hostname: "{{ range_id }}-sliver-server2"
-    template: debian-latest-server-template
-    vlan: 200
-    ip_last_octet: 4
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
-    linux: true
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        server: true
-        metasploit: true
+      - ludus-install-sysmon
 
 router:
   vm_name: "{{ range_id }}-router"
