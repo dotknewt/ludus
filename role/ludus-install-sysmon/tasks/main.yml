@@ -26,7 +26,19 @@
   ansible.windows.win_shell: 
       Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/Antonlovesdnb/ConstructingDefense/main/sysmonconfig.xml -OutFile "C:\SysmonFiles\sysmonconfig.xml"
 
-- name: Install Sysmon
-  ansible.windows.win_shell: C:\SysmonFiles\Sysmon.exe -accepteula -i C:\SysmonFiles\sysmonconfig.xml
-  args:
-    executable: cmd
+- name: Check if the "installed.txt" file exists
+  win_stat: path="C:\SysmonFiles\installed.txt"  
+  register: stat_installed
+
+- name: Check if the sysmon installation has been completed
+  when: stat_installed.stat.exists == False
+  block:
+    - name: Install Sysmon  
+      ansible.windows.win_shell: C:\SysmonFiles\Sysmon.exe -accepteula -i C:\SysmonFiles\sysmonconfig.xml
+      args:
+        executable: cmd
+
+    - name: Create "installed.txt"
+      win_file:
+        path: "C:\\SysmonFiles\\installed.txt"
+        state: touch
