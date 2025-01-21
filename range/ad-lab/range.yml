@@ -134,6 +134,7 @@ ludus:
     roles:
       - ludus-configure-language-windows
       - ludus-local-users
+      - ludus-install-sysmon
     role_vars:
       ludus_local_users:
         - login: fcastle
@@ -169,6 +170,7 @@ ludus:
     roles:
       - ludus-configure-language-windows
       - ludus-local-users
+      - ludus-install-sysmon
     role_vars:
       ludus_local_users:
         - login: pparker
@@ -184,7 +186,7 @@ ludus:
 
   - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
-    template: debian-12-x64-server-template
+    template: debian-latest-server-template
     vlan: 10
     ip_last_octet: 100
     ram_gb: 8
@@ -194,7 +196,12 @@ ludus:
       snapshot: false
       block_internet: false
     roles:
-      - ludus-install-sliver-server
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver:
+        server: true
+        metasploit: true
+        port: 1884
 
   - vm_name: "{{ range_id }}-KALI"
     hostname: "{{ range_id }}-KALI"
@@ -208,7 +215,10 @@ ludus:
       snapshot: false
       block_internet: false
     roles:
-      - ludus-install-sliver-client
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver:
+        client: true
 
 router:
   vm_name: "{{ range_id }}-router"
