@@ -25,7 +25,7 @@ ludus:
       ludus_ad_vulns_kerberoasting: true
       kerberoasting_users:
       - identity: fcastle
-        service_principal_name: EVIL/SQLservice
+        service_principal_name: EVIL/fcastle
       ludus_ad_vulns_unconstrained_delegation_user: true
       unconstrained_delegation_user: 
       - identity: tstark 
