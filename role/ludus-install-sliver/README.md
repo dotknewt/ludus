@@ -3,10 +3,14 @@
 # role_vars:
 
 ``` yaml
-ludus_install_sliver_server: false
-ludus_install_sliver_server: false
-ludus_install_sliver_port: 31337
-ludus_install_metasploit: true # depends on role: ludus-install-metasploit
+ludus_install_sliver:
+  server: false # pt. the role only works on debian where the user is named debian (path specification)
+ludus_install_sliver:
+  client: false # pt. the role only works on kali where the user is named kali (path specification)
+ludus_install_sliver:
+  port: 31337
+ludus_install_sliver:
+  metasploit: false # depends on role: ludus-install-metasploit
 ```
 
 # example vm definitions
