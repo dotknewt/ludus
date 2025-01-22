@@ -15,7 +15,7 @@ ludus:
     roles:
       - ludus-configure-windows
     role_vars:
-      ludus-configure-windows:
+      ludus_configure_windows:
         display_language: "0409" # US English
         keyboard_layout: "00000414" # Norwegian Bokmål
 
