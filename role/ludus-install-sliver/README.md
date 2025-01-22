@@ -16,35 +16,36 @@ ludus_install_sliver:
 # example vm definitions
 
 ``` yaml
-  - vm_name: "{{ range_id }}-sliver-server1"
-    hostname: "{{ range_id }}-sliver-server1"
+  - vm_name: "{{ range_id }}-SLIVER"
+    hostname: "{{ range_id }}-SLIVER"
     template: debian-latest-server-template
-    vlan: 200
-    ip_last_octet: 1
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
+    vlan: 10
+    ip_last_octet: 100
+    ram_gb: 8
+    cpus: 4
     linux: true
+    testing:
+      snapshot: false
+      block_internet: false
     roles:
       - ludus-install-sliver
     role_vars:
       ludus_install_sliver:
         server: true
-        port: 12345
+        metasploit: true
+        port: 1884
 
-  - vm_name: "{{ range_id }}-sliver-client"
-    hostname: "{{ range_id }}-sliver-client"
+    - vm_name: "{{ range_id }}-KALI"
+    hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template
-    vlan: 200
-    ip_last_octet: 2
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
+    vlan: 10
+    ip_last_octet: 200
+    ram_gb: 8
+    cpus: 4
     linux: true
+    testing:
+      snapshot: false
+      block_internet: false
     roles:
       - ludus-install-sliver
     role_vars:
