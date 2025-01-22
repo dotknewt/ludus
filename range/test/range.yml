@@ -13,7 +13,11 @@ ludus:
       sysprep: false
       install_additional_tools: false
     roles:
-      - ludus-install-sysmon
+      - ludus-configure-windows
+    role_vars:
+      ludus-configure-windows:
+        display_language: "0409" # US English
+        keyboard_layout: "00000414" # Norwegian Bokmål
 
 router:
   vm_name: "{{ range_id }}-router"
