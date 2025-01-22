@@ -1,0 +1,9 @@
+---
+#ludus_configure_windows:
+#  display_language: "0409" # US English
+#  keyboard_layout: "00000414" # Norwegian
+#  username: "localuser"
+
+ludus_configure_windows_default_display_language: "0409" # US English
+ludus_configure_windows_default_keyboard_layout: "00000414" # Norwegian
+ludus_configure_windows_default_username: "localuser"
