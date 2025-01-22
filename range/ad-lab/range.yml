@@ -2,7 +2,7 @@ ludus:
   - vm_name: "{{ range_id }}-DC01"
     hostname: "{{ range_id }}-DC01"
     template: win2019-server-x64-no-security-updates-template
-    vlan: 2
+    vlan: 200
     ip_last_octet: 1
     ram_gb: 8
     cpus: 4
@@ -19,7 +19,16 @@ ludus:
       - ludus-configure-language-windows
       - badsectorlabs.ludus_adcs # Configure Primary DC
       - ludus-ad-content  # Create AD Content OU's, Groups and Users
+      - ludus-configure-ad-vulns
     role_vars:
+      ludus_ad_vulns_openshares: true
+      ludus_ad_vulns_kerberoasting: true
+      kerberoasting_users:
+      - identity: fives
+        service_principal_name: HTTP/ArcTraining
+      ludus_ad_vulns_unconstrained_delegation_user: true
+      unconstrained_delegation_user: 
+      - identity: cody 
       ludus_ad:
         ous:
           - name: Norway
@@ -98,27 +107,12 @@ ludus:
             groups:
               - Domain Users
               - Remote Desktop Users
-              - IT Sweden
-
-  - vm_name: "{{ range_id }}-DC02"
-    hostname: "{{ range_id }}-DC02"
-    template: win2012r2-server-x64-template
-    vlan: 5
-    ip_last_octet: 1
-    ram_gb: 8
-    cpus: 4
-    windows:
-      sysprep: true
-    domain:
-      fqdn: evil.local
-      role: alt-dc
-    roles:
-      - ludus-configure-language-windows    
+              - IT Sweden 
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
     template: win11-22h2-x64-enterprise-template
-    vlan: 10
+    vlan: 200
     ip_last_octet: 11
     ram_gb: 8
     cpus: 4
@@ -154,7 +148,7 @@ ludus:
   - vm_name: "{{ range_id }}-WS02"
     hostname: "{{ range_id }}-WS02"
     template: win10-21h2-x64-enterprise-template
-    vlan: 10
+    vlan: 200
     ip_last_octet: 12
     ram_gb: 8
     cpus: 4
@@ -187,7 +181,7 @@ ludus:
   - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
     template: debian-latest-server-template
-    vlan: 10
+    vlan: 200
     ip_last_octet: 100
     ram_gb: 8
     cpus: 4
@@ -206,8 +200,8 @@ ludus:
   - vm_name: "{{ range_id }}-KALI"
     hostname: "{{ range_id }}-KALI"
     template: kali-custom-desktop-template
-    vlan: 10
-    ip_last_octet: 200
+    vlan: 200
+    ip_last_octet: 99
     ram_gb: 8
     cpus: 4
     linux: true
