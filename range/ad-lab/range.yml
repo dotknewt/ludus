@@ -24,11 +24,11 @@ ludus:
       ludus_ad_vulns_openshares: true
       ludus_ad_vulns_kerberoasting: true
       kerberoasting_users:
-      - identity: fives
-        service_principal_name: HTTP/ArcTraining
+      - identity: fcastle
+        service_principal_name: EVIL/SQLservice
       ludus_ad_vulns_unconstrained_delegation_user: true
       unconstrained_delegation_user: 
-      - identity: cody 
+      - identity: tstark 
       ludus_ad:
         ous:
           - name: Norway
