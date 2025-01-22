@@ -55,7 +55,6 @@ ludus:
       ludus_adcs_esc8: false
       ludus_adcs_esc13: false
 
-
   - vm_name: "{{ range_id }}-WIN11V"
     hostname: "{{ range_id }}-WIN11V"
     template: win11-22h2-x64-enterprise-template
@@ -76,7 +75,6 @@ ludus:
       - role_sysmon_install
       - role_splunk_collector_win11v
 
-
   - vm_name: "{{ range_id }}-WIN11A"
     hostname: "{{ range_id }}-WIN11A"
     template: win11-22h2-x64-enterprise-template
@@ -96,7 +94,6 @@ ludus:
     roles: 
       - role_sysmon_install
       - role_splunk_collector_win11a
-
 
   - vm_name: "{{ range_id }}-linuxa"
     hostname: "{{ range_id }}-linuxa"
