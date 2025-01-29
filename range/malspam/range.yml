@@ -1,0 +1,56 @@
+ludus:
+  - vm_name: "{{ range_id }}-REMNUX"
+    hostname: "{{ range_id }}-REMNUX"
+    template: remnux-custom-template
+    vlan: 10
+    ip_last_octet: 1
+    ram_gb: 16
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+
+network: 
+  external_default: ACCEPT
+  inter_vlan_default: ACCEPT
+  always_blocked_networks:
+    - 192.168.0.0/16
+    - 172.16.0.0/12
+  rules:
+    - name: ACCEPT INTERNAL SUBNET TRAFFIC
+      vlan_src: 10
+      vlan_dst: 10
+      protocol: all
+      ports: all
+      action: ACCEPT
+    - name: ACCEPT PUBLIC NETWORK TRAFFIC
+      vlan_src: 10
+      vlan_dst: public
+      protocol: all
+      ports: all
+      action: ACCEPT
+
+router:
+  vm_name: "{{ range_id }}-router"
+  hostname: "{{ range_id }}-router"
+  template: debian-11-x64-server-template
+  ram_gb: 2
+  ram_min_gb: 1
+  cpus: 2
+
+defaults:
+  snapshot_with_RAM: true
+  stale_hours: 0
+  ad_domain_functional_level: Win2012R2
+  ad_forest_functional_level: Win2012R2
+  ad_domain_admin: domainadmin
+  ad_domain_admin_password: password
+  ad_domain_user: domainuser
+  ad_domain_user_password: password
+  ad_domain_safe_mode_password: password
+  timezone: Europe/Oslo
+
+notify:
+  urls:
+     - "discord://VlZYPl7lWSeOxZ_GVSbPZA6XWODeMgGn1_2zimegrPd3f3iX95LCw4H7gp3vNEAqQadF@1322815398306910239?SplitLines=No"
