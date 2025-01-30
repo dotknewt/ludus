@@ -1,9 +1,0 @@
-- name: Download Sumo Collector
-  ansible.builtin.shell:
-    cmd: wget "https://collectors.us2.sumologic.com/rest/download/linux/64" -O SumoCollector.sh && chmod +x SumoCollector.sh
-- name: Download Sumo Collector Config
-  ansible.builtin.shell:
-    cmd: wget "https://raw.githubusercontent.com/Antonlovesdnb/ConstructingDefense/main/linuxvcollectorconfig.json" -O linuxvcollectorconfig.json
-- name: Install Sumo Collector
-  ansible.builtin.shell:
-    cmd: ./SumoCollector.sh -q -Vsumo.token_and_url={{ ludus_sumo_logic_token }} -Vsources=/home/debian/linuxvcollectorconfig.json

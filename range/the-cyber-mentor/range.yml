@@ -177,7 +177,3 @@ defaults:
   ad_domain_user_password: password        # The domain user password for every Windows domain
   ad_domain_safe_mode_password: password   # The domain safe mode password for every Windows domain
   timezone: Europe/Oslo         
-
-notify:
-  urls:
-    - "discord://SYZOeBmcmTQbL9E37aaZVozbAgfnypxmAka-Tljbdc2ygPhGZnidb-263f0361cudGib@1304431341904050602?SplitLines=No"

@@ -3,7 +3,7 @@ roles:
 role_vars:
   ludus_local_users:
     - login: jdoe
-      password: aA8MaQBCtBtPYAFh
+      password: aA8MaQ2alStPYAFh
       groups: sudo
       sudo_nopasswd: true
     - login: msmith

@@ -27,7 +27,7 @@ role_vars:
         firstname: Tony
         surname: Stark
         display_name: Tony Stark
-        password: GFVfPS432QkKN2YdQwJL
+        password: GFVfPS4ggSKAllfopwdQwJL
         path: "DC=evil,DC=local"
         description: IT Domain Administrator
         groups:

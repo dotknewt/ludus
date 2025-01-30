@@ -1,4 +1,4 @@
-url: https://<local-ipaddress>:8080
+url: https://<local-ipaddress>:8080 # https://127.0.0.1:8081
 json: false
 verify: false
 user: <initials>
