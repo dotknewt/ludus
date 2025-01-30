@@ -41,4 +41,4 @@ defaults:
 
 notify:
   urls:
-    - "discord://<REDACTED>@<REDACTED>?<SplitLines=No>"
+    - "discord://<REDACTEDSECRET>@<SECTRETREDACTED>?<SplitLines=No>"
