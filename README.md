@@ -87,4 +87,4 @@ sharerange () {
 }
 ```
 
-This repo is mirrored
+This repo is mirrored.
