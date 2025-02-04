@@ -11,8 +11,8 @@ ludus:
       block_internet: true
     linux: true
 
-network: 
-  external_default: ACCEPT
+network:
+  external_default: DROP
   inter_vlan_default: ACCEPT
   always_blocked_networks:
     - 192.168.0.0/16
