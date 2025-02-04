@@ -18,9 +18,10 @@
       - curl
       - gnupg
       - ubuntu-gnome-desktop
-      - tigervnc-standalone-server
-      - tigervnc-xorg-extension
+      - tigervnc-common
       - tigervnc-viewer
+      - tigervnc-xorg-extension
+      - tigervnc-standalone-server
     state: present
 
 - name: Create a directory if it does not exist # Avoid errors with range-management tasks
