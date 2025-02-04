@@ -70,6 +70,15 @@
         group: localuser
         mode: "0750"
 
+- name: Disable DHCPv4 in netplan
+  ansible.builting.copy:
+    src: "{{ role_path }}/files/01-netcfg.yaml"
+    dest: /etc/netplan/01-netcfg.yaml
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+
 - name: Get remnux
   ansible.builtin.get_url:
     url: https://REMnux.org/remnux-cli
