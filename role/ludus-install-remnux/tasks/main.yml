@@ -39,18 +39,36 @@
     enabled: true
 
 - name: Check if vnc has been configured
-  ansible.builtin.stat:
-    path: /home/localuser/.xstartup
-  register: stat_result
+  block:
+    - name: Look for ~/.xstartup
+      ansible.builtin.stat:
+        path: /home/localuser/.xstartup
+      register: xstat_result
 
-- name: Create .xstartup script #
-  when: not stat_result.stat.exists
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/xstartup"
-    dest: /home/localuser/.xstartup
-    owner: localuser
-    group: localuser
-    mode: "0750"
+    - name: Look for ~/.vncpasswd
+      ansible.builtin.stat:
+        path: /home/localuser/.vncpasswd
+      register: pstat_result
+
+- name: Prepare tigervnc configuration
+  block:
+    - name: Create ~/.xstartup script
+      when: not xstat_result.stat.exists
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/xstartup"
+        dest: /home/localuser/.xstartup
+        owner: localuser
+        group: localuser
+        mode: "0750"
+
+    - name: Create ~/.vncpasswd file
+      when: not pstat_result.stat.exists
+      ansible.builtin.copy:
+        src: "{{ role_path }}/files/vncpasswd"
+        dest: /home/localuser/.vncpasswd
+        owner: localuser
+        group: localuser
+        mode: "0750"
 
 - name: Get remnux
   ansible.builtin.get_url:
