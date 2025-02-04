@@ -1,17 +1,16 @@
 ludus:
-  - vm_name: "{{ range_id }}-WS01"
-    hostname: "{{ range_id }}-WS01"
-    template: win11-22h2-x64-enterprise-template
+  - vm_name: "{{ range_id }}-FLAREVM"
+    hostname: "{{ range_id }}-FLAREVM"
+    template: flare-vm-template
     vlan: 10
-    ip_last_octet: 11
+    ip_last_octet: 1
     ram_gb: 16
     cpus: 8
     testing:
       snapshot: true
       block_internet: true
     windows:
-      sysprep: false
-      install_additional_tools: false
+      sysprep: true
     roles:
       - ludus-configure-windows
     role_vars:
@@ -19,9 +18,23 @@ ludus:
         display_language: "0409" # US English
         keyboard_layout: "00000414" # Norwegian Bokmål
 
+  - vm_name: "{{ range_id }}-REMNUX"
+    hostname: "{{ range_id }}-REMNUX"
+    template: remnux-custom-template
+    vlan: 10
+    ip_last_octet: 2
+    ram_gb: 16
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - ludus-install-remnux
+
 router:
-  vm_name: "{{ range_id }}-router"
-  hostname: "{{ range_id }}-router"
+  vm_name: "{{ range_id }}-ROUTER"
+  hostname: "{{ range_id }}-ROUTER"
   template: debian-11-x64-server-template
   ram_gb: 2
   ram_min_gb: 1
