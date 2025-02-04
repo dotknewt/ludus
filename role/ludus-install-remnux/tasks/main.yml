@@ -12,37 +12,44 @@
     state: latest
     update_cache: true
 
-- name: Install pre-requisites
+- name: Install requirements
   ansible.builtin.apt:
     name:
-      - gnupg
       - curl
-      - ubuntu-desktop
-      - xrdp
+      - gnupg
+      - ubuntu-gnome-desktop
+      - tigervnc-standalone-server
+      - tigervnc-xorg-extension
+      - tigervnc-viewer
     state: present
 
-# adduser xrdp ssl-cert 
-# systemctl restart xrdp
-- name: Create a directory if it does not exist  # Avoid errors with range-management tasks
+- name: Create a directory if it does not exist # Avoid errors with range-management tasks
   ansible.builtin.file:
     path: /etc/cloud/cloud.cfg.d/
     state: directory
     owner: root
     group: root
-    mode: '0755'
+    mode: "0755"
 
-- name: Add the user 'xrdp' to the group 'ssl-cert'
-  ansible.builtin.user:
-    name: xrdp
-    groups: ssl-cert
-    append: yes
-
-- name: Enable sliver-server daemon service
+- name: Enable GNOME Display Manager service
   become: true
   ansible.builtin.systemd:
-    name: xrdp.service
+    name: gdm.service
     enabled: true
-    state: started
+
+- name: Check if vnc has been configured
+  ansible.builtin.stat:
+    path: /home/localuser/.xstartup
+  register: stat_result
+
+- name: Create .xstartup script #
+  when: not stat_result.stat.exists
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/xstartup"
+    dest: /home/localuser/.xstartup
+    owner: localuser
+    group: localuser
+    mode: "0750"
 
 - name: Get remnux
   ansible.builtin.get_url:
