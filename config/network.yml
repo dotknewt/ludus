@@ -10,6 +10,6 @@ network: # https://docs.ludus.cloud/docs/networking
       ip_last_octet_src: 3 # An integer between >= 1 AND <= 255 or a regex string
       vlan_dst: 254 # An integer between >= 2 AND <= 255 or a string matching ["public","all"]
       ip_last_octet_dst: 4 # An integer between >= 1 AND <= 255 or a regex string
-      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"] 
+      protocol: all # Possible values: ["tcp","udp","udplite","icmp","ipv6-icmp","esp","ah","sctp","all"]
       ports: all # An integer >= 0 AND <= 65535 or a string regex: ^([0-9]{1,5}|[0-9]{1,5}:[0-9]{1,5}|all)$
       action: ACCEPT #String value matching: ["ACCEPT","REJECT","DROP"]

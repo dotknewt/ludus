@@ -20,7 +20,7 @@
           WantedBy=multi-user.target
         owner: root
         group: root
-        mode: '0644'
+        mode: "0644"
 
     - name: Reload systemd daemon
       ansible.builtin.systemd:

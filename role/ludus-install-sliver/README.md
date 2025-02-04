@@ -2,7 +2,7 @@
 
 # role_vars:
 
-``` yaml
+```yaml
 ludus_install_sliver:
   server: false # pt. the role only works on debian where the user is named debian (path specification)
 ludus_install_sliver:
@@ -15,7 +15,7 @@ ludus_install_sliver:
 
 # example vm definitions
 
-``` yaml
+```yaml
   - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
     template: debian-latest-server-template

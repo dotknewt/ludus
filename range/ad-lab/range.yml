@@ -18,17 +18,17 @@ ludus:
     roles:
       - ludus-configure-language-windows
       - badsectorlabs.ludus_adcs # Configure Primary DC
-      - ludus-ad-content  # Create AD Content OU's, Groups and Users
+      - ludus-ad-content # Create AD Content OU's, Groups and Users
       - ludus-configure-ad-vulns
     role_vars:
       ludus_ad_vulns_openshares: true
       ludus_ad_vulns_kerberoasting: true
       kerberoasting_users:
-      - identity: fcastle
-        service_principal_name: EVIL/fcastle
+        - identity: fcastle
+          service_principal_name: EVIL/fcastle
       ludus_ad_vulns_unconstrained_delegation_user: true
-      unconstrained_delegation_user: 
-      - identity: tstark 
+      unconstrained_delegation_user:
+        - identity: tstark
       ludus_ad:
         ous:
           - name: Norway
@@ -107,7 +107,7 @@ ludus:
             groups:
               - Domain Users
               - Remote Desktop Users
-              - IT Sweden 
+              - IT Sweden
 
   - vm_name: "{{ range_id }}-WS01"
     hostname: "{{ range_id }}-WS01"
@@ -221,20 +221,20 @@ router:
   ram_min_gb: 1
   cpus: 2
 
-network: 
+network:
   inter_vlan_default: ACCEPT # The default rule to apply to traffic between VLANs. Default: ACCEPT
-  always_blocked_networks:   # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
-    - 192.168.0.0/16         # entries must be in CIDR format
+  always_blocked_networks: # Define any networks that ranges should never be able to reach (i.e. the LAN where the Ludus host is located)
+    - 192.168.0.0/16 # entries must be in CIDR format
     - 172.16.0.0/12
 
 defaults:
-  snapshot_with_RAM: true                  # When entering testing mode, capture the RAM state which allows reverting to a running VM
-  stale_hours: 0                           # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
-  ad_domain_functional_level: Win2012R2    # The functional level of each Windows domain created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
-  ad_forest_functional_level: Win2012R2    # The functional level of each Windows forest created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
-  ad_domain_admin: domainadmin             # The domain admin username for every Windows domain
-  ad_domain_admin_password: Evil2024_Welcome!       # The domain admin password for every Windows domain
-  ad_domain_user: domainuser               # The domain user username for every Windows domain
-  ad_domain_user_password: Evil_Welcome2024!        # The domain user password for every Windows domain
-  ad_domain_safe_mode_password: Evil_Safe_Mode_Password   # The domain safe mode password for every Windows domain
-  timezone: Europe/Oslo         
+  snapshot_with_RAM: true # When entering testing mode, capture the RAM state which allows reverting to a running VM
+  stale_hours: 0 # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
+  ad_domain_functional_level: Win2012R2 # The functional level of each Windows domain created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
+  ad_forest_functional_level: Win2012R2 # The functional level of each Windows forest created by Ludus - options are: "Win2003", "Win2008", "Win2008R2", "Win2012", "Win2012R2", or "WinThreshold"
+  ad_domain_admin: domainadmin # The domain admin username for every Windows domain
+  ad_domain_admin_password: Evil2024_Welcome! # The domain admin password for every Windows domain
+  ad_domain_user: domainuser # The domain user username for every Windows domain
+  ad_domain_user_password: Evil_Welcome2024! # The domain user password for every Windows domain
+  ad_domain_safe_mode_password: Evil_Safe_Mode_Password # The domain safe mode password for every Windows domain
+  timezone: Europe/Oslo

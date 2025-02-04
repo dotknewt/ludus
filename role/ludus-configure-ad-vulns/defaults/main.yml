@@ -5,9 +5,6 @@ ludus_ad_vulns_kerberoasting: false
 ludus_ad_vulns_unconstrained_delegation_user: false
 ludus_ad_vulns_set_acl: false
 
-
-
-
 #Login Data
 ludus_domain_val: "{{ (ludus | selectattr('vm_name', 'match', inventory_hostname))[0].domain.fqdn.split('.')[0] }}"
 

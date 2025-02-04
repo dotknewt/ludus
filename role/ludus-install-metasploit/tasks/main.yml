@@ -22,7 +22,7 @@
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb
             dest: /tmp/msfinstall
-            mode: '0755'
+            mode: "0755"
 
         - name: Execute metasploit-framework installer
           become: true

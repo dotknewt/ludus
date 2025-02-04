@@ -1,4 +1,5 @@
 # ludus-configure-ad-vulns
+
 Source: https://github.com/Primusinterp/ludus-ad-vulns
 
 ## Ansible Role: Active Directory Vulnerabilities (Ludus)
@@ -6,12 +7,13 @@ Source: https://github.com/Primusinterp/ludus-ad-vulns
 An Ansible Role that adds vulnerabilities in an Active Directory.
 
 The role can add the following vulnerabilities:
+
 - Kerberoastable user
 - Add ACL to AD objects
 - Set unconstrained delegation for a user
 - Add open network shares
 
-I plan to add more vulnerabilities to this role, as they become needed on my ranges. 
+I plan to add more vulnerabilities to this role, as they become needed on my ranges.
 
 ---
 
@@ -65,7 +67,6 @@ acl.value.right: "GenericAll"
 
 # Whether the ACL should have inheritance (e.g., None, All)
 acl.value.inheritance: "None"
-
 #This will give cptrex GenericAll over the Bounty Hunters group
 ```
 
@@ -82,43 +83,41 @@ ludus_ad_vulns_unconstrained_delegation_user: false
 ludus_ad_vulns_set_acl: false
 ```
 
-
-
 ## Example Ludus Range Config
 
 ```yaml
-  - vm_name: "{{ range_id }}-ad-dc-win2022-server-x64-1"
-    hostname: "{{ range_id }}-DC01"
-    template: win2022-server-x64-template
-    vlan: 10
-    ip_last_octet: 11
-    ram_gb: 4
-    cpus: 4
-    windows:
-      sysprep: true
-    domain:
-      fqdn: maldev.local
-      role: primary-dc
-    roles:
-      - ludus-configure-ad-vulns
-    role_vars:
-      ludus_ad_vulns_openshares: true
-      ludus_ad_vulns_kerberoasting: true
-      kerberoasting_users:
+- vm_name: "{{ range_id }}-ad-dc-win2022-server-x64-1"
+  hostname: "{{ range_id }}-DC01"
+  template: win2022-server-x64-template
+  vlan: 10
+  ip_last_octet: 11
+  ram_gb: 4
+  cpus: 4
+  windows:
+    sysprep: true
+  domain:
+    fqdn: maldev.local
+    role: primary-dc
+  roles:
+    - ludus-configure-ad-vulns
+  role_vars:
+    ludus_ad_vulns_openshares: true
+    ludus_ad_vulns_kerberoasting: true
+    kerberoasting_users:
       - identity: fives
         service_principal_name: HTTP/ArcTraining
 
-      ludus_ad_vulns_unconstrained_delegation_user: true
-      unconstrained_delegation_user: 
-      - identity: cody 
+    ludus_ad_vulns_unconstrained_delegation_user: true
+    unconstrained_delegation_user:
+      - identity: cody
 
-      ludus_ad_vulns_set_acl: true
-      acl_definitions:
-        grant_generic_all_from_cptrex_to_bounty_group:
-          for: "cptrex"
-          to: "CN=Bounty Hunters,OU=Bounty Hunters,DC=maldev,DC=local"
-          right: "GenericAll"
-          inheritance: "None"   
+    ludus_ad_vulns_set_acl: true
+    acl_definitions:
+      grant_generic_all_from_cptrex_to_bounty_group:
+        for: "cptrex"
+        to: "CN=Bounty Hunters,OU=Bounty Hunters,DC=maldev,DC=local"
+        right: "GenericAll"
+        inheritance: "None"
 ```
 
 ## License

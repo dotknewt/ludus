@@ -1,12 +1,9 @@
 - name: Create Directories for Sumo Collector
-  ansible.windows.win_shell: 
-      New-Item -ItemType Directory -Path "C:\SumoCollector"
+  ansible.windows.win_shell: New-Item -ItemType Directory -Path "C:\SumoCollector"
 - name: Download Sumo Collector
-  ansible.windows.win_shell:
-      Invoke-WebRequest -UseBasicParsing 'https://collectors.sumologic.com/rest/download/win64' -outfile C:\SumoCollector\SumoCollector.exe
+  ansible.windows.win_shell: Invoke-WebRequest -UseBasicParsing 'https://collectors.sumologic.com/rest/download/win64' -outfile C:\SumoCollector\SumoCollector.exe
 - name: Download Collector Config File
-  ansible.windows.win_shell:
-      Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/Antonlovesdnb/ConstructingDefense/main/win11vcollectorconfig.json" -OutFile "C:\SumoCollector\win11vcollectorconfig.json"
+  ansible.windows.win_shell: Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/Antonlovesdnb/ConstructingDefense/main/win11vcollectorconfig.json" -OutFile "C:\SumoCollector\win11vcollectorconfig.json"
 - name: Install Sumo Collector on WIN11V
   ansible.windows.win_shell: C:\SumoCollector\SumoCollector.exe -console -q -Vsumo.token_and_url={{ ludus_sumo_logic_token }} -Vsources=C:\SumoCollector\win11vcollectorconfig.json
   args:

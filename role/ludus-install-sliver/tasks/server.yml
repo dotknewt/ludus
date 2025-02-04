@@ -10,7 +10,7 @@
       ansible.builtin.get_url:
         url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-server_linux
         dest: /usr/local/bin/sliver-server
-        mode: '0755'
+        mode: "0755"
 
     - name: Create a directory for sliver-server config if it does not exist
       ansible.builtin.file:
@@ -18,7 +18,7 @@
         state: directory
         owner: debian
         group: debian
-        mode: '0755'
+        mode: "0755"
 
     - name: Create custom sliver-server configuration
       ansible.builtin.copy:
@@ -44,7 +44,7 @@
           \}
         owner: debian
         group: debian
-        mode: '0644'
+        mode: "0644"
 
     - name: Create sliver-server daemon service
       become: true
@@ -67,7 +67,7 @@
           WantedBy=multi-user.target
         owner: root
         group: root
-        mode: '0644'
+        mode: "0644"
 
     - name: Reload systemd daemon
       become: true

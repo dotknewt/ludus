@@ -20,7 +20,7 @@
 - name: Install sliver
   when: ansible_os_family == "Debian"
   block:
-    - name: Apt upgrade 
+    - name: Apt upgrade
       become: true
       ansible.builtin.apt:
         upgrade: yes
@@ -46,16 +46,15 @@
       retries: 2
       until: result.failed == false
 
-    - name: Install sliver-client 
+    - name: Install sliver-client
       when: ludus_install_sliver.client is true
       include_tasks: client.yml
 
-    - name: Install sliver-server 
+    - name: Install sliver-server
       when: ludus_install_sliver.server is true
       include_tasks: server.yml
-    
-    - name: Include role - ludus-install-metasploit 
+
+    - name: Include role - ludus-install-metasploit
       when: ludus_install_sliver.metasploit is true
       ansible.builtin.include_role:
         name: ludus-install-metasploit
-    

@@ -9,7 +9,7 @@ galaxy_info:
   license: N/A
   min_ansible_version: "2.10"
   platforms:
-    - name: Linux 
+    - name: Linux
   galaxy_tags:
     - offensive security
     - linux

@@ -2,8 +2,8 @@ proxmox_node: ludus # proxmox node
 proxmox_interface: eth0 # / eno1
 proxmox_invalid_cert: true # ignore invalid certificate
 proxmox_url: https://127.0.0.1:8006 # url as seen from proxmox itself
-proxmox_hostname: ludus 
-proxmox_local_ip: 172.16.20.123 
+proxmox_hostname: ludus
+proxmox_local_ip: 172.16.20.123
 proxmox_public_ip: 172.16.20.123 # endpoint IP for wireguard config
 proxmox_gateway: 192.168.0.1
 proxmox_netmask: 255.255.255.0

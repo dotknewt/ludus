@@ -83,7 +83,7 @@
       ansible.builtin.get_url:
         url: https://github.com/kasmtech/KasmVNC/releases/download/v1.3.3/kasmvncserver_kali-rolling_1.3.3_amd64.deb
         dest: /tmp/kasmvncserver_kali-rolling.deb
-        mode: '0700'
+        mode: "0700"
 
     - name: Install the kasmvnc deb
       become: true
@@ -102,7 +102,7 @@
       ansible.builtin.file:
         path: /home/kali/.vnc
         state: directory
-        mode: '0755'
+        mode: "0755"
         owner: kali
         group: kali
 
@@ -117,7 +117,7 @@
         path: /home/kali/.kasmpasswd
         owner: kali
         group: kali
-        mode: '0600'
+        mode: "0600"
 
     - name: Set the de-was-selected file
       ansible.builtin.file:
@@ -125,13 +125,13 @@
         state: touch
         owner: kali
         group: kali
-        mode: '0644'
+        mode: "0644"
 
     - name: Create xstartup script
       ansible.builtin.copy:
         dest: "/home/kali/.vnc/xstartup"
         force: false
-        mode: '0755'
+        mode: "0755"
         content: |-
           #!/bin/bash
           exec xfce4-session

@@ -15,7 +15,6 @@
     full: Administrators
     change: Users
 
-
 - name: Add or update registry path to allow guest access in SMB
   win_regedit:
     path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters

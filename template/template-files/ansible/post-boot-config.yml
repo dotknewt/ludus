@@ -1,4 +1,3 @@
-
 - hosts: all
   become: true
   tasks:
@@ -33,14 +32,14 @@
     - name: Set XKBLAYOUT in /etc/default/keyboard
       ansible.builtin.replace:
         path: /etc/default/keyboard
-        regexp: '^XKBLAYOUT=.*'
+        regexp: "^XKBLAYOUT=.*"
         replace: 'XKBLAYOUT="no"'
 
     - name: Add additional locale in in /etc/locale.gen
       ansible.builtin.replace:
         path: /etc/locale.gen
-        regexp: '^# nb_NO.UTF-8.*'
-        replace: 'nb_NO.UTF-8 UTF-8'
+        regexp: "^# nb_NO.UTF-8.*"
+        replace: "nb_NO.UTF-8 UTF-8"
 
     - name: Set xkbmap layout in /home/localuser/.profile
       ansible.builtin.shell:

@@ -19,7 +19,7 @@
       ansible.windows.win_powershell:
         script: |
           reg add "HKEY_USERS\$(Get-Localuser | Where-Object -Property Name -eq {{ ludus_configure_windows.username | default(ludus_configure_windows_default_username) }} | Select-Object -First 1 -ExpandProperty sid)\Keyboard Layout\Preload" /v 1 /d {{ ludus_configure_windows.keyboard_layout | default(ludus_configure_windows_default_keyboard_layout) }} /f
-      
+
     - name: Set the display language and keyboard layout combination
       ansible.windows.win_powershell:
         script: |

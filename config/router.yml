@@ -11,7 +11,8 @@ router:
     - ludus_guacamole_server # You can add roles to the router VM just like any other VM
   role_vars: # Enterprise only
     somevar: value
-  outbound_wireguard_config: |- # Enterprise only; Note: this config must have AllowedIPs set to 0.0.0.0/0, split tunnels are not supported (yet)
+  outbound_wireguard_config:
+    |- # Enterprise only; Note: this config must have AllowedIPs set to 0.0.0.0/0, split tunnels are not supported (yet)
     [Interface]
     PrivateKey = XXXX
     ...

@@ -60,7 +60,8 @@ ludus:
 
 ## License
 
-[//]: # (If you change the License type, be sure to change the actual LICENSE file as well)
+[//]: # "If you change the License type, be sure to change the actual LICENSE file as well"
+
 GPLv3
 
 ## Author Information
