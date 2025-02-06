@@ -2,4 +2,4 @@
 - hosts: all
   become: true
   roles:
-    - ludus-install-remnux
+    - ludus-template-remnux
