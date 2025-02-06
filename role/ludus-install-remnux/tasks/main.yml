@@ -71,7 +71,7 @@
         mode: "0750"
 
 - name: Disable DHCPv4 in netplan
-  ansible.builting.copy:
+  ansible.builtin.copy:
     src: "{{ role_path }}/files/01-netcfg.yaml"
     dest: /etc/netplan/01-netcfg.yaml
     owner: root
