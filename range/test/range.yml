@@ -29,8 +29,6 @@ ludus:
       snapshot: true
       block_internet: true
     linux: true
-    roles:
-      - ludus-install-remnux
 
 router:
   vm_name: "{{ range_id }}-ROUTER"
