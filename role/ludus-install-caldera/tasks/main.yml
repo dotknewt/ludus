@@ -17,4 +17,3 @@
   ansible.builtin.include_tasks:
     file: install_debian.yml
   when: ansible_distribution == 'Debian' and not stat_result.stat.exists
-
