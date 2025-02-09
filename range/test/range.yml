@@ -1,10 +1,10 @@
 ludus:
-  - vm_name: "{{ range_id }}-FLAREVM"
-    hostname: "{{ range_id }}-FLAREVM"
-    template: flare-vm-template
+  - vm_name: "{{ range_id }}-WIN11-DESKTOP"
+    hostname: "{{ range_id }}-WIN11-DESKTOP"
+    template: win11-23h2-x64-enterprise-template
     vlan: 10
     ip_last_octet: 1
-    ram_gb: 16
+    ram_gb: 32
     cpus: 8
     testing:
       snapshot: true
@@ -17,18 +17,6 @@ ludus:
       ludus_configure_windows:
         display_language: "0409" # US English
         keyboard_layout: "00000414" # Norwegian Bokmål
-
-  - vm_name: "{{ range_id }}-REMNUX"
-    hostname: "{{ range_id }}-REMNUX"
-    template: remnux-custom-template
-    vlan: 10
-    ip_last_octet: 2
-    ram_gb: 16
-    cpus: 8
-    testing:
-      snapshot: true
-      block_internet: true
-    linux: true
 
 router:
   vm_name: "{{ range_id }}-ROUTER"
