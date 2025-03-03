@@ -2,7 +2,7 @@
 
 ## ludus-install-sliver
 ```yaml
-    roles:
+    roles: # server
       - ludus-install-sliver
     role_vars:
       ludus_install_sliver:
@@ -10,7 +10,8 @@
         server: true # only tested on debian12
         port: 443
         metasploit: true # requires role: ludus-install-metasploit
-    roles:
+    
+    roles: # client
       - ludus-install-sliver
     role_vars:
       ludus_install_sliver:
