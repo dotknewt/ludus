@@ -6,3 +6,8 @@
         url: https://github.com/BishopFox/sliver/releases/download/v1.5.42/sliver-client_linux
         dest: /usr/local/bin/sliver
         mode: "0755"
+
+    - name: Include role - ludus-install-metasploit
+      when: ludus_install_sliver.metasploit is true
+      ansible.builtin.include_role:
+        name: ludus-install-metasploit
