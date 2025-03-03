@@ -1,7 +1,7 @@
 ludus:
-  - vm_name: "{{ range_id }}-WIN11-DESKTOP"
-    hostname: "{{ range_id }}-WIN11-DESKTOP"
-    template: win11-23h2-x64-enterprise-template
+  - vm_name: "{{ range_id }}-SLIVERCLIENT"
+    hostname: "{{ range_id }}-SLIVERCLIENT"
+    template: kali-custom-desktop-template
     vlan: 10
     ip_last_octet: 1
     ram_gb: 32
@@ -9,14 +9,11 @@ ludus:
     testing:
       snapshot: true
       block_internet: true
-    windows:
-      sysprep: true
+    linux: true
     roles:
-      - ludus-configure-windows
+      - ludus-install-sliver
     role_vars:
-      ludus_configure_windows:
-        display_language: "0409" # US English
-        keyboard_layout: "00000414" # Norwegian Bokmål
+      ludus_install_sliver.client: true
 
 router:
   vm_name: "{{ range_id }}-ROUTER"
@@ -37,3 +34,4 @@ defaults:
   ad_domain_user_password: password
   ad_domain_safe_mode_password: password
   timezone: Europe/Oslo
+  enable_dynamic_wallpaper: false
