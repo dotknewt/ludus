@@ -13,8 +13,11 @@ ludus:
     roles:
       - ludus-install-sliver
     role_vars:
-      ludus_install_sliver.client: true
-
+      ludus_install_sliver:
+        client: true
+        server: false
+        port: 31337
+        metasploit: false
 router:
   vm_name: "{{ range_id }}-ROUTER"
   hostname: "{{ range_id }}-ROUTER"
