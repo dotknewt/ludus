@@ -13,13 +13,18 @@ ludus_install_sliver:
   metasploit: false # depends on role: ludus-install-metasploit
 ```
 
-# example vm definitions
+# example range definition
 !!! the ludus-install-metasploit role must be available to the deploying user whenever the "metasploit:" key is used, even if value is "false"
 
+##### thanks for testing!
+- https://github.com/jessefmoore
+
 ```yaml
+
+ludus:
   - vm_name: "{{ range_id }}-SLIVER"
     hostname: "{{ range_id }}-SLIVER"
-    template: debian-latest-server-template
+    template: debian-12-x64-server-template
     vlan: 10
     ip_last_octet: 100
     ram_gb: 8
@@ -36,9 +41,9 @@ ludus_install_sliver:
         metasploit: true
         port: 1884
 
-    - vm_name: "{{ range_id }}-KALI"
+  - vm_name: "{{ range_id }}-KALI"
     hostname: "{{ range_id }}-KALI"
-    template: kali-custom-desktop-template
+    template: kali-x64-desktop-template
     vlan: 10
     ip_last_octet: 200
     ram_gb: 8
@@ -55,7 +60,7 @@ ludus_install_sliver:
 
   - vm_name: "{{ range_id }}-metasploit"
     hostname: "{{ range_id }}-metasploit"
-    template: debian-latest-server-template
+    template: debian-12-x64-server-template
     vlan: 200
     ip_last_octet: 3
     ram_gb: 16
@@ -73,7 +78,7 @@ ludus_install_sliver:
 
   - vm_name: "{{ range_id }}-sliver-server2"
     hostname: "{{ range_id }}-sliver-server2"
-    template: debian-latest-server-template
+    template: debian-12-x64-server-template
     vlan: 200
     ip_last_octet: 4
     ram_gb: 16
