@@ -15,9 +15,26 @@ ludus:
     role_vars:
       ludus_install_sliver:
         client: true
-        server: false
-        port: 31337
-        metasploit: false
+
+  - vm_name: "{{ range_id }}-SLIVERSERVER"
+    hostname: "{{ range_id }}-SLIVERSERVER"
+    template: debian-latest-server-template
+    vlan: 10
+    ip_last_octet: 2
+    ram_gb: 32
+    cpus: 8
+    testing:
+      snapshot: true
+      block_internet: true
+    linux: true
+    roles:
+      - ludus-install-sliver
+    role_vars:
+      ludus_install_sliver:
+        server: true
+        port: 443
+        metasploit: true
+
 router:
   vm_name: "{{ range_id }}-ROUTER"
   hostname: "{{ range_id }}-ROUTER"
