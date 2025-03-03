@@ -9,9 +9,9 @@
       - "ansible_os_family: {{ ansible_os_family }}"
 
 - name: Check for Debian
+  when: ansible_os_family != "Debian"
   ansible.builtin.fail:
     msg: This role only supports Debian
-  when: ansible_os_family != "Debian"
 
 - name: Install metasploit-framework
   when: ansible_os_family == "Debian"
