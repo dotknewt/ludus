@@ -1,4 +1,16 @@
 ludus:
+  - vm_name: "{{ range_id }}-malcolm"
+    hostname: "{{ range_id }}-malcolm"
+    template: malcolm-24.10.1-template
+    vlan: 10
+    ip_last_octet: 1
+    ram_gb: 64
+    cpus: 8
+    linux: true
+    testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
+      snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
+      block_internet: true # Cut this VM off from the internet during testing. Default true
+
   - vm_name: "{{ range_id }}-DC" # The name of the VM in Proxmox. You can use the `{{ range_id }}` template string which resolves to your range ID (i.e. JS)
     hostname: "{{ range_id }}-DC" # The hostname for the VM. Note: Windows host names are limited to 15 characters due to NETBIOS
     template: win2022-server-x64-template # The template that will be the base for this VM (`ludus templates list` to get a list of them)
@@ -12,9 +24,9 @@ ludus:
       fqdn: condef.local # The FQDN of the domain
       role: primary-dc # The role of the VM in the domain (primary-dc|alt-dc|member)
     roles:
-      - role_gpo_deploy
+      - condef_gpo_deploy
       - ludus-install-sysmon
-      - role_splunk_install
+      - condef_splunk_install
     testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
       snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
       block_internet: true # Cut this VM off from the internet during testing. Default true
@@ -37,7 +49,7 @@ ludus:
       role: member
     roles:
       - badsectorlabs.ludus_adcs
-      - role_splunk_collector_certer
+      - condef_splunk_collector_certer
     role_vars:
       ludus_adcs_domain: condef.local
       ludus_adcs_ca_host: CERTER
@@ -52,6 +64,9 @@ ludus:
       ludus_adcs_esc6: false
       ludus_adcs_esc8: false
       ludus_adcs_esc13: false
+    testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
+      snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
+      block_internet: true # Cut this VM off from the internet during testing. Default true
 
   - vm_name: "{{ range_id }}-WIN11V"
     hostname: "{{ range_id }}-WIN11V"
@@ -71,7 +86,10 @@ ludus:
       role: member
     roles:
       - ludus-install-sysmon
-      - role_splunk_collector_win11v
+      - condef_splunk_collector_win11v
+    testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
+      snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
+      block_internet: true # Cut this VM off from the internet during testing. Default true
 
   - vm_name: "{{ range_id }}-WIN11A"
     hostname: "{{ range_id }}-WIN11A"
@@ -91,7 +109,10 @@ ludus:
       role: member
     roles:
       - ludus-install-sysmon
-      - role_splunk_collector_win11a
+      - condef_splunk_collector_win11a
+    testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
+      snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
+      block_internet: true # Cut this VM off from the internet during testing. Default true
 
   - vm_name: "{{ range_id }}-linuxa"
     hostname: "{{ range_id }}-linuxa"
@@ -101,6 +122,9 @@ ludus:
     ram_gb: 8
     cpus: 4
     linux: true
+    testing: # This key controls the behavior of the VM in testing mode. If undefined, both values are set to true
+      snapshot: true # Snapshot this VM going into testing, and revert it coming out of testing. Default: true
+      block_internet: true # Cut this VM off from the internet during testing. Default true
 
   - vm_name: "{{ range_id }}-linuxv"
     hostname: "{{ range_id }}-linuxv"
@@ -111,22 +135,20 @@ ludus:
     cpus: 6
     linux: true
     roles:
-      - role_linux_logging
-      - role_minikube
-      - role_splunk_collector_linuxv
+      - condef_linux_logging
+      - condef_minikube
+      - condef_splunk_collector_linuxv
+    testing:
+      snapshot: true
+      block_internet: true
 
 router:
-  vm_name: "{{ range_id }}-router" # The name of the router VM deployed by Ludus
+  vm_name: "{{ range_id }}-router"
 
-# This key defines network rules in your range. It is optional, and by default all traffic is allowed
 network:
-  inter_vlan_default: ACCEPT # The default rule to apply to traffic between VLANs. Default: ACCEPT
-  external_default: ACCEPT # The default rule to apply to traffic leaving the range out to the internet. Default: ACCEPT
+  inter_vlan_default: ACCEPT
+  external_default: ACCEPT
 
-# These values control the values Ludus uses when deploying ranges and Windows domains.
-# The values shown here are the defaults that will be set if this key is not defined
-# If you define the defaults key, you must set every value as it overrides the server set defaults dict
-# Users may wish to change these values to emulate environments (functional level, domain admin username and password, etc)
 defaults:
   snapshot_with_RAM: true # When entering testing mode, capture the RAM state which allows reverting to a running VM
   stale_hours: 0 # How many hours until a pre-existing snapshot should be deleted and retaken (if entering and exiting testing mode quickly)
@@ -138,3 +160,4 @@ defaults:
   ad_domain_user_password: "Temp1234!!" # The domain user password for every Windows domain
   ad_domain_safe_mode_password: "Temp1234!!" # The domain safe mode password for every Windows domain
   timezone: Europe/Oslo # The timezone for all VMs, use the TZ identifier format from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  enable_dynamic_wallpaper: true
