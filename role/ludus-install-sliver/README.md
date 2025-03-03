@@ -14,6 +14,7 @@ ludus_install_sliver:
 ```
 
 # example vm definitions
+!!! the ludus-install-metasploit role must be available to the deploying user whenever the "metasploit:" key is used, even if value is "false"
 
 ```yaml
   - vm_name: "{{ range_id }}-SLIVER"
