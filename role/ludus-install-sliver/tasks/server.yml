@@ -69,7 +69,7 @@
         group: root
         mode: "0644"
 
-    - ansible.posix.sysctl:
+    - ansible.posix.sysctl: # ensure the selected port is unprivileged
       name: net.ipv4.ip_unprivileged_port_start
       value: "{{ ludus_install_sliver.port | default('31337') }}"
       sysctl_set: true
