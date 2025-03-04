@@ -22,49 +22,13 @@ ludus_install_sliver:
 ```yaml
 
 ludus:
-  - vm_name: "{{ range_id }}-SLIVER"
-    hostname: "{{ range_id }}-SLIVER"
-    template: debian-12-x64-server-template
-    vlan: 10
-    ip_last_octet: 100
-    ram_gb: 8
-    cpus: 4
-    linux: true
-    testing:
-      snapshot: false
-      block_internet: false
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        server: true
-        metasploit: true
-        port: 1884
-
-  - vm_name: "{{ range_id }}-KALI"
-    hostname: "{{ range_id }}-KALI"
+  - vm_name: "{{ range_id }}-SLIVERCLIENT"
+    hostname: "{{ range_id }}-SLIVERCLIENT"
     template: kali-x64-desktop-template
     vlan: 10
-    ip_last_octet: 200
+    ip_last_octet: 1
     ram_gb: 8
     cpus: 4
-    linux: true
-    testing:
-      snapshot: false
-      block_internet: false
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        client: true
-
-  - vm_name: "{{ range_id }}-metasploit"
-    hostname: "{{ range_id }}-metasploit"
-    template: debian-12-x64-server-template
-    vlan: 200
-    ip_last_octet: 3
-    ram_gb: 16
-    cpus: 8
     testing:
       snapshot: true
       block_internet: true
@@ -74,15 +38,15 @@ ludus:
     role_vars:
       ludus_install_sliver:
         client: true
-        metasploit: true
+        metasploit: false
 
-  - vm_name: "{{ range_id }}-sliver-server2"
-    hostname: "{{ range_id }}-sliver-server2"
+  - vm_name: "{{ range_id }}-SLIVERSERVER"
+    hostname: "{{ range_id }}-SLIVERSERVER"
     template: debian-12-x64-server-template
-    vlan: 200
-    ip_last_octet: 4
-    ram_gb: 16
-    cpus: 8
+    vlan: 10
+    ip_last_octet: 2
+    ram_gb: 8
+    cpus: 4
     testing:
       snapshot: true
       block_internet: true
@@ -92,6 +56,6 @@ ludus:
     role_vars:
       ludus_install_sliver:
         server: true
-        metasploit: true # depends on role: ludus-install-metasploit
-
+        port: 443 # default: 31337
+        metasploit: true
 ```
