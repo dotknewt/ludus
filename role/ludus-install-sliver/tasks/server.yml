@@ -61,7 +61,7 @@
           Restart=on-failure
           RestartSec=3
           User=debian
-          ExecStart=/usr/local/bin/sliver-server daemon
+          ExecStart=/usr/local/bin/sliver-server daemon -p {{ ludus_install_sliver.port | default('31337') }}
 
           [Install]
           WantedBy=multi-user.target
