@@ -15,7 +15,7 @@ ludus:
     role_vars:
       ludus_install_sliver:
         client: true
-        metasploit: false
+        metasploit: true
 
   - vm_name: "{{ range_id }}-SLIVERSERVER"
     hostname: "{{ range_id }}-SLIVERSERVER"
