@@ -8,26 +8,23 @@
   ansible.builtin.fail:
     msg: This role only supports Debian Linux
 
-- name: Sliver Main - Debug variables
-  debug:
-    msg:
-      - "ansible_os_family: {{ ansible_os_family }}"
-      - "ludus_install_sliver: {{ ludus_install_sliver }}"
-      - "ludus_install_sliver.server: {{ ludus_install_sliver.server }}"
-      - "ludus_install_sliver.port: {{ ludus_install_sliver.port }}"
-      - "ludus_install_sliver.client: {{ ludus_install_sliver.client }}"
-      - "ludus_install_sliver.metasploit: {{ ludus_install_sliver.metasploit }}"
+#- name: Sliver Main - Debug variables
+#  debug:
+#    msg:
+#      - "ansible_os_family: {{ ansible_os_family }}"
+#      - "ludus_install_sliver: {{ ludus_install_sliver }}"
+#      - "ludus_install_sliver.server: {{ ludus_install_sliver.server }}"
+#      - "ludus_install_sliver.port: {{ ludus_install_sliver.port }}"
+#      - "ludus_install_sliver.client: {{ ludus_install_sliver.client }}"
+#      - "ludus_install_sliver.metasploit: {{ ludus_install_sliver.metasploit }}"
 
 - name: Install sliver
   when: ansible_os_family == "Debian"
   block:
-    - name: Apt upgrade
+    - name: Apt update cache
       become: true
       ansible.builtin.apt:
-        upgrade: yes
         update_cache: true
-        autoremove: true
-        clean: true
       register: result
       retries: 2
       until: result.failed == false
