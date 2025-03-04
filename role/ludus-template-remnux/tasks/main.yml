@@ -6,12 +6,6 @@
     shell: /bin/bash
   register: created_user
 
-- name: Update all packages to their latest version
-  ansible.builtin.apt:
-    name: "*"
-    state: latest
-    update_cache: true
-
 - name: Install requirements
   ansible.builtin.apt:
     name:
@@ -23,6 +17,7 @@
       - tigervnc-xorg-extension
       - tigervnc-standalone-server
     state: present
+    update_cache: true
 
 - name: Create a directory if it does not exist # Avoid errors with range-management tasks
   ansible.builtin.file:
@@ -99,6 +94,11 @@
     group: root
     mode: "0644"
     backup: yes
+
+- name: Reload systemd daemon
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
 
 - name: Success
   ansible.builtin.debug:
