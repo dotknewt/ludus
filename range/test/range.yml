@@ -33,7 +33,7 @@ ludus:
       ludus_install_sliver:
         server: true
         port: 443
-        metasploit: true
+        metasploit: false
 
 router:
   vm_name: "{{ range_id }}-ROUTER"
