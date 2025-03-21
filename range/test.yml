@@ -1,40 +1,15 @@
 ludus:
-  - vm_name: "{{ range_id }}-SLIVERCLIENT"
-    hostname: "{{ range_id }}-SLIVERCLIENT"
-    template: kali-custom-desktop-template
-    vlan: 10
+  - vm_name: "{{ range_id }}-REMNUX"
+    hostname: "{{ range_id }}-REMNUX"
+    template: remnux-custom-template
+    vlan: 2
     ip_last_octet: 1
-    ram_gb: 8
-    cpus: 4
+    ram_gb: 16
+    cpus: 8
     testing:
       snapshot: true
       block_internet: true
     linux: true
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        client: true
-        metasploit: true
-
-  - vm_name: "{{ range_id }}-SLIVERSERVER"
-    hostname: "{{ range_id }}-SLIVERSERVER"
-    template: debian-latest-server-template
-    vlan: 10
-    ip_last_octet: 2
-    ram_gb: 8
-    cpus: 4
-    testing:
-      snapshot: true
-      block_internet: true
-    linux: true
-    roles:
-      - ludus-install-sliver
-    role_vars:
-      ludus_install_sliver:
-        server: true
-        port: 443
-        metasploit: true
 
 router:
   vm_name: "{{ range_id }}-ROUTER"
