@@ -1,7 +1,7 @@
 ludus:
-  - vm_name: "{{ range_id }}-REMNUX"
-    hostname: "{{ range_id }}-REMNUX"
-    template: remnux-custom-template
+  - vm_name: "{{ range_id }}-KALI2025"
+    hostname: "{{ range_id }}-KALI2025"
+    template: kali-2025-desktop-template
     vlan: 2
     ip_last_octet: 1
     ram_gb: 16
